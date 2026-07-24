@@ -1,8 +1,23 @@
 aid: cacheflow
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cacheflow.png
 name: Cacheflow
-description: 'Cacheflow is a company surfaced as a portfolio company of ggv-capital, gv and added to the
-  API Evangelist network as a stub for enrichment. Sector: fintech. This profile is a lead awaiting the
-  enrichment pipeline.'
+description: 'Cacheflow was a B2B SaaS billing, CPQ (configure-price-quote), and subscription-management
+  platform that let software companies build interactive deal rooms, automate quote-to-cash, and offer
+  buyers flexible payment and financing options. Founded in 2020 and backed by GGV Capital and GV, Cacheflow
+  was acquired by HubSpot in 2024 and folded into HubSpot Commerce / HubSpot CPQ. Its standalone brand and
+  developer surface have been retired: the getcacheflow.com domain now 301-redirects to HubSpot''s CPQ
+  product, so no independent Cacheflow API, developer portal, SDKs, or MCP surface remains to harvest.'
 url: https://raw.githubusercontent.com/api-evangelist/cacheflow/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,12 +26,22 @@ x-backed-by:
 - gv
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-status: acquired
+x-acquired-by: hubspot
+x-acquired-note: 'getcacheflow.com 301-redirects to https://www.hubspot.com/products/revenue/cpq (HubSpot
+  Commerce / CPQ); no standalone Cacheflow developer surface remains as of 2026-07-18.'
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Fintech
+- Billing
+- Subscriptions
+- CPQ
+- Quote-to-Cash
+- Payments
+- SaaS
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -26,3 +51,10 @@ maintainers:
 common:
 - type: Website
   url: http://www.getcacheflow.com/
+- type: DomainSecurity
+  url: security/cacheflow-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
