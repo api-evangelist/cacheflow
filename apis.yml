@@ -40,7 +40,7 @@ x-acquired-note: 'getcacheflow.com 301-redirects to https://www.hubspot.com/prod
   Commerce / CPQ). The standalone developer portal at developer.getcacheflow.com is still live and still
   serves the OpenAPI and llms.txt, but every runtime host (api., api.sandbox., app.sandbox., checkout.,
   status., help., docs.) returns NXDOMAIN as of 2026-08-13.'
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-08-13'
 tags:
