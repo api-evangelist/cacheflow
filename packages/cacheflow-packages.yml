@@ -1,0 +1,121 @@
+generated: '2026-08-13'
+method: searched
+source: registry queries on 2026-08-13 (registry.npmjs.org, pypi.org, api.github.com)
+package_count: 0
+official_sdk_count: 0
+note: >-
+  Cacheflow published NO first-party client library to any package registry. There is one
+  first-party client in source form - an oclif CLI in the company's own GitHub org - but
+  it was never released to npm, so a developer could not install it. No SDKs pointer is
+  emitted in apis.yml, because there is no SDK to install.
+
+packages: []
+
+registries_checked:
+- registry: npm
+  names:
+  - cacheflow
+  - cacheflow-sdk
+  - cacheflow-cli
+  - getcacheflow
+  - '@cacheflow/cli'
+  - '@cacheflow/sdk'
+  - '@getcacheflow/cli'
+  - cacheflow-api-examples
+  result: 404 on every name
+  version: null
+  published: null
+- registry: pypi
+  names:
+  - cacheflow
+  - cacheflow-api
+  result: >-
+    `cacheflow` resolves (version 0.3) but belongs to an UNRELATED project -
+    gitlab.com/remram44/cacheflow, a workflow caching library. Not this company. Recorded
+    so a future pass does not mistake it for a first-party SDK.
+  version: null
+  published: null
+- registry: rubygems
+  result: not searched - no Ruby client is referenced anywhere in the docs or repos
+  version: null
+  published: null
+- registry: maven-central
+  result: >-
+    not published. The API is a Java/JAX-RS service (it exposes a Jersey WADL) but no
+    client artifact was released.
+  version: null
+  published: null
+- registry: nuget
+  result: not published
+  version: null
+  published: null
+- registry: crates.io
+  result: not published
+  version: null
+  published: null
+- registry: packagist
+  result: not published
+  version: null
+  published: null
+- registry: pkg.go.dev
+  result: not published
+  version: null
+  published: null
+
+first_party_source_only:
+- name: cacheflow-cli
+  language: typescript
+  framework: oclif
+  repo: https://github.com/getcacheflow/api-examples
+  registry: none
+  official: true
+  installable: false
+  version: 0.0.1
+  published: null
+  version_note: >-
+    Version 0.0.1 is the value in the repository's package.json. It was never published to
+    npm (registry.npmjs.org/cacheflow-cli returns 404), so there is no registry metadata
+    endpoint and no publication date to record. Last commit to the repository was
+    2021-12-09 - roughly three years before the API contract's own last state, which makes
+    this the clearest abandonment signal available for this provider.
+  install: 'git clone + yarn + yarn prepack (no registry install path)'
+  commands:
+  - cacheflow proposal create
+  - cacheflow proposal list
+  - cacheflow proposal activate -i <id>
+  purpose: >-
+    Described by its own README as an illustration of how to call the Cacheflow API, not
+    as a supported client.
+
+github_org:
+  url: https://github.com/getcacheflow
+  public_repos: 4
+  repos:
+  - name: api-examples
+    language: TypeScript
+    pushed: '2021-12-09'
+    role: first-party API example client (see above)
+  - name: be-home-1
+    language: Java
+    pushed: '2022-11-21'
+    role: not a client library
+  - name: fe-home-1
+    language: JavaScript
+    pushed: '2022-07-15'
+    role: not a client library
+  - name: skyflow-java
+    language: null
+    pushed: '2022-04-21'
+    role: fork of Skyflow's Java SDK - a third party's library, not Cacheflow's
+
+x-evidence:
+- url: https://api.github.com/orgs/getcacheflow/repos
+  http_status: 200
+  fetched: '2026-08-13'
+- url: https://registry.npmjs.org/cacheflow-cli
+  http_status: 404
+  fetched: '2026-08-13'
+- url: https://pypi.org/pypi/cacheflow/json
+  http_status: 200
+  fetched: '2026-08-13'
+  finding: unrelated project

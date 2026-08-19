@@ -1,0 +1,68 @@
+generated: '2026-08-13'
+method: generated
+source: openapi/_original/cacheflow-openapi.json
+note: >-
+  Packaged Agent Skills for the Cacheflow API, generated from the provider's published
+  OpenAPI. Every operationId referenced in every skill was verified to exist verbatim in
+  the contract before it was written. Cacheflow searched for and published no skills or
+  AGENTS.md of its own. All four are marked status: historical - the API is retired and
+  api.getcacheflow.com no longer resolves, so these are migration and reference material,
+  not callable instructions.
+status: historical
+skills:
+- file: cacheflow-quote-to-cash.md
+  name: Create a customer, build a proposal, and get it accepted
+  api: openapi/cacheflow-api-openapi.yml
+  operations:
+  - createCustomer
+  - createCustomerContact
+  - listActiveProducts
+  - createProposal
+  - addProposalItem
+  - updateProposalItems
+  - requestApproval
+  - getApprovalRequests
+  - inviteBillingContact
+  - getProposal
+  - getProposalEvents
+  - acceptProposal
+- file: cacheflow-subscription-change.md
+  name: Change an existing subscription
+  api: openapi/cacheflow-api-openapi.yml
+  operations:
+  - listContracts
+  - getContract
+  - getCustomerContracts
+  - createContractProposal
+  - updateProposalItems
+  - getProposal
+  - inviteBillingContact
+  - getContractProposals
+  - updateContract
+- file: cacheflow-usage-billing.md
+  name: Load usage onto a subscription and invoice it
+  api: openapi/cacheflow-api-openapi.yml
+  operations:
+  - getContract
+  - getUsageSchedule
+  - createUsage
+  - getBillingScheduleUsage
+  - getBillingSchedule
+  - generateInvoice
+  - getInvoice
+  - listInvoices
+  - getInvoiceActivity
+- file: cacheflow-webhook-subscriptions.md
+  name: Subscribe to Cacheflow events with webhooks
+  api: openapi/cacheflow-api-openapi.yml
+  operations:
+  - addToken
+  - addWebhook
+  - getHooks
+  - getWebhooksMetadata
+  - testHook
+  - testEvent
+  - getHookEvents
+  - updateWebhook
+  - removeHook
+  - getProposal

@@ -1,0 +1,82 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Cacheflow API
+  version: 1.0.0
+extends: openapi/_original/cacheflow-openapi.json
+x-generated: '2026-08-13'
+x-method: generated
+x-source: >-
+  Captures every enhancement API Evangelist applied on top of the spec harvested verbatim
+  from Cacheflow's ReadMe API registry. The original is never mutated; apply this overlay
+  to reproduce openapi/cacheflow-api-openapi.yml plus the annotations below.
+actions:
+- target: $
+  description: >-
+    The harvested contract declares no servers[]. These two hosts are documented by
+    Cacheflow's own public repository, github.com/getcacheflow/api-examples (README.md).
+    Both return NXDOMAIN as of 2026-08-13.
+  update:
+    servers:
+    - url: https://api.getcacheflow.com
+      description: >-
+        Production. Tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com.
+        Host no longer resolves as of 2026-08-13.
+    - url: https://api.sandbox.getcacheflow.com
+      description: >-
+        Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com.
+        Host no longer resolves as of 2026-08-13.
+- target: $.info
+  description: >-
+    Provenance, lifecycle state, and the authentication model the contract omits entirely.
+  update:
+    x-apievangelist-source: https://dash.readme.com/api/v1/api-registry/5whhl2vm7f3cfvv
+    x-apievangelist-source-portal: https://developer.getcacheflow.com/reference
+    x-apievangelist-harvested: '2026-08-13'
+    x-apievangelist-lifecycle: retired
+    x-apievangelist-acquired-by: HubSpot
+    x-apievangelist-successor: https://www.hubspot.com/products/commerce/cpq
+    x-apievangelist-runtime-state: >-
+      api.getcacheflow.com and api.sandbox.getcacheflow.com both return NXDOMAIN as of
+      2026-08-13. The contract and developer portal outlived the runtime.
+    x-apievangelist-auth: >-
+      Authorization: Bearer <api-token>, plus a mandatory tenant Host header. Documented in
+      github.com/getcacheflow/api-examples, NOT in this contract - see the securitySchemes
+      action below.
+    x-apievangelist-idempotency: >-
+      Not supported. No Idempotency-Key parameter on any of the 400 operations; retried
+      writes duplicate.
+- target: $.components
+  description: >-
+    The contract ships no securitySchemes at all, which makes it unusable as an auth
+    reference. This adds the scheme Cacheflow actually documented in its own examples
+    repository, marked as an API Evangelist addition rather than a provider claim.
+  update:
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        description: >-
+          x-apievangelist-added. Static per-organization API token, minted in the Cacheflow
+          app under Settings -> API and sent as an RFC 6750 bearer token. Source:
+          github.com/getcacheflow/api-examples/SETUP.md. This scheme was NOT declared in
+          the contract Cacheflow published.
+        x-apievangelist-added: true
+        x-apievangelist-source: https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+        x-tenant-routing-header: 'Host: <org-flow-domain>.api.getcacheflow.com'
+- target: $.components.schemas.ErrorObject
+  description: Point the error envelope at the extracted 353-code registry.
+  update:
+    x-apievangelist-error-catalog: errors/cacheflow-error-codes.yml
+    x-apievangelist-code-count: 353
+    x-apievangelist-rfc9457: false
+- target: $.paths['/api/latest/settings/api/hooks']
+  description: Link the webhook management surface to the captured event catalog.
+  update:
+    x-apievangelist-webhook-catalog: asyncapi/cacheflow-webhooks.yml
+    x-apievangelist-delivery: 'HTTP PUT of { event_type, reference_type, id } to the subscriber URL; HTTPS required'
+x-notes:
+- >-
+  Not applied: operation summaries, descriptions and tags are already present and of good
+  quality across all 400 operations - this contract's real gaps are securitySchemes,
+  servers, declared 4xx responses (1 of 400) and in-spec examples (none), and only the
+  first two can be honestly supplied from the provider's own published material.

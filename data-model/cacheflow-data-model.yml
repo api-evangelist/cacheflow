@@ -1,0 +1,726 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cacheflow-openapi.json
+note: Entity-relationship graph derived mechanically from schema $ref links and id-reference fields in Cacheflow's
+  published OpenAPI. Relationship kinds come from the JSON Schema shape ($ref = has_one, array of $ref = has_many,
+  <name>Id field = belongs_to). Id prefixes and domain semantics are NOT published in the contract and have not
+  been guessed - Cacheflow uses opaque UUIDs (see api-examples PRODUCT_ID/PLAN_SET_ID).
+identifier_format: uuid
+identifier_evidence: https://github.com/getcacheflow/api-examples/blob/HEAD/README.md
+schema_count: 407
+entity_count: 39
+domains:
+- domain: quote-to-cash
+  entities:
+  - Proposal
+  - ProposalItem
+  - ItemSchedule
+  - ContentTemplate
+- domain: catalog
+  entities:
+  - Product
+  - BundleItem
+  - Unit
+  - Currency
+- domain: parties
+  entities:
+  - Customer
+  - Contact
+  - Organization
+  - UserProfile
+  - Group
+- domain: subscription
+  entities:
+  - Contract
+  - ContractSummary
+  - BillingSchedule
+  - Usage
+  - RenewalConfiguration
+- domain: money
+  entities:
+  - Invoice
+  - Transaction
+  - Payment
+  - PaymentMethod
+  - Refund
+  - TransferRequest
+  - TransferEvent
+  - Account
+- domain: approval
+  entities:
+  - ApprovalGroup
+  - ApprovalRule
+  - ApprovalRequest
+- domain: documents
+  entities:
+  - Document
+  - DocumentVersion
+  - Signature
+  - AttachmentConfig
+- domain: integration
+  entities:
+  - SyncEvent
+  - ExternalDeal
+  - WebhookResult
+entities:
+- name: Proposal
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Proposal
+  field_count: 69
+  relationships:
+  - kind: has_many
+    target: Item
+    via: proposalItems
+  - kind: has_one
+    target: User
+    via: owner
+  - kind: has_many
+    target: ProposalContact
+    via: proposalContacts
+  - kind: has_one
+    target: SigningDocument
+    via: signingDocument
+  - kind: has_many
+    target: ProposalAttachment
+    via: attachments
+  - kind: has_many
+    target: PaymentSchedule
+    via: schedules
+  - kind: has_one
+    target: ObjectReference
+    via: contract
+  - kind: has_one
+    target: Customer
+    via: customer
+  - kind: has_one
+    target: Customer
+    via: billTo
+  - kind: has_one
+    target: OrganizationSummary
+    via: shipFrom
+  - kind: has_one
+    target: ProposalEvent
+    via: lastEvent
+  - kind: has_one
+    target: ObjectReference
+    via: previous
+  - kind: has_one
+    target: ProposalChanges
+    via: changes
+  - kind: has_one
+    target: BillingMethod
+    via: billingMethod
+  - kind: has_one
+    target: RenewalConfiguration
+    via: renewalConfiguration
+  - kind: has_one
+    target: InvoiceConfiguration
+    via: invoiceConfiguration
+  - kind: has_many
+    target: OverrideRange
+    via: overrideRanges
+  - kind: has_one
+    target: Contact
+    via: acceptedByContact
+  - kind: has_one
+    target: User
+    via: acceptedByUser
+  - kind: has_one
+    target: ExternalSource
+    via: externalSource
+  id_references:
+  - kind: belongs_to
+    via: acceptedScheduleId
+    target: AcceptedSchedule
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: selectedScheduleId
+    target: SelectedSchedule
+- name: ProposalSummary
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ProposalSummary
+  field_count: 31
+  relationships:
+  - kind: has_one
+    target: OrgId
+    via: orgId
+  - kind: has_one
+    target: PersonSummary
+    via: owner
+  - kind: has_one
+    target: CustomerSummary
+    via: customer
+  - kind: has_one
+    target: SigningDocumentSummary
+    via: signingDocument
+  - kind: has_one
+    target: ProposalSummaryEvent
+    via: lastEvent
+  id_references:
+  - kind: belongs_to
+    via: orgId
+    target: Org
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: contractId
+    target: Contract
+- name: ItemSchedule
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ItemSchedule
+  field_count: 21
+  relationships:
+  - kind: has_one
+    target: Money
+    via: price
+  - kind: has_one
+    target: Money
+    via: basePrice
+  - kind: has_one
+    target: Money
+    via: listPrice
+  - kind: has_one
+    target: Money
+    via: amount
+  - kind: has_one
+    target: Money
+    via: baseAmount
+  - kind: has_one
+    target: Money
+    via: listAmount
+  - kind: has_many
+    target: ItemScheduleLevel
+    via: levels
+  id_references:
+  - kind: belongs_to
+    via: productId
+    target: Product
+- name: Customer
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Customer
+  field_count: 18
+  relationships:
+  - kind: has_many
+    target: ExternalSource
+    via: sources
+  - kind: has_one
+    target: Address
+    via: billingAddress
+  - kind: has_one
+    target: Address
+    via: shippingAddress
+  - kind: has_one
+    target: Contact
+    via: billingContact
+- name: Contact
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Contact
+  field_count: 13
+  relationships:
+  - kind: has_many
+    target: ExternalSource
+    via: sources
+  - kind: has_one
+    target: ObjectReference
+    via: customerReference
+- name: Product
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Product
+  field_count: 36
+  relationships:
+  - kind: has_many
+    target: ExternalSource
+    via: sources
+  - kind: has_one
+    target: Unit
+    via: unit
+  - kind: has_one
+    target: ProductTaxConfig
+    via: taxConfig
+  - kind: has_many
+    target: PricebookEntry
+    via: entries
+  - kind: has_many
+    target: ProductLevel
+    via: levels
+  - kind: has_many
+    target: BundleItem
+    via: bundleItems
+  - kind: has_many
+    target: BundlePriceEntry
+    via: bundleBottomUpEntries
+  id_references:
+  - kind: belongs_to
+    via: rootId
+    target: Root
+- name: BundleItem
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/BundleItem
+  field_count: 7
+  relationships:
+  - kind: has_one
+    target: Product
+    via: product
+  - kind: has_many
+    target: BundlePriceEntry
+    via: entries
+- name: Contract
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Contract
+  field_count: 38
+  relationships:
+  - kind: has_one
+    target: Customer
+    via: buyer
+  - kind: has_one
+    target: Customer
+    via: billTo
+  - kind: has_one
+    target: CompanyInfo
+    via: shipFrom
+  - kind: has_one
+    target: BillingMethod
+    via: billingMethod
+  - kind: has_many
+    target: Item
+    via: items
+  - kind: has_many
+    target: BillingSchedule
+    via: billingSchedules
+  - kind: has_one
+    target: ContractEvent
+    via: lastEvent
+  - kind: has_one
+    target: BillingSchedule
+    via: nextPaymentDue
+  - kind: has_one
+    target: RenewalConfiguration
+    via: renewalConfiguration
+  - kind: has_one
+    target: InvoiceConfiguration
+    via: invoiceConfiguration
+  - kind: has_one
+    target: Contact
+    via: primaryContact
+  - kind: has_one
+    target: Money
+    via: totalDiscount
+- name: ContractSummary
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ContractSummary
+  field_count: 17
+  relationships:
+  - kind: has_one
+    target: BillingMethodSummary
+    via: billingMethod
+  - kind: has_one
+    target: NextPaymentDueSummary
+    via: nextPaymentDue
+  - kind: has_one
+    target: CustomerSummary
+    via: buyer
+- name: BillingSchedule
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/BillingSchedule
+  field_count: 33
+  relationships:
+  - kind: has_many
+    target: ExternalSource
+    via: sources
+  - kind: has_many
+    target: BillingItem
+    via: billingItems
+  - kind: has_one
+    target: Transfer
+    via: transfer
+  - kind: has_one
+    target: ObjectReference
+    via: contract
+  - kind: has_one
+    target: SyncEvent
+    via: lastSyncEvent
+  id_references:
+  - kind: belongs_to
+    via: invoiceId
+    target: Invoice
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: sourceDisplayId
+    target: SourceDisplay
+- name: Invoice
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Invoice
+  field_count: 16
+  relationships:
+  - kind: has_one
+    target: Customer
+    via: customer
+- name: InvoiceSummary
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/InvoiceSummary
+  field_count: 17
+  id_references:
+  - kind: belongs_to
+    via: subscriptionId
+    target: Subscription
+  - kind: belongs_to
+    via: scheduleId
+    target: Schedule
+- name: Transaction
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Transaction
+  field_count: 23
+  relationships:
+  - kind: has_one
+    target: Account
+    via: fromAccount
+  - kind: has_one
+    target: Account
+    via: toAccount
+  - kind: has_one
+    target: PaymentMethod
+    via: paymentMethod
+  id_references:
+  - kind: belongs_to
+    via: referenceId
+    target: Reference
+  - kind: belongs_to
+    via: altReferenceId
+    target: AltReference
+  - kind: belongs_to
+    via: parentId
+    target: Parent
+  - kind: belongs_to
+    via: externalId
+    target: External
+- name: Payment
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Payment
+  field_count: 16
+  relationships:
+  - kind: has_many
+    target: PaymentComponent
+    via: components
+  id_references:
+  - kind: belongs_to
+    via: changeProposalId
+    target: ChangeProposal
+- name: PaymentMethod
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/PaymentMethod
+  field_count: 21
+  relationships:
+  - kind: has_one
+    target: Account
+    via: account
+  id_references:
+  - kind: belongs_to
+    via: accountId
+    target: Account
+- name: Refund
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Refund
+  field_count: 15
+  relationships:
+  - kind: has_many
+    target: ExternalSource
+    via: sources
+  - kind: has_one
+    target: Transfer
+    via: transfer
+  - kind: has_one
+    target: Customer
+    via: customer
+  - kind: has_one
+    target: SyncEvent
+    via: lastSyncEvent
+- name: TransferRequest
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/TransferRequest
+  field_count: 22
+  relationships:
+  - kind: has_one
+    target: PaymentMethod
+    via: paymentMethod
+  - kind: has_many
+    target: AccountSource
+    via: toAccountSources
+  - kind: has_many
+    target: AccountSource
+    via: fromAccountSources
+  - kind: has_many
+    target: ConnectedEntitySource
+    via: toCustomerSources
+  - kind: has_many
+    target: ConnectedEntitySource
+    via: fromCustomerSources
+  id_references:
+  - kind: belongs_to
+    via: requestId
+    target: Request
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: transferId
+    target: Transfer
+  - kind: belongs_to
+    via: orgId
+    target: Org
+  - kind: belongs_to
+    via: referenceId
+    target: Reference
+  - kind: belongs_to
+    via: toAccountId
+    target: ToAccount
+  - kind: belongs_to
+    via: fromAccountId
+    target: FromAccount
+  - kind: belongs_to
+    via: parentExternalId
+    target: ParentExternal
+- name: TransferEvent
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/TransferEvent
+  field_count: 18
+  relationships:
+  - kind: has_one
+    target: Transfer
+    via: transfer
+  - kind: has_one
+    target: ObjectReference
+    via: transferReference
+  id_references:
+  - kind: belongs_to
+    via: externalId
+    target: External
+- name: Account
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Account
+  field_count: 27
+  relationships:
+  - kind: has_one
+    target: Address
+    via: address
+  id_references:
+  - kind: belongs_to
+    via: mandateId
+    target: Mandate
+- name: Organization
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Organization
+  field_count: 15
+  relationships:
+  - kind: has_one
+    target: OrgId
+    via: orgId
+  id_references:
+  - kind: belongs_to
+    via: orgId
+    target: Org
+- name: OrgConfig
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/OrgConfig
+  field_count: 11
+  id_references:
+  - kind: belongs_to
+    via: referenceId
+    target: Reference
+- name: UserProfile
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/UserProfile
+  field_count: 4
+  relationships:
+  - kind: has_one
+    target: User
+    via: user
+  - kind: has_many
+    target: UserEmail
+    via: emails
+- name: Group
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Group
+  field_count: 7
+- name: ApprovalGroup
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ApprovalGroup
+  field_count: 7
+  relationships:
+  - kind: has_one
+    target: Group
+    via: group
+- name: ApprovalRule
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ApprovalRule
+  field_count: 10
+  relationships:
+  - kind: has_one
+    target: ProposalApprovalRuleConfig
+    via: config
+- name: ApprovalRequest
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ApprovalRequest
+  field_count: 13
+  relationships:
+  - kind: has_one
+    target: User
+    via: requester
+  - kind: has_many
+    target: Approver
+    via: approvers
+  - kind: has_many
+    target: ApprovalAction
+    via: actions
+  - kind: has_many
+    target: ApprovalRuleSummary
+    via: rules
+  id_references:
+  - kind: belongs_to
+    via: proposalId
+    target: Proposal
+- name: AttachmentConfig
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/AttachmentConfig
+  field_count: 12
+  relationships:
+  - kind: has_one
+    target: Document
+    via: document
+  id_references:
+  - kind: belongs_to
+    via: documentId
+    target: Document
+- name: Document
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Document
+  field_count: 7
+  relationships:
+  - kind: has_one
+    target: DocumentVersion
+    via: latestVersion
+- name: DocumentVersion
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/DocumentVersion
+  field_count: 9
+  id_references:
+  - kind: belongs_to
+    via: documentId
+    target: Document
+- name: Signature
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Signature
+  field_count: 9
+  id_references:
+  - kind: belongs_to
+    via: userId
+    target: User
+- name: Currency
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Currency
+  field_count: 10
+- name: Unit
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/Unit
+  field_count: 7
+- name: SyncEvent
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/SyncEvent
+  field_count: 12
+  relationships:
+  - kind: has_one
+    target: ExternalSource
+    via: externalSource
+  id_references:
+  - kind: belongs_to
+    via: referenceId
+    target: Reference
+  - kind: belongs_to
+    via: externalId
+    target: External
+- name: ExternalDeal
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ExternalDeal
+  field_count: 12
+  relationships:
+  - kind: has_one
+    target: Money
+    via: amount
+  - kind: has_one
+    target: ProposalSummary
+    via: proposal
+  id_references:
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: customerId
+    target: Customer
+  - kind: belongs_to
+    via: ownerId
+    target: Owner
+- name: WebhookResult
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/WebhookResult
+  field_count: 8
+  relationships:
+  - kind: has_one
+    target: WebHookEvent
+    via: request
+  id_references:
+  - kind: belongs_to
+    via: referenceId
+    target: Reference
+- name: ContentTemplate
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ContentTemplate
+  field_count: 9
+- name: RenewalConfiguration
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/RenewalConfiguration
+  field_count: 10
+- name: CompanyInfo
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/CompanyInfo
+  field_count: 18
+  relationships:
+  - kind: has_one
+    target: Address
+    via: billingAddress
+  - kind: has_one
+    target: Document
+    via: logo
+  id_references:
+  - kind: belongs_to
+    via: externalId
+    target: External
+  - kind: belongs_to
+    via: logoId
+    target: Logo
+- name: ActivityEvent
+  schema: openapi/cacheflow-api-openapi.yml#/components/schemas/ActivityEvent
+  field_count: 6
+  relationships:
+  - kind: has_one
+    target: ActivityActor
+    via: actor
+  - kind: has_one
+    target: ActivityDetails
+    via: details
+most_returned_schemas:
+- schema: Proposal
+  get_responses: 6
+- schema: ActivityEvent
+  get_responses: 4
+- schema: CompanyInfo
+  get_responses: 4
+- schema: Product
+  get_responses: 4
+- schema: SyncEvent
+  get_responses: 3
+- schema: Account
+  get_responses: 3
+- schema: ApprovalGroup
+  get_responses: 3
+- schema: Customer
+  get_responses: 3
+- schema: ContractSummary
+  get_responses: 3
+- schema: Organization
+  get_responses: 3
+- schema: UserProfile
+  get_responses: 3
+- schema: Transaction
+  get_responses: 3
+- schema: BillingSchedule
+  get_responses: 3
+- schema: ContentTemplate
+  get_responses: 3
+- schema: BillingScheduleSyncSummary
+  get_responses: 2
+- schema: TransferSyncSummary
+  get_responses: 2
+- schema: ReconciliationSummaryRest
+  get_responses: 2
+- schema: Contact
+  get_responses: 2
+- schema: ProposalSummary
+  get_responses: 2
+- schema: ExternalDeal
+  get_responses: 2
+- schema: Group
+  get_responses: 2
+- schema: Refund
+  get_responses: 2
+- schema: TransferEvent
+  get_responses: 2
+- schema: TransferRequest
+  get_responses: 2
+- schema: AttachmentConfig
+  get_responses: 2

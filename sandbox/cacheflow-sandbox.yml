@@ -1,0 +1,86 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/getcacheflow/api-examples/blob/HEAD/README.md
+also_source: https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+note: >-
+  Cacheflow ran a full, separately-hosted sandbox environment, documented in its own
+  public GitHub org. No test cards, magic values or fixture tooling are published on the
+  surviving surface, and none have been invented here - the sandbox model is environment
+  separation by hostname, not by key prefix.
+
+model: separate-environment
+separation:
+  mechanism: hostname
+  key_prefixes: false
+  key_prefix_note: >-
+    Cacheflow did NOT distinguish test from live by token prefix. The same "create an API
+    token" flow ran in each environment, and the environment was chosen by which host you
+    called and which app you minted the token in. A token therefore carries no visible
+    signal of which environment it belongs to.
+
+environments:
+- name: sandbox
+  api_base: https://api.sandbox.getcacheflow.com
+  api_host_header: '<org-flow-domain>.api.sandbox.getcacheflow.com'
+  app: https://app.sandbox.getcacheflow.com
+  token_ui: https://app.sandbox.getcacheflow.com/settings
+  checkout: 'https://{domain}.checkout.sandbox.getcacheflow.com/p/{id}'
+  resolves_2026_08_13: false
+- name: production
+  api_base: https://api.getcacheflow.com
+  api_host_header: '<org-flow-domain>.api.getcacheflow.com'
+  checkout: 'https://{domain}.checkout.getcacheflow.com/p/{id}'
+  resolves_2026_08_13: false
+
+checkout_url_template:
+  form: 'https://{domain}.checkout.{env}.getcacheflow.com/p/{id}?email=<buyer-email>'
+  source: https://github.com/getcacheflow/api-examples/blob/HEAD/README.md
+  note: >-
+    The buyer-facing checkout / deal-room surface was a distinct host per tenant per
+    environment. This was Cacheflow's marquee product surface and it was reachable
+    directly from a proposal id.
+
+test_data:
+  test_cards: null
+  test_bank_accounts: null
+  magic_values: null
+  test_clocks: null
+  fixture_tooling: null
+  note: >-
+    None published. Payments ran through Stripe and bank transfers through Plaid (see the
+    STRIPE_* and PLAID_* error codes), so a sandbox tenant would have used those
+    providers' own test instruments rather than Cacheflow-issued ones. That inference is
+    recorded as an inference and is not presented as documented behaviour.
+
+example_client:
+  repo: https://github.com/getcacheflow/api-examples
+  language: TypeScript
+  framework: oclif
+  configuration:
+  - API_TOKEN
+  - API_HOST
+  - API_HOST_HEADER
+  - PRODUCT_ID
+  - PLAN_SET_ID
+  commands:
+  - cacheflow proposal create
+  - cacheflow proposal list
+  - cacheflow proposal activate -i <id>
+  note: >-
+    The repository README carries an example .env whose API_TOKEN value is a redacted
+    placeholder, not a working credential.
+
+status:
+  operational: false
+  checked: '2026-08-13'
+  detail: >-
+    api.sandbox.getcacheflow.com and app.sandbox.getcacheflow.com both return NXDOMAIN.
+    The sandbox cannot be exercised; this artifact is a record of what Cacheflow published.
+
+x-evidence:
+- url: https://raw.githubusercontent.com/getcacheflow/api-examples/HEAD/README.md
+  http_status: 200
+  fetched: '2026-08-13'
+- url: https://raw.githubusercontent.com/getcacheflow/api-examples/HEAD/SETUP.md
+  http_status: 200
+  fetched: '2026-08-13'

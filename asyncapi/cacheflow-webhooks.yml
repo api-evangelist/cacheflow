@@ -1,0 +1,124 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+docs: https://developer.getcacheflow.com/docs/create-and-manage-webhooks
+spec_type: none
+asyncapi_published: false
+note: >-
+  Cacheflow documented and shipped a webhook surface but never published an AsyncAPI
+  document, so this artifact captures the webhook catalog instead. The management
+  operations below are real operationIds read from Cacheflow's published OpenAPI; the
+  delivery envelope is quoted verbatim from Cacheflow's own api-examples repository. The
+  full event-type vocabulary is NOT enumerated anywhere on the surviving public surface
+  and has deliberately not been invented - the eventType/referenceType query parameters
+  exist in the contract but their allowed values are not declared.
+
+surface:
+  transport: HTTP
+  method: PUT
+  direction: outbound (Cacheflow -> subscriber URL)
+  https_required: true
+  https_evidence: error code APIHOOK_REQUIRES_HTTPS in ErrorObject.errorCode
+  registration_ui: Settings -> Webhooks
+  registration_api: /api/latest/settings/api/hooks
+  signing: not documented
+  retry_policy: not documented
+
+envelope:
+  format: application/json
+  example: |
+    {
+      "event_type": "status_changed",
+      "reference_type": "proposal",
+      "id": "<id of object>"
+    }
+  fields:
+  - name: event_type
+    description: >-
+      The change that occurred. Only "status_changed" is shown in the provider's own
+      example; the full enum is not published.
+  - name: reference_type
+    description: >-
+      The object class the event is about. Only "proposal" is shown in the provider's
+      example. The contract's `referenceType` query parameter implies more.
+  - name: id
+    description: Opaque UUID of the object that changed. The payload is a thin pointer - the
+      subscriber must call back to read the object.
+  payload_style: thin/notification
+  payload_note: >-
+    Cacheflow sends an identity-only notification, not the changed resource. Every consumer
+    must make an authenticated read-back call, which matters for anyone sizing agent or
+    integration traffic against this API.
+
+management_operations:
+- operationId: getHooks
+  method: GET
+  path: /api/latest/settings/api/hooks
+  summary: List webhooks
+- operationId: addWebhook
+  method: POST
+  path: /api/latest/settings/api/hooks
+  summary: Create a webhook
+- operationId: updateWebhook
+  method: PATCH
+  path: /api/latest/settings/api/hooks/{id}
+  summary: Update a webhook
+- operationId: removeHook
+  method: DELETE
+  path: /api/latest/settings/api/hooks/{id}
+  summary: Delete a webhook
+- operationId: getHookEvents
+  method: GET
+  path: /api/latest/settings/api/hooks/{id}/events
+  summary: Get events for a webhook
+- operationId: testHook
+  method: GET
+  path: /api/latest/settings/api/hooks/{id}/test
+  summary: Test a webhook
+- operationId: testEvent
+  method: POST
+  path: /api/latest/settings/api/trigger/event
+  summary: Create a webhook event
+- operationId: getWebhooksMetadata
+  method: GET
+  path: /api/latest/settings/webhooks
+  summary: List webhooks
+
+related_event_surfaces:
+  note: >-
+    Beyond subscriber webhooks, the contract exposes read-only event logs that are part of
+    the same eventing story.
+  operations:
+  - operationId: getEvents
+    path: /api/latest/settings/integrations/events
+  - operationId: getEventById
+    path: /api/latest/settings/integrations/data/sync-events/{id}
+  - operationId: getSyncEvents
+    path: /api/latest/settings/integrations/data/sync-events
+  - operationId: getProposalEvents
+    path: /api/latest/data/proposals/{id}/events
+  - operationId: getInvoiceActivity
+    path: /api/latest/data/invoices/{id}/activity
+  - operationId: getRefundEvents
+    path: /api/latest/data/refunds/{refundId}/events
+    deprecated: true
+
+error_codes:
+- APIHOOK_INVALID_EVENT_TYPE
+- APIHOOK_REQUIRES_HTTPS
+- DOCUSIGN_WEBHOOK_ERROR
+- DOCUSIGN_HMAC_ERROR
+
+status:
+  operational: false
+  note: >-
+    api.getcacheflow.com does not resolve as of 2026-08-13, so no webhook can be
+    registered or delivered. The catalog records what Cacheflow published.
+
+x-evidence:
+- url: https://raw.githubusercontent.com/getcacheflow/api-examples/HEAD/SETUP.md
+  http_status: 200
+  fetched: '2026-08-13'
+- url: https://dash.readme.com/api/v1/api-registry/5whhl2vm7f3cfvv
+  http_status: 200
+  fetched: '2026-08-13'

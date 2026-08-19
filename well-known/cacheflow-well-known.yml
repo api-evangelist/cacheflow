@@ -1,0 +1,95 @@
+generated: '2026-08-13'
+method: probed
+source: live /.well-known/ probes on 2026-08-13
+note: >-
+  Every /.well-known/ path was probed on every Cacheflow host that resolves. Nothing was
+  found. This is a recorded ABSENCE, not a presence: no WellKnown or SecurityTxt pointer
+  is emitted in apis.yml, because none of these paths returned a real document. The 301
+  results are the marketing domain's blanket redirect to HubSpot, which answers the same
+  way for every path and is therefore not evidence of any served document.
+documents_found: 0
+
+hosts:
+- host: https://developer.getcacheflow.com
+  role: developer portal (ReadMe)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.getcacheflow.com
+  role: legacy app hostname, now a Webflow site
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    body_note: 'returns a literal "Invalid .well-known request" page'
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://www.getcacheflow.com
+  role: marketing domain
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/openid-configuration
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/api-catalog
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/ai-plugin.json
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/agent-card.json
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  - path: /.well-known/agent.json
+    status: 301
+    redirect: https://www.hubspot.com/products/commerce/cpq
+  note: >-
+    Every path on this host answers with the same 301 to HubSpot's CPQ product page. A
+    blanket redirect is not a served document.
+
+unreachable_hosts:
+- host: api.getcacheflow.com
+  reason: NXDOMAIN
+- host: api.sandbox.getcacheflow.com
+  reason: NXDOMAIN
+- host: docs.getcacheflow.com
+  reason: NXDOMAIN
+- host: help.getcacheflow.com
+  reason: NXDOMAIN
+
+llms_txt:
+  found: true
+  url: https://developer.getcacheflow.com/llms.txt
+  status: 200
+  file: ../llms/cacheflow-llms.txt
+  note: >-
+    Not a /.well-known/ document, but a real machine-readable discovery file the provider
+    serves. Recorded here for completeness and wired separately as type LLMsTxt.

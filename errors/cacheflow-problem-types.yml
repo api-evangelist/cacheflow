@@ -1,0 +1,113 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cacheflow-openapi.json
+format: vendor-string-codes
+rfc9457: false
+note: 'Derived strictly from the 4xx/5xx and `default` responses declared in Cacheflow''s published OpenAPI. The
+  finding is that the contract barely declares them: across 400 operations exactly ONE names an explicit 4xx response,
+  and 22 declare an untyped `default`. The substantive error surface lives in the schema catalog instead - see errors/cacheflow-error-codes.yml
+  for the 353-code registry. Nothing has been inferred or invented to fill this out.'
+coverage:
+  operations_total: 400
+  operations_with_explicit_4xx_5xx: 1
+  operations_with_default_response: 22
+  problem_json_responses: 0
+problems:
+- status: '400'
+  description: error
+  schema: ErrorObject
+  source_operation: openapi/cacheflow-api-openapi.yml#getOrganization
+  path: /api/latest/data/organizations/{id}
+  method: GET
+default_responses:
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#syncProposalToCrm
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#getHubspotCardInfo
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#get
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#syncContract
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#getThreadDump
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deleteAttachmentConfig
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#downloadDocument
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#downloadZip
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#createMetrics
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deleteUnit
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deleteProduct
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#logout
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#removeHook
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#removeToken
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#removeInvite
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deleteOrgConfig
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deletePaymentMethod
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deletePaymentTerm
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#deleteUserConfig
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#getSystemOrgView
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#getExternalGrammar
+- status: default
+  description: default response
+  schema: null
+  source_operation: openapi/cacheflow-api-openapi.yml#getWadl
+cross_links:
+  error_registry: errors/cacheflow-error-codes.yml
+  conventions: conventions/cacheflow-conventions.yml

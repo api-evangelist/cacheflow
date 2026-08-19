@@ -1,0 +1,109 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cacheflow-openapi.json
+note: >-
+  Cross-cutting standards conformance, derived from Cacheflow's published contract and the
+  provider's own api-examples repository. No compliance certifications (SOC 2, ISO 27001,
+  PCI DSS, HIPAA) are published on any surviving Cacheflow host - trust.getcacheflow.com
+  and security.getcacheflow.com both return NXDOMAIN - so no Compliance pointer is
+  emitted.
+
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'openapi: 3.0.1 with 305 paths, 400 operations, 407 component schemas'
+- id: openapi-3.1
+  conforms: false
+  evidence: contract is pinned at 3.0.1
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: 'Authorization: Bearer <api-token> per github.com/getcacheflow/api-examples SETUP.md'
+- id: oauth2
+  conforms: false
+  evidence: >-
+    no components.securitySchemes of type oauth2; the /settings/integrations/oauth/*
+    endpoints are OUTBOUND connector authorization against third parties, not an
+    authorization server Cacheflow offers to API clients
+- id: oidc
+  conforms: false
+  evidence: >-
+    /.well-known/openid-configuration returns 404 on every resolving host; SSO provider
+    listing exists for end-user web sign-in only
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    errors use a vendor envelope (ErrorObject with a string errorCode enum), not
+    application/problem+json
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt 404 on developer.getcacheflow.com and app.getcacheflow.com
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no sunset or deprecation policy published; 3 operations flagged deprecated in-spec only
+- id: json-api
+  conforms: false
+  evidence: plain JSON resource representations, no JSON:API document structure
+- id: odata
+  conforms: false
+- id: scim
+  conforms: false
+  evidence: user and group management is a bespoke /api/latest/settings surface, not SCIM 2.0
+- id: fhir
+  conforms: false
+- id: psd2
+  conforms: false
+- id: pagination-standardized
+  conforms: partial
+  evidence: >-
+    Spring Data page/size/sort across 21 operations, but two operations use `pageSize`
+    instead of `size` - a real inconsistency in the published surface
+- id: idempotency
+  conforms: false
+  evidence: zero occurrences of "idempoten" in the contract; no Idempotency-Key parameter
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    a real webhook surface exists and is documented, but no AsyncAPI document was ever
+    published (see asyncapi/cacheflow-webhooks.yml)
+- id: mcp
+  conforms: false
+  evidence: no MCP server; company acquired in 2024 before MCP distribution existed
+- id: a2a
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json 404 on every resolving host
+- id: llms-txt
+  conforms: true
+  evidence: 'https://developer.getcacheflow.com/llms.txt returns 200 with a real llms.txt document'
+- id: wadl
+  conforms: true
+  evidence: >-
+    /api/latest/application.wadl and /api/latest/application.wadl/{path} expose a JAX-RS
+    WADL descriptor - a second, older machine-readable contract alongside the OpenAPI
+
+compliance_certifications:
+  published: false
+  probed:
+  - url: https://trust.getcacheflow.com
+    result: NXDOMAIN
+  - url: https://security.getcacheflow.com
+    result: NXDOMAIN
+  note: >-
+    getcacheflow.com/cacheflow-sub-processors appears in the archived sitemap of the
+    marketing site, but every path on that domain now 301s to HubSpot, so no
+    sub-processor or compliance page is reachable.
+
+third_party_processors_in_contract:
+  note: >-
+    Derived from integration tags and error-code prefixes in the contract - useful for
+    anyone assessing this API's data-flow surface.
+  processors:
+  - Stripe (payments, connected accounts)
+  - Plaid (bank account linking, transfers)
+  - DocuSign (e-signature)
+  - Salesforce (CRM sync)
+  - HubSpot (CRM deals, webhooks)
+  - Close (CRM)
+  - QuickBooks (accounting)
+  - Slack (notifications)
+  - Avalara (tax - inferred from the embedded ErrorInfo tax error vocabulary)
+  - Metabase (embedded analytics)

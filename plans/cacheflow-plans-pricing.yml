@@ -1,0 +1,44 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.getcacheflow.com/pricing
+plan_count: 0
+note: >-
+  Cacheflow published a pricing page while it operated (/pricing and /startup-plan both
+  appear in the sitemap still served at app.getcacheflow.com). Neither is reachable now:
+  every path on getcacheflow.com and www.getcacheflow.com returns 301 to HubSpot's
+  Commerce CPQ product page, which carries HubSpot's pricing, not Cacheflow's. No
+  Cacheflow plan, price, quota or overage can be read from any surviving Cacheflow
+  surface, and none has been reconstructed from memory or from third parties. plan_count
+  is an honest zero, not an omission.
+
+plans: []
+
+api_pricing:
+  metered: false
+  documented: false
+  note: >-
+    No API-specific pricing, quota or overage was found in the contract, the llms.txt, or
+    the developer portal. API access appears to have been a feature of the product
+    subscription rather than a separately-metered product.
+
+probes:
+- url: https://www.getcacheflow.com/pricing
+  status: 301
+  redirect: https://www.hubspot.com/products/commerce/cpq
+  checked: '2026-08-13'
+- url: https://getcacheflow.com/pricing
+  status: 301
+  redirect: https://www.hubspot.com/products/commerce/cpq
+  checked: '2026-08-13'
+- url: https://developer.getcacheflow.com/llms.txt
+  status: 200
+  finding: no pricing section
+  checked: '2026-08-13'
+
+successor:
+  vendor: HubSpot
+  product: HubSpot Commerce / CPQ
+  pricing_url: https://www.hubspot.com/pricing
+  note: >-
+    Recorded as context only. HubSpot's pricing is HubSpot's and is NOT attributed to
+    Cacheflow.

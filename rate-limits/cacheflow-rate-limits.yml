@@ -1,0 +1,61 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.getcacheflow.com/reference
+limit_count: 0
+note: >-
+  Cacheflow published no rate limits. The 400-operation contract declares no header
+  parameters at all and no 429 response on any operation; the ErrorObject enum of 353
+  codes contains no rate-limit, quota or throttle code; and the llms.txt index of the
+  developer portal lists no limits page. An honest zero - not "not checked".
+
+limits: []
+
+response_headers:
+  documented: false
+  observed: false
+  candidates_checked:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - Retry-After
+  note: >-
+    None appear in the contract. They could not be observed live either, because
+    api.getcacheflow.com returns NXDOMAIN as of 2026-08-13, so there is no unauthenticated
+    response to read them from.
+
+status_on_exhaustion:
+  documented: false
+  declared_429_responses: 0
+
+evidence:
+- source: openapi/_original/cacheflow-openapi.json
+  finding: 0 header parameters across 400 operations; 0 responses with status 429
+- source: openapi/_original/cacheflow-openapi.json#/components/schemas/ErrorObject
+  finding: no rate-limit / throttle / quota code among 353 enumerated error codes
+- url: https://developer.getcacheflow.com/llms.txt
+  status: 200
+  finding: no rate limits, quotas or usage-limits page listed in the docs index
+- url: https://developer.getcacheflow.com/docs/calling-the-api
+  status: 429
+  finding: >-
+    The one narrative guide most likely to state limits could not be read - ReadMe's own
+    bot challenge answered with HTTP 429 and a "Hello there, human!" interstitial. Noted
+    so this zero can be revisited; it is not treated as a finding about Cacheflow.
+
+related_limits_in_contract:
+  note: >-
+    Not API rate limits, but the contract does encode product-level quotas, recorded here
+    so a future pass does not mistake them for throttling.
+  items:
+  - code: ENTITY_LIMIT_EXCEEDED
+    kind: entity count limit
+  - code: DOCUSIGN_ENVELOPE_ALLOWANCE_EXCEEDED
+    kind: third-party envelope quota
+  - operationId: getDocusignEnvelopeQuota
+    path: /api/latest/data/docusign/quota
+    kind: quota read endpoint for the DocuSign integration
+  - code: AUTH_CODE_MAX_ATTEMPTS
+    kind: authentication attempt limit

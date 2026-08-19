@@ -1,0 +1,172 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/cacheflow-openapi.json
+docs: https://developer.getcacheflow.com/reference
+searched_sources:
+- https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+- https://developer.getcacheflow.com/llms.txt
+note: >-
+  Cross-cutting request/response semantics for the Cacheflow API, derived from the
+  305-path / 400-operation OpenAPI 3.0.1 published through Cacheflow's ReadMe developer
+  portal, and enriched from Cacheflow's own api-examples repository. The narrative
+  developer guides (developer.getcacheflow.com/docs/*) are served behind a ReadMe bot
+  challenge (HTTP 429) and could not be read, so anything not visible in the contract or
+  the examples repo is recorded as unknown rather than guessed.
+
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <api-token>'
+  tenant_routing_header: 'Host: <org-flow-domain>.api.getcacheflow.com'
+  detail: authentication/cacheflow-authentication.yml
+
+base_url:
+  production: https://api.getcacheflow.com
+  sandbox: https://api.sandbox.getcacheflow.com
+  path_prefix: /api/latest
+  source: https://github.com/getcacheflow/api-examples/blob/HEAD/README.md
+
+versioning:
+  scheme: uri-path-rolling
+  current: latest
+  detail: >-
+    Every one of the 305 paths is prefixed /api/latest. Cacheflow ships a rolling
+    "latest" segment rather than a pinned version number, so a caller cannot request a
+    frozen version from the URI. info.version in the contract reads 0.0.3.
+  pinned_versions_available: false
+  detail_artifact: lifecycle/cacheflow-lifecycle.yml
+
+idempotency:
+  supported: false
+  evidence: >-
+    Zero occurrences of "idempoten" anywhere in the 431KB contract; no Idempotency-Key
+    header parameter on any of the 400 operations; no header parameters of any kind are
+    declared. No idempotency contract is documented in api-examples either.
+  consequence: >-
+    Retrying a POST (create proposal, create customer, create usage, create refund) is
+    not safe by contract. No Idempotency pointer is emitted in apis.yml.
+
+pagination:
+  style: page-number
+  family: Spring Data Pageable
+  parameters:
+  - name: page
+    in: query
+    used_by_operations: 16
+    description: Zero-based page index.
+  - name: size
+    in: query
+    used_by_operations: 21
+    description: Page size.
+  - name: sort
+    in: query
+    used_by_operations: 15
+    description: Sort expression.
+  - name: pageSize
+    in: query
+    used_by_operations: 2
+    description: Inconsistent variant used by two operations alongside the `size` convention.
+  cursor_support: false
+  response_envelope: unknown
+  note: >-
+    Parameter descriptions are absent from the contract, so page indexing base and sort
+    syntax are not stated. The `pageSize` / `size` split is a real inconsistency in the
+    published surface.
+
+filtering_and_search:
+  parameters:
+  - name: search
+    in: query
+    used_by_operations: 18
+  - name: filterBy
+    in: query
+    used_by_operations: 3
+  - name: include_archived
+    in: query
+    used_by_operations: 3
+  note: >-
+    A filter grammar is implied by the error codes INVALID_FILTER, INVALID_QUERY_PARAMS,
+    MALFORMED_ID_LIST and NoFilterCriteriaException, but the grammar itself is not
+    published in the contract.
+
+field_expansion:
+  supported: unknown
+  sparse_fieldsets: false
+
+metadata:
+  custom_fields: true
+  evidence: >-
+    The contract carries QuickbooksCustomField and custom-field plumbing on the
+    integration surface; a general per-resource `metadata` map is not declared.
+
+request_tracing:
+  request_id_header: unknown
+  evidence: no header parameters are declared on any operation in the contract
+
+content_type:
+  request: application/json
+  response: application/json
+  exceptions:
+  - path: /api/latest/documents/download
+    content_type: '*/*'
+  - path: /api/latest/application.wadl
+    content_type: application/vnd.sun.wadl+xml, application/xml
+    note: >-
+      A JAX-RS/Jersey WADL descriptor is exposed alongside the OpenAPI, confirming a
+      Java runtime and leaving a second, older machine-readable contract on the surface.
+
+error_envelope:
+  primary_schema: ErrorObject
+  shape:
+    errorCode: string enum (300+ named codes)
+    message: string
+    detail: ErrorDetail (polymorphic; discriminator on `type`)
+  detail_discriminator_values:
+  - field
+  - listField
+  - filter
+  - references
+  - contactEmail
+  secondary_schemas:
+  - name: Fault
+    shape: '{ error: [FaultError{message, statusCode, errorCode, detail, code, element}], type, message }'
+  - name: ErrorResult
+    shape: '{ error: ErrorInfo{code, ...} }'
+    note: >-
+      ErrorInfo carries an Avalara-shaped tax error enum and belongs to the embedded tax
+      integration, not to Cacheflow's own API surface.
+  rfc9457: false
+  detail_artifact: errors/cacheflow-error-codes.yml
+
+rate_limit_signaling:
+  headers_documented: false
+  status_on_exhaustion: unknown
+  detail_artifact: rate-limits/cacheflow-rate-limits.yml
+
+webhooks:
+  supported: true
+  registration: API or Settings -> Webhooks
+  transport: HTTP PUT to the subscriber URL
+  https_required: true
+  https_evidence: error code APIHOOK_REQUIRES_HTTPS
+  envelope: '{ "event_type": "status_changed", "reference_type": "proposal", "id": "<id of object>" }'
+  envelope_source: https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+  detail_artifact: asyncapi/cacheflow-webhooks.yml
+
+response_codes_in_contract:
+  '200': 322
+  '201': 56
+  '400': 1
+  default: 22
+  note: >-
+    Only one operation in 400 declares an explicit 4xx response. Error behaviour is
+    carried almost entirely by the schema catalog rather than by per-operation responses,
+    which is a real contract-quality gap and not an omission by this pipeline.
+
+cross_links:
+  authentication: authentication/cacheflow-authentication.yml
+  errors: errors/cacheflow-error-codes.yml
+  problem_types: errors/cacheflow-problem-types.yml
+  lifecycle: lifecycle/cacheflow-lifecycle.yml
+  rate_limits: rate-limits/cacheflow-rate-limits.yml
+  sandbox: sandbox/cacheflow-sandbox.yml
+  data_model: data-model/cacheflow-data-model.yml

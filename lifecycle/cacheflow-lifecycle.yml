@@ -1,0 +1,126 @@
+generated: '2026-08-13'
+method: probed
+source: live probes of the getcacheflow.com estate on 2026-08-13
+note: >-
+  Cacheflow was acquired by HubSpot in 2024 and folded into HubSpot Commerce / CPQ. This
+  lifecycle record captures the unusual end-state measured on 2026-08-13: the DEVELOPER
+  PORTAL and the machine-readable contract are still publicly served, while every runtime
+  host has been withdrawn. The contract outlived the API.
+
+versioning:
+  scheme: uri-path-rolling
+  current: latest
+  path_prefix: /api/latest
+  spec_version: 0.0.3
+  pinned_versions: false
+  docs: https://developer.getcacheflow.com/reference
+  note: >-
+    All 305 paths sit under /api/latest. There is no dated or numbered version segment a
+    client can pin to, so there was never a mechanism to hold an old version through a
+    breaking change.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  note: >-
+    No deprecation or sunset policy is published anywhere on the surviving surface. Three
+    operations carry `deprecated: true` in the contract itself, which is the only
+    deprecation signal the provider shipped.
+
+deprecated_operations:
+- operation: openapi/cacheflow-api-openapi.yml#getRefundEvents
+  method: GET
+  path: /api/latest/data/refunds/{refundId}/events
+- operation: openapi/cacheflow-api-openapi.yml#getConnectedSalesforceUser
+  method: GET
+  path: /api/latest/data/salesforce/me
+- operation: openapi/cacheflow-api-openapi.yml#triggerTransferRequest
+  method: GET
+  path: /api/latest/data/transfer-requests/{transfer-id}/trigger
+
+status_page: null
+status_page_note: >-
+  status.getcacheflow.com does not resolve (NXDOMAIN, probed 2026-08-13). No status page
+  is published on any surviving host, so no StatusPage pointer is emitted.
+
+sla:
+  url: null
+  uptime_target: null
+
+changelog:
+  published: false
+  evidence: >-
+    The ReadMe project configuration served with developer.getcacheflow.com declares
+    "changelog": false and "changelog": "" in nav_names - the changelog module was never
+    enabled. No ChangeLog pointer is emitted.
+
+lifecycle_state:
+  stage: retired
+  acquired_by: HubSpot
+  acquired_year: 2024
+  successor_product: HubSpot Commerce / CPQ
+  successor_url: https://www.hubspot.com/products/commerce/cpq
+  brand_site_state: 301-redirect
+  developer_portal_state: live
+  runtime_state: withdrawn
+  migration_path_published: false
+  migration_note: >-
+    No migration guide from the Cacheflow API to HubSpot's CPQ/Commerce APIs is published
+    on any Cacheflow host. The redirect drops a developer on a HubSpot marketing page,
+    not on an equivalent API reference.
+
+host_probe:
+  checked: '2026-08-13'
+  hosts:
+  - host: developer.getcacheflow.com
+    resolves: true
+    result: live ReadMe developer portal (302 / -> /reference; /reference/* 200; /llms.txt 200)
+  - host: www.getcacheflow.com
+    resolves: true
+    result: 301 to https://www.hubspot.com/products/commerce/cpq for every path probed
+  - host: getcacheflow.com
+    resolves: true
+    result: 301 to https://www.hubspot.com/products/commerce/cpq
+  - host: app.getcacheflow.com
+    resolves: true
+    result: Webflow-hosted site, last published 2025-04-03; /login is an infinite 301 loop
+  - host: api.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN - the documented production API host
+  - host: api.sandbox.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN - the documented sandbox API host
+  - host: app.sandbox.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN - the documented sandbox app / token-issuing UI
+  - host: checkout.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN - the documented buyer checkout host
+  - host: status.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN
+  - host: trust.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN
+  - host: docs.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN
+  - host: help.getcacheflow.com
+    resolves: false
+    result: NXDOMAIN - the former Intercom help centre, still linked from search results
+
+github_org:
+  url: https://github.com/getcacheflow
+  state: live
+  public_repos: 4
+  last_org_update: '2026-08-08'
+  note: >-
+    Still carries api-examples (the oclif example client that documents the base URL,
+    bearer auth and webhook envelope). Never archived.
+
+cross_links:
+  conventions: conventions/cacheflow-conventions.yml
+  authentication: authentication/cacheflow-authentication.yml
+  webhooks: asyncapi/cacheflow-webhooks.yml

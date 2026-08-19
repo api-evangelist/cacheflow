@@ -1,0 +1,84 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+docs: https://developer.getcacheflow.com/docs/create-an-api-token
+note: >-
+  The harvested OpenAPI (openapi/_original/cacheflow-openapi.json) declares NO
+  components.securitySchemes and no operation-level security[], so nothing could be
+  derived from the contract. The auth model below is taken verbatim from Cacheflow's
+  own public GitHub org (github.com/getcacheflow/api-examples), which documents the
+  token, the header, and the tenant-routing Host header, and is corroborated by the
+  token-management operations that exist in the spec itself.
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  api_key_in: []
+  oauth2_flows: []
+  declared_in_spec: false
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  in: header
+  parameter: Authorization
+  format: 'Authorization: Bearer <api-token>'
+  description: >-
+    Static, long-lived API token minted per organization from the Cacheflow web app
+    (Settings -> API -> create an API token). Presented as an RFC 6750 bearer token.
+  sources:
+  - https://github.com/getcacheflow/api-examples/blob/HEAD/SETUP.md
+  - https://github.com/getcacheflow/api-examples/blob/HEAD/src/api/index.ts
+tenant_routing:
+  required: true
+  mechanism: Host header
+  form: '<org-flow-domain>.api.getcacheflow.com'
+  sandbox_form: '<org-flow-domain>.api.sandbox.getcacheflow.com'
+  description: >-
+    Cacheflow routes API calls to a per-organization domain. Callers send the base URL
+    plus an explicit Host header naming their org's flow domain; the token alone is not
+    sufficient. Recorded verbatim from api-examples/SETUP.md and src/api/index.ts.
+token_management:
+  described_in_spec: true
+  operations:
+  - operationId: getAllTokens
+    method: GET
+    path: /api/latest/settings/api/tokens
+    summary: List API tokens
+  - operationId: addToken
+    method: POST
+    path: /api/latest/settings/api/tokens
+    summary: Create an API token
+  - operationId: removeToken
+    method: DELETE
+    path: /api/latest/settings/api/tokens/{id}
+    summary: Delete an token
+  ui_path: Settings -> API
+sso:
+  described_in_spec: true
+  note: >-
+    The spec exposes GET /api/latest/auth/providers (getProviderList, "List SSO Providers")
+    and SAML-related error codes, indicating tenant SSO for the web application. This is
+    end-user sign-in, not API authentication.
+oauth2_note: >-
+  The spec's oauth endpoints under /api/latest/settings/integrations/oauth/* are OUTBOUND
+  connectors (Cacheflow authorizing itself against QuickBooks, Salesforce, HubSpot, Slack,
+  DocuSign, Stripe, Plaid). Cacheflow does NOT publish an OAuth 2.0 authorization server
+  for third-party API clients, so scopes/ is intentionally absent.
+error_codes_related:
+  - BEARER_TOKEN_INVALID_equivalent: BearerTokenInvalid
+  - NOT_AUTHORIZED_TO_ACCESS_ENTITY
+  - AUTH_CODE_INVALID
+  - AUTH_CODE_MAX_ATTEMPTS
+x-evidence:
+- url: https://raw.githubusercontent.com/getcacheflow/api-examples/HEAD/SETUP.md
+  http_status: 200
+  fetched: '2026-08-13'
+- url: https://raw.githubusercontent.com/getcacheflow/api-examples/HEAD/src/api/index.ts
+  http_status: 200
+  fetched: '2026-08-13'
+x-status-note: >-
+  Cacheflow was acquired by HubSpot in 2024. As of 2026-08-13 api.getcacheflow.com and
+  api.sandbox.getcacheflow.com no longer resolve (NXDOMAIN), so no token can be exercised
+  against a live host. The auth contract is recorded as the provider published it.

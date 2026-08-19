@@ -1,0 +1,113 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: openapi/_original/cacheflow-openapi.json
+note: >-
+  Cacheflow never shipped an MCP server. It was acquired by HubSpot in 2024, before MCP
+  existed as a distribution surface, and no hosted endpoint or stdio package exists under
+  any Cacheflow name on npm, PyPI or any registry probed on 2026-08-13. The tools below
+  are a DERIVED candidate set showing what an MCP server over this contract would expose -
+  they are not a claim that any server exists. No endpoint URL has been invented.
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: derived
+
+search_evidence:
+- registry: npm
+  queried:
+  - cacheflow
+  - cacheflow-sdk
+  - cacheflow-cli
+  - '@cacheflow/cli'
+  - '@getcacheflow/cli'
+  result: no first-party package (404 on every name)
+- registry: pypi
+  queried:
+  - cacheflow
+  - cacheflow-api
+  result: >-
+    the `cacheflow` name on PyPI belongs to an unrelated workflow-caching project
+    (gitlab.com/remram44/cacheflow), not to this company
+- host_probe: https://app.getcacheflow.com/mcp
+  status: 404
+  note: static Webflow 404, not an MCP endpoint
+- docs: https://developer.getcacheflow.com/llms.txt
+  result: no MCP server referenced
+
+candidate_tools:
+- name: list_proposals
+  description: List proposals, with search, paging and sorting.
+  source_operation: openapi/cacheflow-api-openapi.yml#getProposals
+- name: create_proposal
+  description: Create a new proposal (quote).
+  source_operation: openapi/cacheflow-api-openapi.yml#createProposal
+- name: get_proposal
+  description: Retrieve a proposal by id.
+  source_operation: openapi/cacheflow-api-openapi.yml#getProposal
+- name: update_proposal
+  description: Update a proposal.
+  source_operation: openapi/cacheflow-api-openapi.yml#updateProposal
+- name: accept_proposal
+  description: Accept a proposal on the buyer's behalf.
+  source_operation: openapi/cacheflow-api-openapi.yml#acceptProposal
+- name: share_proposal
+  description: Share a proposal with a billing contact.
+  source_operation: openapi/cacheflow-api-openapi.yml#inviteBillingContact
+- name: list_customers
+  description: List customers.
+  source_operation: openapi/cacheflow-api-openapi.yml#listCustomers
+- name: create_customer
+  description: Create a customer.
+  source_operation: openapi/cacheflow-api-openapi.yml#createCustomer
+- name: list_products
+  description: List catalog products.
+  source_operation: openapi/cacheflow-api-openapi.yml#listProducts
+- name: create_product
+  description: Create a catalog product.
+  source_operation: openapi/cacheflow-api-openapi.yml#createProduct
+- name: list_subscriptions
+  description: List subscriptions (contracts).
+  source_operation: openapi/cacheflow-api-openapi.yml#listContracts
+- name: get_subscription
+  description: Retrieve a subscription.
+  source_operation: openapi/cacheflow-api-openapi.yml#getContract
+- name: create_change_proposal
+  description: Create a change proposal against an existing subscription.
+  source_operation: openapi/cacheflow-api-openapi.yml#createContractProposal
+- name: create_usage
+  description: Load usage onto a billing schedule.
+  source_operation: openapi/cacheflow-api-openapi.yml#createUsage
+- name: list_invoices
+  description: List invoices.
+  source_operation: openapi/cacheflow-api-openapi.yml#listInvoices
+- name: get_invoice
+  description: Retrieve an invoice.
+  source_operation: openapi/cacheflow-api-openapi.yml#getInvoice
+- name: list_payments
+  description: List payments.
+  source_operation: openapi/cacheflow-api-openapi.yml#listTransactions
+- name: create_refund
+  description: Schedule a refund for a transfer.
+  source_operation: openapi/cacheflow-api-openapi.yml#createRefund
+- name: request_approval
+  description: Request approval for a proposal.
+  source_operation: openapi/cacheflow-api-openapi.yml#requestApproval
+- name: create_webhook
+  description: Register a webhook subscription.
+  source_operation: openapi/cacheflow-api-openapi.yml#addWebhook
+
+coverage:
+  rest_operations_total: 400
+  candidate_tools: 20
+  note: >-
+    A deliberately small marquee set over a 400-operation contract, not an exhaustive
+    one-tool-per-operation expansion.
+
+status_note: >-
+  Even as a candidate this is not callable: api.getcacheflow.com returns NXDOMAIN as of
+  2026-08-13.
