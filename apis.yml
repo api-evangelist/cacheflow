@@ -47,6 +47,19 @@ tags:
 - Company
 - Fintech
 - Billing
+- Subscription
+- CPQ
+- Quote-to-Cash
+- Payments
+- Software-as-a-Service
+- Invoicing
+- Revenue Operations
+- E-Signature
+- Retired API
+tags_raw:
+- Company
+- Fintech
+- Billing
 - Subscriptions
 - CPQ
 - Quote-to-Cash
@@ -69,6 +82,16 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Billing
+  - Subscription
+  - CPQ
+  - Quote-to-Cash
+  - Payments
+  - Invoicing
+  - Revenue Operations
+  - E-Signature
+  - Retired API
+  tags_raw:
   - Billing
   - Subscriptions
   - CPQ
