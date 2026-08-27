@@ -70,40 +70,16 @@ tags_raw:
 - E-Signature
 - Retired API
 apis:
-- name: Cacheflow API
-  description: >-
-    REST API for the full Cacheflow quote-to-cash surface: proposals (quotes) and proposal items, product
-    catalog and versioning, customers and contacts, subscriptions and change/renewal proposals, billing
-    schedules and usage metering, invoices, payments, transfers and refunds, approval workflows, e-signature
-    via DocuSign, webhooks, and outbound integrations with Salesforce, HubSpot, Close, QuickBooks, Stripe,
-    Plaid and Slack. OpenAPI 3.0.1 with 305 paths, 400 uniquely-identified operations and 407 component
-    schemas. Authentication is a static per-organization bearer token plus a mandatory tenant Host header.
-    The contract remains published; the API host no longer resolves.
+- aid: cacheflow:cacheflow-accounts-api
+  name: Cacheflow Accounts API
+  description: The Accounts API from Cacheflow — 7 operation(s) for accounts.
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
-  - Billing
-  - Subscription
-  - CPQ
-  - Quote-to-Cash
-  - Payments
-  - Invoicing
-  - Revenue Operations
-  - E-Signature
-  - Retired API
-  tags_raw:
-  - Billing
-  - Subscriptions
-  - CPQ
-  - Quote-to-Cash
-  - Payments
-  - Invoicing
-  - Revenue Operations
-  - E-Signature
-  - Retired API
+  - Accounts
   properties:
   - type: OpenAPI
-    url: openapi/cacheflow-api-openapi.yml
+    url: openapi/cacheflow-accounts-api-openapi.yml
   - type: DeveloperPortal
     url: https://developer.getcacheflow.com/
   - type: Documentation
@@ -126,8 +102,1913 @@ apis:
     url: sandbox/cacheflow-sandbox.yml
   - type: RateLimits
     url: rate-limits/cacheflow-rate-limits.yml
-  - type: Overlay
-    url: overlays/cacheflow-api-overlay.yaml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-addresses-api
+  name: Cacheflow Addresses API
+  description: The Addresses API from Cacheflow — 2 operation(s) for addresses.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-addresses-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-approval-groups-api
+  name: Cacheflow Approval Groups API
+  description: The Approval Groups API from Cacheflow — 3 operation(s) for approval groups.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Approval Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-approval-groups-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-approval-requests-api
+  name: Cacheflow Approval Requests API
+  description: The Approval Requests API from Cacheflow — 1 operation(s) for approval requests.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Approval Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-approval-requests-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-attachments-api
+  name: Cacheflow Attachments API
+  description: The Attachments API from Cacheflow — 2 operation(s) for attachments.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Attachments
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-attachments-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-authentication-api
+  name: Cacheflow Authentication API
+  description: The Authentication API from Cacheflow — 1 operation(s) for authentication.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-authentication-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-branding-api
+  name: Cacheflow Branding API
+  description: The Branding API from Cacheflow — 6 operation(s) for branding.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Branding
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-branding-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-checkout-api
+  name: Cacheflow Checkout API
+  description: The Checkout API from Cacheflow — 6 operation(s) for checkout.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Checkout
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-checkout-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-close-api
+  name: Cacheflow Close API
+  description: The Close API from Cacheflow — 3 operation(s) for close.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Close
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-close-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-contacts-api
+  name: Cacheflow Contacts API
+  description: The Contacts API from Cacheflow — 2 operation(s) for contacts.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-contacts-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-countries-api
+  name: Cacheflow Countries API
+  description: The Countries API from Cacheflow — 2 operation(s) for countries.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Countries
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-countries-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-crm-api
+  name: Cacheflow CRM API
+  description: The CRM API from Cacheflow — 11 operation(s) for crm.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - CRM
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-crm-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-currencies-api
+  name: Cacheflow Currencies API
+  description: The Currencies API from Cacheflow — 3 operation(s) for currencies.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Currencies
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-currencies-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-customers-api
+  name: Cacheflow Customers API
+  description: The Customers API from Cacheflow — 3 operation(s) for customers.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-customers-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-documents-api
+  name: Cacheflow Documents API
+  description: The Documents API from Cacheflow — 5 operation(s) for documents.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-documents-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-docusign-api
+  name: Cacheflow Docu Sign API
+  description: The DocuSign API from Cacheflow — 6 operation(s) for docusign.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - DocuSign
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-docusign-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-events-api
+  name: Cacheflow Events API
+  description: The Events API from Cacheflow — 1 operation(s) for events.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-events-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-hubspot-deals-api
+  name: Cacheflow HubSpot Deals API
+  description: The HubSpot Deals API from Cacheflow — 3 operation(s) for hubspot deals.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - HubSpot Deals
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-hubspot-deals-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-hubspot-webhooks-api
+  name: Cacheflow HubSpot Webhooks API
+  description: The HubSpot Webhooks API from Cacheflow — 1 operation(s) for hubspot webhooks.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - HubSpot Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-hubspot-webhooks-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-index-api
+  name: Cacheflow Index API
+  description: The Index API from Cacheflow — 1 operation(s) for index.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Index
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-index-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-integrations-api
+  name: Cacheflow Integrations API
+  description: The Integrations API from Cacheflow — 23 operation(s) for integrations.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-integrations-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-invoice-api
+  name: Cacheflow Invoice API
+  description: The Invoice API from Cacheflow — 1 operation(s) for invoice.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-invoice-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-invoice-configurations-api
+  name: Cacheflow Invoice Configurations API
+  description: >-
+    The Invoice Configurations API from Cacheflow — 1 operation(s) for invoice configurations.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Invoice Configurations
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-invoice-configurations-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-invoices-api
+  name: Cacheflow Invoices API
+  description: The Invoices API from Cacheflow — 11 operation(s) for invoices.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-invoices-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-latest-api
+  name: Cacheflow Latest API
+  description: The Latest API from Cacheflow — 2 operation(s) for latest.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Latest
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-latest-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-metabase-api
+  name: Cacheflow Metabase API
+  description: The Metabase API from Cacheflow — 2 operation(s) for metabase.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Metabase
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-metabase-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-metrics-api
+  name: Cacheflow Metrics API
+  description: The Metrics API from Cacheflow — 3 operation(s) for metrics.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-metrics-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-migration-api
+  name: Cacheflow Migration API
+  description: The Migration API from Cacheflow — 2 operation(s) for migration.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Migration
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-migration-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-organizations-api
+  name: Cacheflow Organizations API
+  description: The Organizations API from Cacheflow — 4 operation(s) for organizations.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-organizations-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-payment-methods-api
+  name: Cacheflow Payment Methods API
+  description: The Payment Methods API from Cacheflow — 4 operation(s) for payment methods.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-payment-methods-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-payment-schedules-api
+  name: Cacheflow Payment Schedules API
+  description: The Payment Schedules API from Cacheflow — 1 operation(s) for payment schedules.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Payment Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-payment-schedules-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-payment-terms-api
+  name: Cacheflow Payment Terms API
+  description: The Payment Terms API from Cacheflow — 3 operation(s) for payment terms.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Payment Terms
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-payment-terms-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-payments-api
+  name: Cacheflow Payments API
+  description: The Payments API from Cacheflow — 5 operation(s) for payments.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-payments-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-payouts-api
+  name: Cacheflow Payouts API
+  description: The Payouts API from Cacheflow — 1 operation(s) for payouts.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Payouts
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-payouts-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-products-api
+  name: Cacheflow Products API
+  description: The Products API from Cacheflow — 10 operation(s) for products.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-products-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-proposal-approval-rules-api
+  name: Cacheflow Proposal Approval Rules API
+  description: >-
+    The Proposal Approval Rules API from Cacheflow — 2 operation(s) for proposal approval rules.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Proposal Approval Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-proposal-approval-rules-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-proposal-approvals-api
+  name: Cacheflow Proposal Approvals API
+  description: The Proposal Approvals API from Cacheflow — 3 operation(s) for proposal approvals.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Proposal Approvals
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-proposal-approvals-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-proposal-deltas-api
+  name: Cacheflow Proposal Deltas API
+  description: The Proposal Deltas API from Cacheflow — 1 operation(s) for proposal deltas.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Proposal Deltas
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-proposal-deltas-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-proposals-api
+  name: Cacheflow Proposals API
+  description: The Proposals API from Cacheflow — 43 operation(s) for proposals.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Proposals
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-proposals-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-refunds-api
+  name: Cacheflow Refunds API
+  description: The Refunds API from Cacheflow — 5 operation(s) for refunds.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-refunds-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-renewal-configurations-api
+  name: Cacheflow Renewal Configurations API
+  description: >-
+    The Renewal Configurations API from Cacheflow — 1 operation(s) for renewal configurations.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Renewal Configurations
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-renewal-configurations-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-roles-api
+  name: Cacheflow Roles API
+  description: The Roles API from Cacheflow — 2 operation(s) for roles.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-roles-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-salesforce-api
+  name: Cacheflow Salesforce API
+  description: The Salesforce API from Cacheflow — 3 operation(s) for salesforce.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Salesforce
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-salesforce-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-self-service-api
+  name: Cacheflow Self Service API
+  description: The Self Service API from Cacheflow — 2 operation(s) for self service.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Self Service
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-self-service-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-settings-api
+  name: Cacheflow Settings API
+  description: The Settings API from Cacheflow — 6 operation(s) for settings.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-settings-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-slack-api
+  name: Cacheflow Slack API
+  description: The Slack API from Cacheflow — 5 operation(s) for slack.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Slack
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-slack-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-stripe-api
+  name: Cacheflow Stripe API
+  description: The Stripe API from Cacheflow — 6 operation(s) for stripe.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Stripe
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-stripe-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-subscriptions-api
+  name: Cacheflow Subscriptions API
+  description: The Subscriptions API from Cacheflow — 16 operation(s) for subscriptions.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-subscriptions-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-system-api
+  name: Cacheflow System API
+  description: The System API from Cacheflow — 33 operation(s) for system.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - System
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-system-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-taxes-api
+  name: Cacheflow Taxes API
+  description: The Taxes API from Cacheflow — 4 operation(s) for taxes.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Taxes
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-taxes-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-tokens-api
+  name: Cacheflow Tokens API
+  description: The Tokens API from Cacheflow — 2 operation(s) for tokens.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-tokens-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-transfers-api
+  name: Cacheflow Transfers API
+  description: The Transfers API from Cacheflow — 6 operation(s) for transfers.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-transfers-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-uoms-api
+  name: Cacheflow UO Ms API
+  description: The UOMs API from Cacheflow — 2 operation(s) for uoms.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - UOMs
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-uoms-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-usage-api
+  name: Cacheflow Usage API
+  description: The Usage API from Cacheflow — 2 operation(s) for usage.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-usage-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-user-groups-api
+  name: Cacheflow User Groups API
+  description: The User Groups API from Cacheflow — 3 operation(s) for user groups.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - User Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-user-groups-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-users-api
+  name: Cacheflow Users API
+  description: The Users API from Cacheflow — 11 operation(s) for users.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-users-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
+  - type: LLMsTxt
+    url: llms/cacheflow-llms.txt
+- aid: cacheflow:cacheflow-webhooks-api
+  name: Cacheflow Webhooks API
+  description: The Webhooks API from Cacheflow — 6 operation(s) for webhooks.
+  humanURL: https://developer.getcacheflow.com/reference
+  baseURL: https://api.getcacheflow.com
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cacheflow-webhooks-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.getcacheflow.com/
+  - type: Documentation
+    url: https://developer.getcacheflow.com/reference
+  - type: APIReference
+    url: https://developer.getcacheflow.com/reference
+  - type: GettingStarted
+    url: https://developer.getcacheflow.com/reference/create-an-api-token-copy
+  - type: Authentication
+    url: authentication/cacheflow-authentication.yml
+  - type: Conventions
+    url: conventions/cacheflow-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cacheflow-error-codes.yml
+  - type: DataModel
+    url: data-model/cacheflow-data-model.yml
+  - type: Webhooks
+    url: asyncapi/cacheflow-webhooks.yml
+  - type: Sandbox
+    url: sandbox/cacheflow-sandbox.yml
+  - type: RateLimits
+    url: rate-limits/cacheflow-rate-limits.yml
   - type: LLMsTxt
     url: llms/cacheflow-llms.txt
 maintainers:
