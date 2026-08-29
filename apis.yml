@@ -2029,6 +2029,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/cacheflow-capability-edges.yml
+  name: Cacheflow Business Capability Map
 - type: Website
   url: http://www.getcacheflow.com/
 - type: DeveloperPortal
