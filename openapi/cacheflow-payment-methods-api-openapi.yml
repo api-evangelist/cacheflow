@@ -1,0 +1,448 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Payment Methods API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Payment Methods
+paths:
+  /api/latest/payment-methods:
+    get:
+      tags:
+      - Payment Methods
+      summary: List payment methods.
+      operationId: getPaymentMethods
+      parameters:
+      - name: currency
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+  /api/latest/settings/payment-methods:
+    get:
+      tags:
+      - Payment Methods
+      summary: List payment methods.
+      operationId: getSettingsPaymentMethods
+      parameters:
+      - name: currency
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+    post:
+      tags:
+      - Payment Methods
+      summary: Create a payment method
+      operationId: createPaymentMethod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethodRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+  /api/latest/settings/payment-methods/{id}:
+    delete:
+      tags:
+      - Payment Methods
+      summary: Delete a payment method
+      operationId: deletePaymentMethod
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Payment Methods
+      summary: Update a payment method
+      operationId: updatePaymentMethod
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentMethodRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+  /api/latest/settings/payment-methods/batch/{ids}:
+    patch:
+      tags:
+      - Payment Methods
+      summary: Update a payment method batch
+      operationId: updatePaymentMethodBatch
+      parameters:
+      - name: ids
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UpdatePaymentMethodRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
+    UpdatePaymentMethodRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        isEnabledSet:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
+    CreatePaymentMethodRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        isEnabledSet:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
+        paymentType:
+          type: string
+          enum:
+          - ach
+          - cc
+          - check
+          - custom
+          - direct_debit
+          - wire
+          - external
+          - manual
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        configured:
+          type: boolean
+        managed:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        account:
+          $ref: '#/components/schemas/Account'
+        accountId:
+          type: string
+          format: uuid
+        paymentType:
+          type: string
+          enum:
+          - ach
+          - cc
+          - check
+          - custom
+          - direct_debit
+          - wire
+          - external
+          - manual
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
+        processor:
+          type: string
+          enum:
+          - plaid
+          - stripe
+          - manual
+        activePaymentMethod:
+          type: boolean
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        deleted:
+          type: boolean
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/Address'
+        institutionName:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - depository
+          - credit
+          - manual
+          - external
+        subtype:
+          type: string
+        mask:
+          type: string
+        legalName:
+          type: string
+        currency:
+          type: string
+        ownerType:
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        wireNumber:
+          type: string
+        expMonth:
+          type: integer
+          format: int32
+        expYear:
+          type: integer
+          format: int32
+        cvv:
+          type: integer
+          format: int32
+        bic:
+          type: string
+        iban:
+          type: string
+        sortCode:
+          type: string
+        institutionNumber:
+          type: string
+        transitNumber:
+          type: string
+        verificationLink:
+          type: string
+        mandateId:
+          type: string

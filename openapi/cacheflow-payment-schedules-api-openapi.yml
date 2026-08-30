@@ -1,0 +1,237 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Payment Schedules API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Payment Schedules
+paths:
+  /api/latest/data/payment-schedules/{id}:
+    patch:
+      tags:
+      - Payment Schedules
+      summary: Update a payment schedule
+      operationId: updatePaymentSchedule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentSchedule'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSchedule'
+components:
+  schemas:
+    PaymentComponent:
+      required:
+      - amount
+      - baseAmount
+      - currency
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        productId:
+          type: string
+          format: uuid
+        bundleId:
+          type: string
+          format: uuid
+        bundleItemId:
+          type: string
+          format: uuid
+        itemId:
+          type: string
+          format: uuid
+        itemKey:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        bundleName:
+          type: string
+        bundleDescription:
+          type: string
+        bundleQuantity:
+          type: number
+        amount:
+          type: integer
+          format: int64
+        baseAmount:
+          type: integer
+          format: int64
+        listAmount:
+          type: integer
+          format: int64
+        taxAmount:
+          type: integer
+          format: int64
+        proration:
+          type: integer
+          format: int32
+        quantity:
+          type: number
+        taxAmountFormatted:
+          type: string
+        baseAmountFormatted:
+          type: string
+        amountFormatted:
+          type: string
+        listAmountFormatted:
+          type: string
+    PaymentSchedule:
+      required:
+      - currency
+      - payEvery
+      - scheduleType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        payEvery:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        scheduleType:
+          type: string
+          enum:
+          - standard
+          - upfront
+        paymentMethodIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        total:
+          type: integer
+          format: int64
+        baseTotal:
+          type: integer
+          format: int64
+        listTotal:
+          type: integer
+          format: int64
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        totalDiscount:
+          type: integer
+          format: int64
+        totalDiscountPercent:
+          type: integer
+          format: int32
+        totalFormatted:
+          type: string
+        baseTotalFormatted:
+          type: string
+        listTotalFormatted:
+          type: string
+        totalDiscountFormatted:
+          type: string
+    Payment:
+      required:
+      - amount
+      - baseAmount
+      - currency
+      - dueDate
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        scheduleDate:
+          type: string
+          format: date
+        amount:
+          type: integer
+          format: int64
+        baseAmount:
+          type: integer
+          format: int64
+        listAmount:
+          type: integer
+          format: int64
+        changeProposalId:
+          type: string
+          format: uuid
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentComponent'
+        baseAmountFormatted:
+          type: string
+        amountFormatted:
+          type: string
+        listAmountFormatted:
+          type: string

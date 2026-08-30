@@ -1,0 +1,39 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Latest API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Latest
+paths:
+  /api/latest/application.wadl/{path}:
+    get:
+      operationId: getExternalGrammar
+      parameters:
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/xml: {}
+      tags:
+      - Latest
+  /api/latest/application.wadl:
+    get:
+      operationId: getWadl
+      responses:
+        default:
+          description: default response
+          content:
+            application/vnd.sun.wadl+xml: {}
+            application/xml: {}
+      tags:
+      - Latest

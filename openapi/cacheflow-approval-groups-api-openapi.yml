@@ -1,0 +1,197 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Approval Groups API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Approval Groups
+paths:
+  /api/latest/data/approval-groups:
+    get:
+      tags:
+      - Approval Groups
+      summary: List approval groups
+      operationId: getAllApprovalGroups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalGroup'
+    post:
+      tags:
+      - Approval Groups
+      summary: Create an approval group
+      operationId: createApprovalGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalGroupRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalGroup'
+  /api/latest/data/approval-groups/{id}:
+    get:
+      tags:
+      - Approval Groups
+      summary: Retrieve an approval group
+      operationId: getApprovalGroupById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalGroup'
+    put:
+      tags:
+      - Approval Groups
+      summary: Update an approval group
+      operationId: updateApprovalGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalGroupRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalGroup'
+    delete:
+      tags:
+      - Approval Groups
+      summary: Delete an approval group
+      operationId: deleteApprovalGroup
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/latest/data/users/{id}/approval-groups:
+    get:
+      tags:
+      - Approval Groups
+      summary: List approval groups
+      operationId: getApprovalGroupsByUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalGroup'
+components:
+  schemas:
+    ApprovalGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        groupId:
+          type: string
+          format: uuid
+    ApprovalGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        group:
+          $ref: '#/components/schemas/Group'
+        priority:
+          type: integer
+          format: int32
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        name:
+          type: string

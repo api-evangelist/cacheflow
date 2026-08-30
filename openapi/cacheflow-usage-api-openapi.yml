@@ -1,0 +1,99 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Usage API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Usage
+paths:
+  /api/latest/data/billing-schedules/{id}/usage:
+    get:
+      tags:
+      - Usage
+      summary: List usage for a billing schedule
+      operationId: getBillingScheduleUsage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductUsage'
+  /api/latest/usage:
+    post:
+      tags:
+      - Usage
+      summary: Create usage
+      operationId: createUsage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductUsageRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductUsage'
+components:
+  schemas:
+    ProductUsage:
+      required:
+      - currency
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        billingItemId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+        amountFormatted:
+          type: string
+    ProductUsageRequest:
+      type: object
+      properties:
+        billingItemId:
+          type: string
+          format: uuid
+        quantity:
+          type: number

@@ -1,0 +1,77 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Metabase API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Metabase
+paths:
+  /api/latest/metabase/embed:
+    post:
+      tags:
+      - Metabase
+      summary: Create a token to view an embedded dashboard in Metabase
+      operationId: createEmbedToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetabaseRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetabaseResponse'
+  /api/latest/metabase/sso:
+    post:
+      tags:
+      - Metabase
+      summary: Create a token to SSO into Metabase
+      operationId: createMetabaseToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetabaseRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetabaseResponse'
+components:
+  schemas:
+    MetabaseRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        orgId:
+          type: string
+          format: uuid
+        dashboard:
+          type: integer
+          format: int32
+        question:
+          type: integer
+          format: int32
+    MetabaseResponse:
+      required:
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+        dashboardHome:
+          type: string

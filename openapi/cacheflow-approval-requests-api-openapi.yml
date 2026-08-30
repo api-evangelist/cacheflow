@@ -1,0 +1,457 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Approval Requests API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Approval Requests
+paths:
+  /api/latest/approval-requests/me:
+    get:
+      tags:
+      - Approval Requests
+      summary: Retrieve approval requests
+      operationId: getMyApproverRequests
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalRequestSummary'
+components:
+  schemas:
+    SigningDocumentSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        signedAt:
+          type: string
+          format: date-time
+    OrgId:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+    CustomerSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        billingContact:
+          $ref: '#/components/schemas/PersonSummary'
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        name:
+          type: string
+    ApprovalAction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        action:
+          type: string
+          enum:
+          - approve
+          - reject
+          - cancel
+          - comment
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    PersonSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+    ApprovalRequestSummary:
+      required:
+      - approvalGroup
+      - id
+      - requester
+      - status
+      - strategy
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        proposal:
+          $ref: '#/components/schemas/ProposalSummary'
+        requester:
+          $ref: '#/components/schemas/User'
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          - canceled
+        strategy:
+          type: string
+          enum:
+          - any
+        message:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalAction'
+        approvalGroup:
+          $ref: '#/components/schemas/ApprovalGroup'
+    ApprovalGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        group:
+          $ref: '#/components/schemas/Group'
+        priority:
+          type: integer
+          format: int32
+    ProposalSummary:
+      required:
+      - amount
+      - archived
+      - createdAt
+      - currency
+      - deleted
+      - displayStatus
+      - id
+      - name
+      - orgId
+      - owner
+      - proposalType
+      - status
+      - systemGenerated
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        orgId:
+          $ref: '#/components/schemas/OrgId'
+        name:
+          type: string
+        description:
+          type: string
+        currency:
+          type: string
+        amount:
+          type: integer
+          format: int64
+        proposalNumber:
+          type: string
+        externalId:
+          type: string
+        termType:
+          type: string
+          deprecated: true
+          enum:
+          - month
+          - quarter
+          - year
+        termQty:
+          type: integer
+          format: int32
+          deprecated: true
+        source:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        status:
+          type: string
+          enum:
+          - draft
+          - pending_approval
+          - approved
+          - schedule_selection
+          - payment_selection
+          - active
+          - pending_renewal
+          - accepted
+          - expired
+          - cancelled
+          - deleted
+        displayStatus:
+          type: string
+          enum:
+          - draft
+          - active
+          - approved
+          - archived
+          - expired
+          - cancelled
+          - deleted
+          - completed
+          - pending_approval
+          - shared_payment_selection
+          - shared_schedule_selection
+          - shared_active
+          - signed_awaiting_payment
+        optionsValue:
+          type: string
+        signingOrderBy:
+          type: string
+        owner:
+          $ref: '#/components/schemas/PersonSummary'
+        customer:
+          $ref: '#/components/schemas/CustomerSummary'
+        signingDocument:
+          $ref: '#/components/schemas/SigningDocumentSummary'
+        lastEvent:
+          $ref: '#/components/schemas/ProposalSummaryEvent'
+        proposalType:
+          type: string
+          enum:
+          - initial
+          - change
+          - renewal
+          - template
+        previewCode:
+          type: string
+        contractId:
+          type: string
+          format: uuid
+        systemGenerated:
+          type: boolean
+        deleted:
+          type: boolean
+        archived:
+          type: boolean
+        options:
+          type: object
+          additionalProperties:
+            type: boolean
+        amountFormatted:
+          type: string
+    ProposalSummaryEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        eventType:
+          type: string
+          enum:
+          - created
+          - updated
+          - archived
+          - restore
+          - activated
+          - started
+          - set_to_draft
+          - contact_added
+          - contact_removed
+          - expired
+          - cancelled
+          - deleted
+          - buyer_downloaded
+          - buyer_printed
+          - seller_downloaded
+          - signing
+          - viewed
+          - unviewable_status
+          - request_new
+          - accepted
+          - invited
+          - created_signing_doc
+          - cancelled_signing_doc
+          - signed
+          - buyer_updated
+          - billing_method_added
+          - renewal_pending
+          - approval_requested
+          - approval_approved
+          - approval_rejected
+          - approval_canceled
+          - items_date_truncated
+          - items_date_cleared
+        user:
+          $ref: '#/components/schemas/PersonSummary'
+        contact:
+          $ref: '#/components/schemas/PersonSummary'

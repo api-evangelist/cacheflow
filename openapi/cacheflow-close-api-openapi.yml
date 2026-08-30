@@ -1,0 +1,121 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Close API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Close
+paths:
+  /api/latest/data/close/contacts:
+    get:
+      tags:
+      - Close
+      summary: List contacts
+      operationId: getCloseContacts
+      responses:
+        '200':
+          description: List of Close contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloseContact'
+  /api/latest/data/close/leads:
+    get:
+      tags:
+      - Close
+      summary: List leads
+      operationId: getCloseLeads
+      responses:
+        '200':
+          description: List of Close Leads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloseLead'
+  /api/latest/data/close/proxy/{path}:
+    get:
+      tags:
+      - Close
+      summary: Proxy to Close API
+      operationId: proxy
+      parameters:
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Proxy to Close API
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+components:
+  schemas:
+    CloseContact:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloseEmail'
+        lead_id:
+          type: string
+    CloseAddress:
+      type: object
+      properties:
+        address_1:
+          type: string
+        address_2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipcode:
+          type: string
+        label:
+          type: string
+    CloseEmail:
+      type: object
+      properties:
+        type:
+          type: string
+        email:
+          type: string
+    CloseLead:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        display_name:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloseAddress'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloseContact'

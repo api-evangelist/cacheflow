@@ -1,0 +1,491 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Webhooks API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Webhooks
+paths:
+  /api/latest/settings/api/hooks:
+    get:
+      tags:
+      - Webhooks
+      summary: List webhooks
+      operationId: getHooks
+      parameters:
+      - name: eventType
+        in: query
+        schema:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiWebhook'
+    post:
+      tags:
+      - Webhooks
+      summary: Create a webhook
+      operationId: addWebhook
+      parameters:
+      - name: testAllowHttp
+        in: query
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiWebhookRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiWebhook'
+  /api/latest/settings/api/hooks/{id}/events:
+    get:
+      tags:
+      - Webhooks
+      summary: Get events for a webhook
+      operationId: getHookEvents
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sort
+        in: query
+        schema:
+          type: string
+          default: -createdAt
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 300
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebhookResult'
+  /api/latest/settings/api/hooks/{id}:
+    delete:
+      tags:
+      - Webhooks
+      summary: Delete a webhook
+      operationId: removeHook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Webhooks
+      summary: Update a webhook
+      operationId: updateWebhook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: testAllowHttp
+        in: query
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApiWebhookRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiWebhook'
+  /api/latest/settings/api/trigger/event:
+    post:
+      tags:
+      - Webhooks
+      summary: Create a webhook event
+      operationId: testEvent
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebHookEvent'
+  /api/latest/settings/api/hooks/{id}/test:
+    get:
+      tags:
+      - Webhooks
+      summary: Test a webhook
+      operationId: testHook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResult'
+  /api/latest/settings/webhooks:
+    get:
+      tags:
+      - Webhooks
+      summary: List webhooks
+      operationId: getWebhooksMetadata
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksMetadata'
+components:
+  schemas:
+    WebhookResult:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        referenceId:
+          type: string
+          format: uuid
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        status:
+          type: string
+          enum:
+          - sent
+          - failed
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        result:
+          type: string
+        request:
+          $ref: '#/components/schemas/WebHookEvent'
+    ApiWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        name:
+          type: string
+        url:
+          type: string
+    WebHookData:
+      title: WebHook event data
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+    UpdateApiWebhookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+    CreateApiWebhookRequest:
+      required:
+      - eventType
+      - name
+      - url
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        name:
+          type: string
+        url:
+          type: string
+    WebhookMetadata:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    WebhooksMetadata:
+      type: object
+      properties:
+        webhooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookMetadata'
+    WebHookEvent:
+      type: object
+      properties:
+        orgId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        fields:
+          $ref: '#/components/schemas/WebHookData'

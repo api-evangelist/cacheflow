@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Currencies API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Currencies
+paths:
+  /api/latest/settings/currencies:
+    get:
+      tags:
+      - Currencies
+      summary: List currencies
+      operationId: listCurrencies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+    post:
+      tags:
+      - Currencies
+      summary: Create a currency
+      operationId: createCurrency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+  /api/latest/settings/currencies/{code}:
+    get:
+      tags:
+      - Currencies
+      summary: Retrieve a currency
+      operationId: getCurrency
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+    patch:
+      tags:
+      - Currencies
+      summary: Update a currency
+      operationId: updateCurrency
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Currency'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+  /api/latest/settings/currencies/all:
+    get:
+      tags:
+      - Currencies
+      summary: List all available currencies
+      operationId: listAllCurrencies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyListing'
+components:
+  schemas:
+    CurrencyListing:
+      required:
+      - code
+      - defaultScale
+      - description
+      - extendedScale
+      - symbol
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        symbol:
+          type: string
+        defaultScale:
+          type: integer
+          format: int32
+        extendedScale:
+          type: integer
+          format: int32
+    Currency:
+      required:
+      - active
+      - code
+      - reportExchangeRate
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        active:
+          type: boolean
+        code:
+          type: string
+        reportExchangeRate:
+          type: integer
+          format: int64
+        symbol:
+          type: string
+        defaultScale:
+          type: integer
+          format: int32
+        extendedScale:
+          type: integer
+          format: int32

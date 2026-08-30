@@ -1,0 +1,123 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Addresses API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Addresses
+paths:
+  /api/latest/proposals/{id}/verified-address:
+    put:
+      tags:
+      - Addresses
+      summary: Verify an address
+      operationId: acceptVerifiedAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressRest'
+  /api/latest/proposals/{id}/verify-address:
+    post:
+      tags:
+      - Addresses
+      summary: Verify an address
+      operationId: verifyAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyAddressResponse'
+components:
+  schemas:
+    AddressRequest:
+      required:
+      - city
+      - country
+      - postalCode
+      - region
+      - streetAddress
+      type: object
+      properties:
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    AddressRest:
+      required:
+      - city
+      - country
+      - postalCode
+      - region
+      - streetAddress
+      type: object
+      properties:
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    VerifyAddressResponse:
+      required:
+      - originalAddress
+      type: object
+      properties:
+        originalAddress:
+          $ref: '#/components/schemas/AddressRest'
+        verifiedAddress:
+          $ref: '#/components/schemas/AddressRest'
+        couldNotBeVerified:
+          type: boolean
+        badCountry:
+          type: boolean
+        wasSaved:
+          type: boolean

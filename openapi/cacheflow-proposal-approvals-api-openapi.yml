@@ -1,0 +1,327 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Proposal Approvals API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Proposal Approvals
+paths:
+  /api/latest/approval-requests/{id}/actions:
+    post:
+      tags:
+      - Proposal Approvals
+      summary: Action an approval
+      operationId: createApprovalAction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalAction'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalAction'
+  /api/latest/proposals/{id}/approval-requests:
+    get:
+      tags:
+      - Proposal Approvals
+      summary: Retrieve approval status for a proposal
+      operationId: getApprovalRequests
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalRequest'
+    post:
+      tags:
+      - Proposal Approvals
+      summary: Request approval for a proposal
+      operationId: requestApproval
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProposalApprovalRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalRequest'
+  /api/latest/proposals/{id}/approval-requirements:
+    get:
+      tags:
+      - Proposal Approvals
+      summary: Retrieve approval requirements for a proposal
+      operationId: getApprovalRequirements
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalRequirements'
+components:
+  schemas:
+    ApprovalRuleResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        ruleType:
+          type: string
+          enum:
+          - proposalAmountDecrease
+          - proposalAmount
+          - proposalAttachments
+          - proposalAutoRenewal
+          - proposalBillingPeriods
+          - proposalCountry
+          - proposalCustom
+          - proposalCustomTerms
+          - proposalDiscountPercent
+          - proposalDocusign
+          - proposalDuplicateProducts
+          - proposalExternalCrm
+          - proposalFreeMonths
+          - proposalItemQuantity
+          - proposalPaymentTerms
+          - proposalProductDiscountPercent
+          - proposalProducts
+          - proposalTermLength
+        required:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: string
+            format: uuid
+    ApprovalAction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        action:
+          type: string
+          enum:
+          - approve
+          - reject
+          - cancel
+          - comment
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    Approver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+    ApprovalRequirements:
+      type: object
+      properties:
+        requiresApproval:
+          type: boolean
+        currentStatus:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          - canceled
+        ruleResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRuleResult'
+    ProposalApprovalRequest:
+      type: object
+      properties:
+        message:
+          type: string
+    ApprovalRuleSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        ruleType:
+          type: string
+          enum:
+          - proposalAmountDecrease
+          - proposalAmount
+          - proposalAttachments
+          - proposalAutoRenewal
+          - proposalBillingPeriods
+          - proposalCountry
+          - proposalCustom
+          - proposalCustomTerms
+          - proposalDiscountPercent
+          - proposalDocusign
+          - proposalDuplicateProducts
+          - proposalExternalCrm
+          - proposalFreeMonths
+          - proposalItemQuantity
+          - proposalPaymentTerms
+          - proposalProductDiscountPercent
+          - proposalProducts
+          - proposalTermLength
+        description:
+          type: string
+    ApprovalRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        proposalId:
+          type: string
+          format: uuid
+        requester:
+          $ref: '#/components/schemas/User'
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - pending
+          - approved
+          - rejected
+          - canceled
+        strategy:
+          type: string
+          enum:
+          - any
+        message:
+          type: string
+        approvers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approver'
+        actions:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ApprovalAction'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRuleSummary'

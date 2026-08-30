@@ -1,0 +1,290 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Docu Sign API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: DocuSign
+paths:
+  /api/latest/settings/docusign/user:
+    get:
+      tags:
+      - DocuSign
+      summary: Retrieve DocuSign user
+      operationId: checkDocusignUser
+      parameters:
+      - name: code
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocusignUser'
+  /api/latest/settings/docusign:
+    get:
+      tags:
+      - DocuSign
+      summary: Retrieve DocuSign settings
+      operationId: getDocusignAccount
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocusignAccount'
+    post:
+      tags:
+      - DocuSign
+      summary: Create DocuSign settings
+      operationId: initDocusignAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocusignAccount'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocusignAccount'
+    patch:
+      tags:
+      - DocuSign
+      summary: Update DocuSign settings
+      operationId: updateDocusignAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocusignAccount'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocusignAccount'
+  /api/latest/settings/docusign/envelope-quota:
+    get:
+      tags:
+      - DocuSign
+      summary: Retrieve DocuSign envelope quota
+      operationId: getDocusignEnvelopeQuota
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocusignEnvelopeQuota'
+  /api/latest/settings/docusign/setup:
+    post:
+      tags:
+      - DocuSign
+      summary: Setup DocuSign
+      operationId: setupDocusignAccount
+      parameters:
+      - name: code
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+  /api/latest/settings/signatures/{id}:
+    get:
+      tags:
+      - DocuSign
+      summary: Retrieve a signature
+      operationId: getSignature
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signature'
+  /api/latest/settings/users/{user_id}/signature:
+    get:
+      tags:
+      - DocuSign
+      summary: Retrieve signature for user
+      operationId: getUserSignature
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signature'
+    put:
+      tags:
+      - DocuSign
+      summary: Update signature for user
+      operationId: updateUserSignature
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signature'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signature'
+    post:
+      tags:
+      - DocuSign
+      summary: Create signature for user
+      operationId: createUserSignature
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signature'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Signature'
+    delete:
+      tags:
+      - DocuSign
+      summary: Delete signature for user
+      operationId: deleteUserSignature
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    DocusignEnvelopeQuota:
+      required:
+      - blocked
+      - sent
+      - unlimitedQuota
+      type: object
+      properties:
+        allowed:
+          type: integer
+          format: int32
+        sent:
+          type: integer
+          format: int32
+        blocked:
+          type: boolean
+        unlimitedQuota:
+          type: boolean
+    DocusignAccount:
+      required:
+      - userId
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        userId:
+          type: string
+        HMACKey:
+          type: string
+          writeOnly: true
+        hmackey:
+          type: string
+        hasHMACKey:
+          type: boolean
+          readOnly: true
+    DocusignUser:
+      type: object
+      properties:
+        username:
+          type: string
+    Signature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        title:
+          type: string
+        signatureImageData:
+          type: string
+        userId:
+          type: string
+          format: uuid

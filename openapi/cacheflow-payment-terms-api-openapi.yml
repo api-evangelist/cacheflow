@@ -1,0 +1,150 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Payment Terms API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Payment Terms
+paths:
+  /api/latest/settings/payment-terms:
+    get:
+      tags:
+      - Payment Terms
+      summary: List payment terms
+      operationId: getPaymentTerms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentTerm'
+    post:
+      tags:
+      - Payment Terms
+      summary: Create a payment term
+      operationId: createPaymentTerm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTerm'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentTerm'
+  /api/latest/settings/payment-terms/{id}:
+    delete:
+      tags:
+      - Payment Terms
+      summary: Delete a payment term
+      operationId: deletePaymentTerm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Payment Terms
+      summary: Update a payment term
+      operationId: updatePaymentTerm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTerm'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentTerm'
+  /api/latest/settings/payment-terms/batch:
+    patch:
+      tags:
+      - Payment Terms
+      summary: List payment term batches
+      operationId: updatePaymentTermBatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentTerm'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentTerm'
+components:
+  schemas:
+    PaymentTerm:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        termType:
+          type: string
+          enum:
+          - net_15
+          - net_30
+          - net_45
+          - net_60
+          - net_75
+          - net_90
+          - upon_receipt
+          - end_of_month
+          - on_15th
+        days:
+          type: integer
+          format: int32

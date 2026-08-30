@@ -1,0 +1,961 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Products API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Products
+paths:
+  /api/latest/settings/pricebook-entries/{id}:
+    get:
+      tags:
+      - Products
+      summary: Retrieve a pricebook entry
+      operationId: getPricebookEntry
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricebookEntry'
+    patch:
+      tags:
+      - Products
+      summary: Update a pricebook entry
+      operationId: updatePricebook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricebookEntry'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricebookEntry'
+  /api/latest/settings/products/{id}/copy:
+    post:
+      tags:
+      - Products
+      summary: Copy a product
+      operationId: copyProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /api/latest/settings/products:
+    get:
+      tags:
+      - Products
+      summary: List products
+      operationId: listProducts
+      parameters:
+      - name: filterBy
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSummary'
+    post:
+      tags:
+      - Products
+      summary: Create a product
+      operationId: createProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /api/latest/settings/products/{id}:
+    get:
+      tags:
+      - Products
+      summary: Retrieve a product
+      operationId: getProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    delete:
+      tags:
+      - Products
+      summary: Delete a product
+      operationId: deleteProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+    patch:
+      tags:
+      - Products
+      summary: Update a product
+      operationId: updateProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /api/latest/settings/products/{id}/upgrades:
+    get:
+      tags:
+      - Products
+      summary: List available upgrades for bundle items nested within a bundle product
+      operationId: getAvailableProductUpgrades
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductUpgrade'
+  /api/latest/settings/products/latest-by-root/{id}:
+    get:
+      tags:
+      - Products
+      summary: Retrieve latest version of a product by root_id
+      operationId: getLatestByRoot
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /api/latest/settings/products/{id}/stats:
+    get:
+      tags:
+      - Products
+      summary: Retrieve stats about how a product is used
+      operationId: getProductStats
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductStats'
+  /api/latest/settings/products/batch/{ids}:
+    get:
+      tags:
+      - Products
+      summary: Retrieve a product batch
+      operationId: getProductsBatch
+      parameters:
+      - name: ids
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /api/latest/settings/products/active:
+    get:
+      tags:
+      - Products
+      summary: List active products
+      operationId: listActiveProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /api/latest/settings/products/{id}/versions:
+    post:
+      tags:
+      - Products
+      summary: Create a product version
+      operationId: versionProduct
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+components:
+  schemas:
+    ProductSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        internalName:
+          type: string
+        productType:
+          type: string
+          enum:
+          - single
+          - bundleTopDown
+          - bundleBottomUp
+        recurrence:
+          type: string
+          enum:
+          - one_time
+          - recurring
+          - usage
+        pricing:
+          type: string
+          enum:
+          - fixed
+          - graduated
+          - stairstep
+          - volume
+        consumption:
+          type: string
+          enum:
+          - single
+          - multiple
+        billing:
+          type: string
+          enum:
+          - scheduled
+          - fixed
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/PersonSummary'
+        subscriptionCount:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        currencies:
+          type: array
+          items:
+            type: string
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+    ProductRequest:
+      type: object
+      properties:
+        productType:
+          type: string
+          enum:
+          - single
+          - bundleTopDown
+          - bundleBottomUp
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        recurrence:
+          type: string
+          enum:
+          - one_time
+          - recurring
+          - usage
+        pricing:
+          type: string
+          enum:
+          - fixed
+          - graduated
+          - stairstep
+          - volume
+        consumption:
+          type: string
+          enum:
+          - single
+          - multiple
+        billing:
+          type: string
+          enum:
+          - scheduled
+          - fixed
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        unitId:
+          type: string
+          format: uuid
+        customizable:
+          type: boolean
+        descriptionCustomizable:
+          type: boolean
+        nameCustomizable:
+          type: boolean
+        discountable:
+          type: boolean
+        listPriceAdjustable:
+          type: boolean
+        displayQuantityOnInvoicePdf:
+          type: boolean
+        extendedScale:
+          type: boolean
+        showProductsOnInvoice:
+          type: boolean
+        showProductPricesOnInvoice:
+          type: boolean
+        showProductsOnProposal:
+          type: boolean
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricebookEntryRequest'
+        taxConfig:
+          $ref: '#/components/schemas/ProductTaxConfigRequest'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelRequest'
+        bundleItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundleItemRequest'
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        currencies:
+          type: array
+          items:
+            type: string
+    ProductTaxConfigRequest:
+      type: object
+      properties:
+        taxMode:
+          type: string
+          enum:
+          - inclusive
+          - exclusive
+        taxCode:
+          type: string
+    Money:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
+          type: string
+        currency:
+          type: string
+      description: Total list amount for this level. null for usage.
+    PricebookEntry:
+      required:
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    Product:
+      required:
+      - billing
+      - consumption
+      - createdAt
+      - customizable
+      - discountable
+      - displayQuantityOnInvoicePdf
+      - entries
+      - extendedScale
+      - hidden
+      - id
+      - listPriceAdjustable
+      - pricing
+      - productType
+      - recurrence
+      - status
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        hidden:
+          type: boolean
+        rootId:
+          type: string
+          format: uuid
+        productType:
+          type: string
+          enum:
+          - single
+          - bundleTopDown
+          - bundleBottomUp
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        recurrence:
+          type: string
+          enum:
+          - one_time
+          - recurring
+          - usage
+        pricing:
+          type: string
+          enum:
+          - fixed
+          - graduated
+          - stairstep
+          - volume
+        consumption:
+          type: string
+          enum:
+          - single
+          - multiple
+        billing:
+          type: string
+          enum:
+          - scheduled
+          - fixed
+        unit:
+          $ref: '#/components/schemas/Unit'
+        extendedScale:
+          type: boolean
+        customizable:
+          type: boolean
+        discountable:
+          type: boolean
+        displayQuantityOnInvoicePdf:
+          type: boolean
+        listPriceAdjustable:
+          type: boolean
+        descriptionCustomizable:
+          type: boolean
+        nameCustomizable:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        currencies:
+          type: array
+          items:
+            type: string
+        taxConfig:
+          $ref: '#/components/schemas/ProductTaxConfig'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricebookEntry'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLevel'
+        showProductsOnInvoice:
+          type: boolean
+        showProductPricesOnInvoice:
+          type: boolean
+        showProductsOnProposal:
+          type: boolean
+        bundleItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundleItem'
+        bundleBottomUpEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundlePriceEntry'
+        bundleGroups:
+          type: array
+          items:
+            type: string
+    BundleItem:
+      required:
+      - entries
+      - id
+      - name
+      - product
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: number
+        bundlePercent:
+          type: integer
+          format: int32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundlePriceEntry'
+        name:
+          type: string
+        description:
+          type: string
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
+          type: string
+        sourceLink:
+          type: string
+    PricebookEntryChange:
+      type: object
+      properties:
+        changeType:
+          type: string
+          enum:
+          - modify
+          - remove
+          - add
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        currency:
+          type: object
+          properties:
+            currencyCode:
+              type: string
+            defaultFractionDigits:
+              type: integer
+              format: int32
+            numericCode:
+              type: integer
+              format: int32
+            displayName:
+              type: string
+            symbol:
+              type: string
+            numericCodeAsString:
+              type: string
+        level:
+          type: integer
+          format: int32
+    LevelRequest:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int32
+    ProductTaxConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        taxMode:
+          type: string
+          enum:
+          - inclusive
+          - exclusive
+        taxCode:
+          $ref: '#/components/schemas/TaxCode'
+    PersonSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+    BundleItemRequest:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        bundlePercent:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+    PricebookEntryRequest:
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    ProductUpgrade:
+      required:
+      - changedFields
+      - productId
+      - upgrade
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        upgrade:
+          $ref: '#/components/schemas/Product'
+        changedFields:
+          type: array
+          items:
+            type: string
+        entryChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricebookEntryChange'
+    TaxCode:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        code:
+          type: string
+        description:
+          type: string
+    ProductStats:
+      required:
+      - anyVersionBundleCount
+      - anyVersionProposalCount
+      - bundleCount
+      - proposalCount
+      type: object
+      properties:
+        proposalCount:
+          type: integer
+          format: int32
+        bundleCount:
+          type: integer
+          format: int32
+        anyVersionProposalCount:
+          type: integer
+          format: int32
+        anyVersionBundleCount:
+          type: integer
+          format: int32
+    Unit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        plural:
+          type: string
+    BundlePriceEntry:
+      required:
+      - price
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        price:
+          $ref: '#/components/schemas/Money'
+    ProductLevel:
+      required:
+      - start
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        start:
+          type: integer
+          format: int32

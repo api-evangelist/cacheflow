@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Renewal Configurations API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Renewal Configurations
+paths:
+  /api/latest/renewal-config/{id}:
+    get:
+      tags:
+      - Renewal Configurations
+      summary: Retrieve a renewal configuration
+      operationId: getRenewalConfiguration
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - Renewal Configurations
+      summary: Delete a renewal configuration
+      operationId: deleteRenewalConfiguration_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+      - Renewal Configurations
+      summary: Update a renewal configuration
+      operationId: patchRenewalConfiguration
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenewalConfigurationRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenewalConfiguration'
+components:
+  schemas:
+    RenewalConfigurationRequest:
+      type: object
+      properties:
+        termLengthMonths:
+          type: integer
+          format: int32
+        renewalClause:
+          type: string
+        priceIncrease:
+          type: number
+        cancellationDeadlineDays:
+          type: integer
+          format: int32
+    RenewalConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        termLengthMonths:
+          type: integer
+          format: int32
+        cancellationDeadlineDays:
+          type: integer
+          format: int32
+        renewalClause:
+          type: string
+        priceIncrease:
+          minimum: 0
+          type: number
+        renewalClauseDescription:
+          type: string

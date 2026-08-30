@@ -1,0 +1,921 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Users API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Users
+paths:
+  /api/latest/data/users/{id}/emails:
+    post:
+      tags:
+      - Users
+      summary: Add user email
+      operationId: addUserEmail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEmail'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEmail'
+    delete:
+      tags:
+      - Users
+      summary: Delete user email
+      operationId: deleteUserEmail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEmail'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEmail'
+  /api/latest/data/users:
+    get:
+      tags:
+      - Users
+      summary: List users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+    post:
+      tags:
+      - Users
+      summary: Create a user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /api/latest/data/users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Retrieve a user
+      operationId: getUserById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    put:
+      tags:
+      - Users
+      summary: Update a user
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    delete:
+      tags:
+      - Users
+      summary: Delete a user
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/latest/profile/me/sso_redirect:
+    get:
+      tags:
+      - Users
+      summary: Retrieve SSO redirect
+      operationId: getSsoRedirect
+      parameters:
+      - name: sso_source
+        in: query
+        schema:
+          type: string
+      - name: return_to
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/latest/profile/me/support:
+    post:
+      tags:
+      - Users
+      summary: Retrieve support token
+      operationId: getSupportToken
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/latest/profile/me:
+    get:
+      tags:
+      - Users
+      summary: Retrieve user profile
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+    put:
+      tags:
+      - Users
+      summary: Update user profile
+      operationId: updateUser_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/latest/profile/me/logout:
+    get:
+      tags:
+      - Users
+      summary: Sign-out user
+      operationId: logout
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /api/latest/settings/invites:
+    get:
+      tags:
+      - Users
+      summary: List invites
+      operationId: getInvites
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invite'
+    post:
+      tags:
+      - Users
+      summary: Create invite
+      operationId: createInvite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invite'
+  /api/latest/settings/invites/{id}:
+    delete:
+      tags:
+      - Users
+      summary: Delete invite
+      operationId: removeInvite
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /api/latest/settings/me/configs/{config_key}:
+    get:
+      tags:
+      - Users
+      summary: Retrieve user config by key
+      operationId: getUserConfig
+      parameters:
+      - name: config_key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConfig'
+    put:
+      tags:
+      - Users
+      summary: Update a user config
+      operationId: upsertUserConfig
+      parameters:
+      - name: config_key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConfig'
+    post:
+      tags:
+      - Users
+      summary: Create a user config
+      operationId: createUserConfig
+      parameters:
+      - name: config_key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConfig'
+    delete:
+      tags:
+      - Users
+      summary: Delete a user config
+      operationId: deleteUserConfig
+      parameters:
+      - name: config_key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /api/latest/settings/me/configs:
+    get:
+      tags:
+      - Users
+      summary: List user configs
+      operationId: listUserConfigs
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserConfig'
+components:
+  schemas:
+    ReferenceSet:
+      type: object
+      properties:
+        references:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Reference'
+    Profile:
+      required:
+      - role
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        organizationId:
+          type: string
+          format: uuid
+        domain:
+          type: string
+        organizationName:
+          type: string
+        flowDomain:
+          type: string
+        organizationDefaultCurrency:
+          type: string
+        referenceSet:
+          $ref: '#/components/schemas/ReferenceSet'
+        identity:
+          $ref: '#/components/schemas/Identity'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        role:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        referenceTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - account
+            - apiwebhook
+            - apitoken
+            - approvalgroup
+            - attachmentconfig
+            - authidentity
+            - billingschedule
+            - companyInfo
+            - connectorSyncEvent
+            - contact
+            - contentTemplate
+            - contract
+            - contractitem
+            - contractitemlevel
+            - currency
+            - customer
+            - docusignaccount
+            - document
+            - documentversion
+            - group
+            - invite
+            - invoice
+            - invoiceConfiguration
+            - organization
+            - orgconfig
+            - orgidentitytoken
+            - payment
+            - paymentMethod
+            - paymentSchedule
+            - paymentTerm
+            - pricebook
+            - pricebookentry
+            - product
+            - productlevel
+            - productusage
+            - proposal
+            - proposalapprovalrule
+            - proposalevent
+            - proposalitem
+            - proposaliteminterval
+            - proposalitemlevel
+            - proposaloption
+            - refund
+            - renewalconfiguration
+            - signature
+            - signingdocument
+            - transfer
+            - transferevent
+            - unit
+            - user
+        isSysAdmin:
+          type: boolean
+    UserConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        configKey:
+          type: string
+        configValue:
+          type: object
+          additionalProperties:
+            type: object
+        userId:
+          type: string
+          format: uuid
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        name:
+          type: string
+    InviteRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        type:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    UserProfile:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        invite:
+          type: boolean
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        actorType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        orgId:
+          type: string
+        userId:
+          type: string
+        redirectUrl:
+          type: string
+        role:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+    UserEmail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        user:
+          $ref: '#/components/schemas/User'
+    Reference:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        ids:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        actions:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+            - none
+            - read
+            - create
+            - update
+            - delete
+            - sign
+            - planset_selection
+            - invite_contact
+            - billing_information
+            - billing_payment
+            - accept
+    Identity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        identityType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        firstName:
+          type: string
+        lastName:
+          type: string
+    Invite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        code:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        expiresAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+        group:
+          $ref: '#/components/schemas/Group'

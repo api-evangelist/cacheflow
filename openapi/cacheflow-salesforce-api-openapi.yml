@@ -1,0 +1,143 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Salesforce API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Salesforce
+paths:
+  /api/latest/data/salesforce/me:
+    get:
+      tags:
+      - Salesforce
+      summary: Gets info about the current logged in salesforce user
+      operationId: getConnectedSalesforceUser
+      responses:
+        '200':
+          description: The current logged in salesforce user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForceUser'
+      deprecated: true
+  /api/latest/data/salesforce/opportunities/{opportunityId}:
+    get:
+      tags:
+      - Salesforce
+      summary: Retrieve an opportunity
+      operationId: getSalesforceOpp
+      parameters:
+      - name: opportunityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Salesforce Opportunity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForceOpportunity'
+  /api/latest/data/salesforce/sync-contract/{contractId}:
+    put:
+      tags:
+      - Salesforce
+      summary: Sync a subscription to Salesforce
+      operationId: syncContract
+      parameters:
+      - name: contractId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+components:
+  schemas:
+    ForceAccount:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        BillingStreet:
+          type: string
+        BillingCity:
+          type: string
+        BillingState:
+          type: string
+        BillingCountry:
+          type: string
+        BillingPostalCode:
+          type: string
+        ShippingStreet:
+          type: string
+        ShippingCity:
+          type: string
+        ShippingState:
+          type: string
+        ShippingCountry:
+          type: string
+        ShippingPostalCode:
+          type: string
+        CurrencyIsoCode:
+          type: string
+        OwnerId:
+          type: string
+    ForceUser:
+      type: object
+      properties:
+        Id:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Email:
+          type: string
+        Title:
+          type: string
+        Username:
+          type: string
+        PackageVersion:
+          type: string
+        PackageInstalledAt:
+          type: string
+          format: date-time
+    ForceOpportunity:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Amount:
+          type: number
+          format: double
+        StageName:
+          type: string
+        Account:
+          $ref: '#/components/schemas/ForceAccount'
+        AccountId:
+          type: string
+        HasOpportunityLineItem:
+          type: boolean
+        Pricebook2Id:
+          type: string
+        CurrencyIsoCode:
+          type: string
+        CloseDate:
+          type: string
+          format: date
+        OwnerId:
+          type: string

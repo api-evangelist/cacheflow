@@ -1,0 +1,253 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Taxes API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Taxes
+paths:
+  /api/latest/settings/taxes/tax-codes:
+    get:
+      tags:
+      - Taxes
+      summary: List tax codes for an organization
+      operationId: getTaxCodes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxCodeRest'
+    post:
+      tags:
+      - Taxes
+      summary: Create a tax code
+      operationId: createTaxCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaxCodeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxCodeRest'
+  /api/latest/settings/taxes/tax-codes/{code}:
+    put:
+      tags:
+      - Taxes
+      summary: Update a tax code
+      operationId: updateTaxCode
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaxCodeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxCodeRest'
+    delete:
+      tags:
+      - Taxes
+      summary: Delete a tax code
+      operationId: deleteTaxCode
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxCodeRest'
+  /api/latest/settings/exempt-use-codes:
+    get:
+      tags:
+      - Taxes
+      summary: Get created tax codes for organization
+      operationId: getExemptTaxCodes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - A
+                  - B
+                  - C
+                  - D
+                  - E
+                  - F
+                  - G
+                  - H
+                  - I
+                  - J
+                  - K
+                  - L
+                  - M
+                  - N
+                  - P
+                  - Q
+                  - R
+  /api/latest/data/billing-schedules/{id}/tax-items:
+    get:
+      tags:
+      - Taxes
+      summary: List tax items for a billing schedule
+      operationId: getTaxItemsForBillingSchedule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxItem'
+    put:
+      tags:
+      - Taxes
+      summary: Update tax items for a billing schedule
+      operationId: updateTaxItemsForBillingSchedule
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxItem'
+components:
+  schemas:
+    UpdateTaxCodeRequest:
+      required:
+      - description
+      type: object
+      properties:
+        description:
+          type: string
+    CreateTaxCodeRequest:
+      required:
+      - code
+      - description
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+    TaxItem:
+      required:
+      - currency
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        billingItemId:
+          type: string
+          format: uuid
+        taxCode:
+          type: string
+        taxDescription:
+          type: string
+        rate:
+          type: number
+        rateType:
+          type: string
+        taxType:
+          type: string
+        jurisdiction:
+          type: string
+        jurisdictionCode:
+          type: string
+        jurisdictionId:
+          type: string
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        amount:
+          type: integer
+          format: int64
+        currency:
+          type: string
+    TaxCodeRest:
+      required:
+      - code
+      - description
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string

@@ -1,0 +1,87 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Events API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Events
+paths:
+  /api/latest/data/events/system:
+    get:
+      tags:
+      - Events
+      summary: List events
+      operationId: getSystemEvents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SystemEvent'
+    put:
+      tags:
+      - Events
+      summary: Update an event
+      operationId: updateSystemEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemEvent'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemEvent'
+components:
+  schemas:
+    SystemEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          enum:
+          - scheduled_job
+          - event_task
+          - migration
+        status:
+          type: string
+          enum:
+          - notready
+          - success
+          - failed
+        name:
+          type: string
+        reason:
+          type: string
+        log:
+          type: string
+        correlationRef:
+          type: string
+        instanceRef:
+          type: string

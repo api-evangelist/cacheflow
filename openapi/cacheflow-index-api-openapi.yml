@@ -1,0 +1,23 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Index API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Index
+paths:
+  /api/latest:
+    get:
+      tags:
+      - Index
+      summary: Retrieve webapp
+      operationId: get
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}

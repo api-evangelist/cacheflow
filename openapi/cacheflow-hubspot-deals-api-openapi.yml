@@ -1,0 +1,656 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow HubSpot Deals API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: HubSpot Deals
+paths:
+  /api/latest/data/hubspot/card-info:
+    get:
+      tags:
+      - HubSpot Deals
+      summary: Retrieve card info
+      operationId: getHubspotCardInfo
+      parameters:
+      - name: associatedObjectId
+        in: query
+        schema:
+          type: string
+      - name: portalId
+        in: query
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json: {}
+  /api/latest/data/hubspot/account-already-linked:
+    get:
+      tags:
+      - HubSpot Deals
+      summary: Validate HubSpot account
+      operationId: getIsHubspotAccountLinked
+      parameters:
+      - name: hubspotAccountId
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Check if HubSpot account is already linked to a Cacheflow org
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HubspotAccountLinkedRest'
+  /api/latest/data/hubspot/sync:
+    put:
+      tags:
+      - HubSpot Deals
+      summary: Sync customer
+      operationId: sync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SyncRequest'
+      responses:
+        '200':
+          description: List of SyncResponses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyncResponse'
+components:
+  schemas:
+    SyncRequest:
+      type: object
+      properties:
+        externalId:
+          type: string
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    ErrorObject:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum:
+          - NOT_FOUND
+          - OBJECT_ALREADY_EXISTS
+          - INVALID_FILTER
+          - VALIDATION_ERROR
+          - CONSTRAINT_ERROR
+          - DUPLICATE_ERROR
+          - SYSTEM_UNCAUGHT
+          - OBJECT_NOT_FOUND
+          - INPUT_CONFLICT
+          - MISSING_REQUIRED_REQUEST_BODY
+          - MISSING_REQUIRED_FIELD
+          - MISSING_QUERY_PARAM
+          - MISSING_ID_IN_URL
+          - CANT_SET_BOTH_IN_INPUT
+          - FIELD_TOO_LONG
+          - FIELD_NOT_NULLABLE
+          - READ_ONLY_FIELD
+          - NOT_AUTHORIZED_TO_ACCESS_ENTITY
+          - MALFORMED_ID_LIST
+          - UNSUPPORTED_TYPE
+          - FEATURE_NOT_ENABLED
+          - BATCH_INPUT_MISMATCH
+          - BATCH_PATCH_INPUT_MISSING_ID
+          - ILLEGAL_STATE
+          - INVALID_QUERY_PARAMS
+          - NULL_LIST_VALUE
+          - GET_ERROR
+          - CREATE_ERROR
+          - SAVE_ERROR
+          - DELETE_ERROR
+          - ARCHIVE_ERROR
+          - UPDATE_ERROR
+          - COPY_ERROR
+          - INVALID_ENDPOINT
+          - AUTH_CODE_INVALID
+          - AUTH_CODE_MAX_ATTEMPTS
+          - ACCOUNT_LEGALNAME_REQUIRED
+          - ACCOUNT_LEGALNAME_INVALID
+          - APIHOOK_INVALID_EVENT_TYPE
+          - APIHOOK_REQUIRES_HTTPS
+          - PLAID_AUTH_ERROR
+          - PLAID_ACCESS_TOKEN_ERROR
+          - PLAID_TRANSFER_ERROR
+          - PLAID_ACCOUNT_ONLY_ONE
+          - STRIPE_CONNECT_ERROR
+          - STRIPE_INVALID_ACCOUNT
+          - STRIPE_INVALID_INTENT
+          - STRIPE_CREATE_ACCOUNT_ERROR
+          - STRIPE_CREATE_CUSTOMER_ERROR
+          - STRIPE_ACCOUNT_ALREADY_CONNECTED
+          - DOCUMENT_STORE_ERROR
+          - DOCUMENT_INVALID_TYPE
+          - DOCUMENT_CORRUPT
+          - DOCUSIGN_ACCOUNT_ALREADY_EXISTS
+          - DOCUSIGN_ACCOUNT_NOT_REGISTERED
+          - DOCUSIGN_USER_ERROR
+          - DOCUSIGN_API_ERROR
+          - DOCUSIGN_AUTH_ERROR
+          - DOCUSIGN_BAD_FILE_TYPE
+          - DOCUSIGN_WEBHOOK_ERROR
+          - DOCUSIGN_HMAC_ERROR
+          - DOCUSIGN_MULTIPLE_SIGNERS
+          - DOCUSIGN_SIGNING_INCOMPLETE
+          - DOCUSIGN_SIGNER_MISMATCH
+          - DOCUSIGN_PROVIDER_EXPECTED
+          - DOCUSIGN_ENVELOPE_ALLOWANCE_EXCEEDED
+          - ORG_ACCOUNT_NOT_ACTIVE
+          - ORG_ACCOUNT_NOT_FUNDING
+          - ORG_ALREADY_EXISTS_FOR_DOMAIN
+          - ORG_KEYS_MISMATCH
+          - CACHEFLOW_FUNDING_ACCOUNT_NOT_FOUND
+          - USER_CANNOT_DELETE_SELF
+          - ROLE_NOT_FOUND
+          - USER_INVALID_DOMAIN
+          - USER_INVALID_ROLE
+          - USER_INVALID_MANAGER_CYCLE
+          - USER_INVALID_MANAGER_ROLE
+          - USER_INVALID_MANAGER_SELF
+          - USER_INVALID_MANAGER_STATUS
+          - USER_NOT_FOUND
+          - USER_DUPLICATE_USERNAME
+          - USER_CANNOT_CHANGE_FROM_ADMIN
+          - USER_IS_PROPOSAL_OWNER
+          - USER_IS_APPROVAL_REQUESTER
+          - USER_IS_APPROVAL_ACTIONER
+          - CUSTOMER_INVALID_EMAIL
+          - CUSTOMER_EMAIL_ALREADY_EXIST
+          - CUSTOMER_HAS_ACTIVE_DOCUMENTS
+          - CUSTOMER_IS_DELETED
+          - CUSTOMER_NAME_REQUIRED
+          - CUSTOMER_NOT_PARTNER
+          - CUSTOMER_ALREADY_EXISTS_FOR_EXTERNAL_SOURCE
+          - CUSTOMER_NOT_FOUND
+          - PROPOSAL_CANT_CHANGE_CUSTOMER_ON_SOURCED_PROPOSAL
+          - PROPOSAL_CANT_CHANGE_CUSTOMER_DUE_TO_PROPOSAL_STATE
+          - PROPOSAL_CANT_CHANGE_CUSTOMER_DUE_TO_PROPOSAL_TYPE
+          - PROPOSAL_NON_SETTABLE_STATUS
+          - PROPOSAL_TEMPLATE_NON_SETTABLE_STATUS
+          - PROPOSAL_STATUS_TRANSITION_ILLEGAL
+          - PROPOSAL_CONTACT_CUSTOMERID_DOESNT_MATCH
+          - PROPOSAL_CONTACT_SET_WITH_NO_CUSTOMER
+          - PROPOSAL_CONTACT_SET_INVALID_CONTACT
+          - PROPOSAL_NOT_VIEWABLE
+          - PROPOSAL_NOT_EDITABLE
+          - PROPOSAL_SUPERSEDED
+          - CONTACT_CANT_ACCESS_PROPOSAL
+          - CONTACT_CANT_ACCESS_CONTRACT
+          - PROPOSAL_EDIT_USER_NOT_AUTHORIZED
+          - CANT_USE_NON_ACTIVE_PRODUCTS
+          - CANT_UPGRADE_PRODUCTS
+          - PROPOSAL_OWNER_NOT_FOUND
+          - PROPOSAL_CANNOT_REMOVE_ACCEPTOR
+          - CONTACT_NOT_ASSOCIATED_WITH_PROPOSAL
+          - PROPOSAL_FIELD_REQUIRED_TO_ACTIVATE
+          - PROPOSAL_ITEM_REQUIRES_PRODUCT
+          - PROPOSAL_ITEM_REQUIRES_QUANTITY
+          - PROPOSAL_ITEM_DOESNT_SUPPORT_QUANTITY
+          - PROPOSAL_ITEM_INCOMPATIBLE_LEVELS
+          - PROPOSAL_ITEM_LEVEL_CUSTOMIZATION_USAGE_ONLY
+          - PRODUCT_ALREADY_IN_PROPOSAL
+          - PROPOSAL_DOES_NOT_REQUIRE_SIGNING
+          - PROPOSAL_REQUIRES_SIGNING_BEFORE_ACCEPT
+          - PROPOSAL_REQUIRES_PAYMENT_METHOD_ACCEPT
+          - PROPOSAL_CANT_CREATE_PAYMENT_INTENT
+          - PROPOSAL_PAYMENT_ERROR
+          - PROPOSAL_CANT_UPDATE_PAYMENT_SCHEDULE
+          - PRODUCT_CAN_ONLY_MODIFY_LATEST
+          - PRODUCT_MISSING_BILLING_PERIOD_PRICES
+          - PRODUCT_MISSING_PROPOSAL_CURRENCY
+          - CHANGE_PROPOSAL_CANT_EDIT_FIELD
+          - RENEWAL_PROPOSAL_CANT_EDIT_FIELD
+          - CHANGE_PROPOSAL_CANT_START_BEFORE_PREVIOUS
+          - CHANGE_PROPOSAL_CANT_START_AFTER_PREVIOUS
+          - PAYMENT_SCHEDULE_ILLEGAL_PAYMENT_METHODS
+          - CHANGE_RENEWAL_PROPOSAL_NEEDS_PREVIOUS_ACCEPTED
+          - PROPOSAL_NEEDS_PRODUCT
+          - CHANGE_PROPOSAL_CANT_REMOVE_ONETIME
+          - CHANGE_PROPOSAL_CANT_DECREASE_ONETIME_QUANTITY
+          - CHANGE_PROPOSAL_CANT_CHANGE_ONETIME
+          - CHANGE_PROPOSAL_CANT_ADD_SCHEDULED_ITEM
+          - CHANGE_PROPOSAL_CANT_CHANGE_SCHEDULED_ITEM
+          - TEMPLATE_PROPOSAL_CANT_USE_SCHEDULED_ITEM
+          - PAYMENT_SCHEDULE_HAS_NO_ACTIVE_PAYMENT_METHODS
+          - PROPOSAL_NO_BILLING_PERIODS_HAVE_PAYMENT_METHODS
+          - PROPOSAL_NO_BILLING_PERIODS_HAVE_ACTIVE_PAYMENT_METHODS
+          - PROPOSAL_PDF_RENDER_TIMEOUT
+          - PROPOSAL_PDF_RENDER_ERROR
+          - PROPOSAL_PDF_ATTACHMENT_ERROR
+          - PROPOSAL_ADD_BILLING_METHOD_ILLEGAL_TYPE
+          - PROPOSAL_RENEWAL_START_DATE_IN_FUTURE
+          - PROPOSAL_START_DATE_IN_PAST
+          - PROPOSAL_ALREADY_ACCEPTED
+          - PROPOSAL_ILLEGAL_FREE_MONTHS
+          - CHANGE_PROPOSAL_CANT_CREATE_FROM_NON_ACTIVE_SUBSCRIPTION
+          - ITEM_SCHEDULE_DATE_NOT_SUPPORTED_FOR_RECURRING
+          - ITEM_SCHEDULE_DATE_NOT_SUPPORTED_FOR_USAGE
+          - ITEM_SCHEDULE_END_DATE_NOT_SUPPORTED_FOR_ONETIME
+          - ITEM_SCHEDULE_START_DATE_AFTER_END_DATE
+          - ITEM_SCHEDULE_ILLEGAL_DATE_COMBINATION
+          - ITEM_SCHEDULE_DATE_PAST_END
+          - ITEM_SCHEDULE_ILLEGAL_MIXED_DATES
+          - ITEM_SCHEDULE_ILLEGAL_INDEX
+          - ITEM_SCHEDULE_MISSING_FIRST_INDEX_FOR_BILLING_PERIOD
+          - ITEM_SCHEDULE_REPEATED_INDEX
+          - ITEM_SCHEDULE_ID_NOT_SUPPORTED
+          - ITEM_SCHEDULE_ONE_TIME_ILLEGAL_INDEX
+          - ITEM_SCHEDULE_PRODUCT_ILLEGAL_ROOT
+          - ITEM_SCHEDULE_ONETIME_WITH_BILLING_PERIOD
+          - ITEM_SCHEDULE_UNSUPPORTED_BILLING_PERIOD
+          - ITEM_SCHEDULE_PRODUCT_DOESNT_MATCH_ITEM
+          - ITEM_SCHEDULE_ILLEGAL_CURRENCY
+          - ITEM_SCHEDULE_ILLEGAL_LEVELS
+          - ITEM_SCHEDULE_ILLEGAL_PRICE
+          - ITEM_SCHEDULE_LEVELS_ILLEGAL_SIZE
+          - ITEM_SCHEDULE_ILLEGAL_START_INDEX
+          - ITEM_SCHEDULE_LEVEL_ILLEGAL_CURRENCY
+          - ITEM_SCHEDULE_QUANTITY_CANNOT_BE_NULL
+          - ITEM_SCHEDULE_QUANTITY_NOT_SUPPORTED
+          - PROPOSAL_ITEM_REQUIRES_ITEM_SCHEDULES
+          - ITEM_MISSING_ITEM_SCHEDULE_BILLING_PERIODS
+          - ITEM_ONE_TIME_NEEDS_ONE_ITEM_SCHEDULE
+          - PROPOSAL_ITEMS_NOT_UPDATEABLE
+          - PROPOSAL_EXTERNAL_SOURCE_NOT_UPDATEABLE
+          - PROPOSAL_ALREADY_EXISTS_FOR_EXTERNAL_SOURCE
+          - PREVIOUS_SCHEDULE_NOT_INVOICED
+          - QUANTITY_MUST_BE_NULL_FOR_SINGLE_CONSUMPTION
+          - ATTACHMENT_MISSING_REQUIRED_FIELD
+          - ATTACHMENT_TYPE_UNSUPPORTED_FIELD
+          - ATTACHMENT_NO_DOCUMENT_INPUT
+          - ATTACHMENT_UNRECOGNIZED_TYPE
+          - ATTACHMENT_CANT_MODIFY_TYPE
+          - ATTACHMENT_SIGNING_NEEDS_FILE_EXT
+          - ATTACHMENT_SIGNING_UNSUPPORTED_FILE_EXT
+          - CONTRACT_PROPOSAL_TYPE_CANT_BE_CREATED
+          - CONTRACT_PROPOSAL_ALREADY_IN_PROGRESS
+          - CONTRACT_CHANGE_ILLEGAL_PROPOSAL_TYPE
+          - CONTRACT_BILLING_METHOD_EXISTS
+          - CONTRACT_NOT_AUTHORIZED_TO_CHANGE_STATUS
+          - CONTRACT_CANNOT_BE_ARCHIVED
+          - CONTRACT_IS_CANCELLED
+          - SIGNING_DOCUMENT_EXISTS
+          - NO_SIGNING_DOCUMENT
+          - CANT_CREATE_SIGNING_DOCUMENT
+          - MISSING_SIGNING_CONTACT
+          - CANT_DELETE_USER_WITH_SIGNATURE
+          - CANNOT_REMOVE_SIGNER
+          - SIGNING_PROVIDER_NOT_AVAILABLE
+          - SIGNING_DOCUMENT_NOT_ACCESSIBLE
+          - SIGNING_DOCUMENT_CANT_CANCEL_SIGNED
+          - ACCOUNT_LEDGER_MANUAL_ONLY
+          - TRANSFER_NOT_FOUND
+          - TRANSFER_WITH_PARENT_NOT_FOUND
+          - TRANSFER_EVENT_CREATION_ERROR
+          - TRANSFER_CREATION_ERROR
+          - NOTHING_RETURNED_FROM_TRIGGER
+          - TRANSFER_EVENT_ILLEGAL_TRANSITION
+          - ACCOUNT_NOT_FOUND
+          - UNSUPPORTED_ACCOUNT_TYPE
+          - PAYMENT_METHOD_NOT_SUPPORTED
+          - PAYMENT_METHOD_NOT_ENABLED
+          - PAYMENT_METHOD_IS_NOT_CONFIGURED
+          - ONLY_CUSTOM_PAYMENT_METHODS_SUPPORTED
+          - CANT_DISABLE_DEFAULT_BILLING_PERIOD
+          - INVOICE_PAYMENT_UPDATE_ERROR
+          - INVOICE_PAYMENT_UPDATE_INVALID_PAYMENT_TYPE
+          - MUST_HAVE_ONE_PAYMENT_TERM
+          - PRODUCT_IN_USE_CANT_DELETE
+          - PRODUCT_IN_USE_CANT_UNLINK
+          - PRODUCT_IN_USE_CANT_EDIT
+          - PRODUCT_IN_USE_READONLY_FIELDS
+          - PRODUCT_CANT_VERSION_INACTIVE
+          - PRODUCT_ONETIME_NO_BILLING_PERIODS
+          - PRODUCT_ONETIME_NO_BILLING_FIXED
+          - PRODUCT_SINGLE_MUST_USE_FIXED
+          - PRODUCT_FIXED_CANT_USE_LEVELS
+          - PRODUCT_TIERED_MUST_INCLUDE_LEVEL
+          - PRODUCT_BATCH_NOT_FOUND
+          - PRODUCT_NOT_IN_EXTERNAL_SOURCE
+          - PRODUCT_USAGE_ONLY_MULTIPLE
+          - PRODUCT_SINGLE_NO_BUNDLE_GROUPS
+          - PRODUCT_SINGLE_NO_BUNDLE_UPGRADES
+          - PRODUCT_FIXED_BILLING_ONE_BILLING_PERIOD
+          - PRODUCT_BUNDLE_NO_UNIT
+          - PRODUCT_BUNDLE_NO_USAGE
+          - PRODUCT_BUNDLE_NO_BILLING_FIXED
+          - PRODUCT_BUNDLE_TOPDOWN_REQUIRES_ITEMS
+          - BUNDLE_PRODUCT_NOT_FOUND
+          - BUNDLE_PRODUCT_CANT_BE_USAGE
+          - BUNDLE_ITEM_TOPDOWN_REQUIRES_PERCENT
+          - BUNDLE_ITEM_BOTTOMUP_NO_PERCENT
+          - BUNDLE_ITEM_INCOMPATIBLE_BILLING
+          - BUNDLE_ITEM_INCOMPATIBLE_BILLING_PERIODS
+          - BUNDLE_ITEM_INCOMPATIBLE_CURRENCIES
+          - BUNDLE_ITEM_INCOMPATIBLE_RECURRENCE
+          - BUNDLE_ITEM_PRODUCT_IS_NOT_ACTIVE
+          - BUNDLE_ITEM_REQUIRES_QUANTITY
+          - BUNDLE_ITEM_DOESNT_SUPPORT_QUANTITY
+          - BUNDLE_PRODUCT_TOPDOWN_PERCENTS_ERROR
+          - PRODUCT_ACTIVATION_MISSING_REQUIRED_PRICE
+          - PRODUCT_ACTIVATION_MISSING_REQUIRED_LEVEL_PRICE
+          - PRODUCT_ACTIVATION_MISSING_REQUIRED_PERIOD_PRICE
+          - PRODUCT_ACTIVATION_MISSING_REQUIRED_PERIOD_AND_LEVEL_PRICE
+          - ITEM_NOT_DISCOUNTABLE
+          - ITEM_NOT_CUSTOMIZABLE
+          - ITEM_NOT_LIST_PRICE_ADJUSTABLE
+          - ITEM_LIST_VISIBILITY_ONLY_NON_FIXED
+          - ITEM_LEVEL_VISIBILITY_REQUIRED
+          - ITEM_LEVEL_VISIBILITY_USAGE_ONLY_ALL
+          - ITEM_LEVEL_VISIBILITY_GRADUATED_NOT_PRIOR
+          - UNIT_ALREADY_EXISTS
+          - PRICEBOOK_ENTRY_LEVEL_REQUIRED
+          - PRICEBOOK_ENTRY_LEVEL_NOT_SUPPORTED
+          - PRICEBOOK_ENTRY_BILLING_PERIOD_NOT_SUPPORTED
+          - PRICEBOOK_ENTRY_CURRENCY_NOT_SUPPORTED
+          - PRICEBOOK_ENTRY_BAD_SCALE
+          - CANT_OVERRIDE_ACCEPTED_BILLING_PERIOD
+          - PRICE_OVERRIDE_CANT_REPEAT_PIVOT
+          - PRICE_OVERRIDE_MISSING_PRICE
+          - PRICE_OVERRIDE_FIXED_WITH_LEVELS
+          - PRICE_OVERRIDE_MISSING_LEVEL
+          - PRICE_OVERRIDE_UNSUPPORTED_LEVEL
+          - PRICE_OVERRIDE_REPEATED_LEVEL
+          - PRICE_OVERRIDE_DISCOUNT_MUST_BE_LOWER
+          - PRICE_OVERRIDE_LEVEL_PRICE_MUST_BE_LOWER
+          - PRICE_OVERRIDE_ONETIME_TIME_BASED
+          - PRICE_OVERRIDE_USAGE_TIME_BASED
+          - PRICE_OVERRIDE_ONETIME_WITH_BILLING_PERIOD
+          - PRICE_OVERRIDE_MISSING_BILLING_PERIOD
+          - PRICE_OVERRIDE_PARTIAL_TIME_BASED
+          - PRICE_OVERRIDE_CONSISTENT_DISCOUNTS_TIME_BASED
+          - QUANTITY_OVERRIDE_ONLY_RECURRING
+          - QUANTITY_OVERRIDE_ONLY_MULTIPLE
+          - QUANTITY_OVERRIDE_MISSING_REQUIRED_FIELD
+          - OVERRIDE_BAD_STARTINDEX_DURATION
+          - OVERRIDE_OVERLAP_TIME_BASED
+          - OVERRIDE_UNSUPPORTED_BILLING_PERIOD
+          - USAGE_DEADLINE_PAST
+          - USAGE_TOO_EARLY
+          - USAGE_PRODUCT_NOT_USAGE
+          - USAGE_INVOICE_EXISTS
+          - APPROVAL_INVALID_USER
+          - APPROVAL_USER_NOT_AUTHORIZED
+          - APPROVAL_INVALID_RULE_CONFIG
+          - APPROVAL_INVALID_TRANSITION
+          - SLACK_WORKSPACE_ALREADY_LINKED
+          - SLACK_USER_ALREADY_LINKED
+          - INTEGRATION_ERROR
+          - SYNC_REFERENCE_INVALID
+          - SYNC_NOT_SUPPORTED
+          - ERROR_WHILE_SYNCING_FROM_EXTERNAL_SOURCE
+          - SFDC_ERROR_SETTING_PRICEBOOK
+          - SFDC_ERROR_UPDATING_LINEITEM
+          - SFDC_ERROR_CREATING_LINEITEM
+          - SFDC_ERROR_MERGING_OPPORTUNITY
+          - SFDC_PRODUCT_NOT_IN_PRICEBOOK
+          - PROPOSAL_EXISTS_FOR_DEAL
+          - EXTERNAL_DEAL_NOT_FOUND
+          - DEAL_HAS_NO_COMPANY
+          - NO_SOURCE_TYPE_FOR_OBJECT
+          - PROPOSAL_MUST_BE_RENEWAL
+          - CONTACT_IS_BILLING_FOR_CUSTOMER
+          - CONTACT_IS_ACTIVE_PROPOSAL_CONTACT
+          - AUTO_RENEWAL_DISABLED
+          - RENEWAL_CONFIGURATION_ASSOCIATED_WITH_MULTIPLE_ENTITIES
+          - RENEWAL_CONFIGURATION_NOT_EDITABLE_PROPOSAL
+          - RENEWAL_CONFIGURATION_INVALID_TERM_LENGTH_MONTHS
+          - CANT_DELETE_DEFAULT_CURRENCY
+          - CURRENCY_NOT_CONFIGURED
+          - TAX_CODE_NOT_FOUND
+          - TAX_CODE_IN_USE
+          - TAX_CALCULATION_ERROR
+          - INVOICE_CONFIGURATION_NOT_EDITABLE_PROPOSAL
+          - INVOICE_CONFIGURATION_ALREADY_EXISTS
+          - INVOICE_CONFIGURATION_INVALID_INVOICE_IN_ADVANCE_DAYS
+          - INVOICE_CONFIGURATION_INVALID_INVOICE_IN_ADVANCE_DATE
+          - INVOICE_CANNOT_BE_ARCHIVED
+          - INVALID_TRANSFER_STATUS_FOR_VOIDING
+          - INVOICE_CANNOT_BE_VOIDED
+          - INVOICE_CLOSED_BOOKS
+          - INVOICE_NOT_VOIDED
+          - INVOICE_CANNOT_BE_UNVOIDED
+          - INVOICE_NOT_FOUND
+          - INVOICE_STATUS_ACTION_NOT_SUPPORTED_YET
+          - INVALID_INVOICE_STATUS_TRANSITION
+          - INVALID_TRANSFER_STATUS_FOR_MARKING_AS_PAID
+          - COMPANY_INFO_DELETE_DEFAULT
+          - COMPANY_INFO_IN_USE
+          - ENTITY_ALREADY_EXISTS_FOR_EXTERNAL_SOURCE
+          - BEACON_NOT_FOUND
+          - TRANSFER_IS_NOT_REFUNDABLE
+          - REFUND_EXISTS
+          - QUICKBOOKS_CUSTOM_TXN_NUMBERS_DISABLED
+          - DOCUMENT_DOWNLOAD_ERROR
+        message:
+          type: string
+        detail:
+          $ref: '#/components/schemas/ErrorDetail'
+    HubspotAccountLinkedRest:
+      type: object
+      properties:
+        alreadyLinked:
+          type: boolean
+    ObjectReference:
+      type: object
+      properties:
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        id:
+          type: string
+          format: uuid
+        uri:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          writeOnly: true
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    ErrorDetail:
+      title: ErrorDetail
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - field
+          - listField
+          - filter
+          - references
+          - contactEmail
+      discriminator:
+        propertyName: type
+        mapping:
+          filter: '#/components/schemas/FilterDetail'
+          field: '#/components/schemas/FieldDetail'
+          listField: '#/components/schemas/ListFieldDetail'
+          references: '#/components/schemas/ReferencesDetail'
+          contactEmail: '#/components/schemas/ContactUserDetail'
+    SyncResponse:
+      type: object
+      properties:
+        externalId:
+          type: string
+        syncStatus:
+          type: string
+          enum:
+          - success
+          - error
+        error:
+          $ref: '#/components/schemas/ErrorObject'
+        reference:
+          $ref: '#/components/schemas/ObjectReference'

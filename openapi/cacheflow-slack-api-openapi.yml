@@ -1,0 +1,258 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Slack API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Slack
+paths:
+  /api/latest/slack/app-info:
+    get:
+      tags:
+      - Slack
+      summary: Retrieve slack info
+      operationId: getSlackAppId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackAppInfo'
+  /api/latest/slack/users:
+    post:
+      tags:
+      - Slack
+      summary: Create a slack user
+      operationId: createSlackUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSlackResourceRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackUser'
+  /api/latest/slack/users/me:
+    get:
+      tags:
+      - Slack
+      summary: Retrieve my slack user
+      operationId: getCurrentSlackUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityToken'
+    delete:
+      tags:
+      - Slack
+      summary: Delete my slack user
+      operationId: deleteCurrentSlackUser
+      responses:
+        '200':
+          description: OK
+  /api/latest/slack/workspaces:
+    post:
+      tags:
+      - Slack
+      summary: Create a slack workspace
+      operationId: createSlackWorkspace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSlackResourceRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SlackWorkspace'
+  /api/latest/slack/workspaces/current:
+    get:
+      tags:
+      - Slack
+      summary: List slack workspaces
+      operationId: getCurrentSlackWorkspace
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlackWorkspace'
+    delete:
+      tags:
+      - Slack
+      summary: Delete a slack workspace
+      operationId: deleteCurrentSlackWorkspace
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    IdentityToken:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        user:
+          $ref: '#/components/schemas/User'
+        source:
+          type: string
+          enum:
+          - fakegoogle
+          - google
+          - salesforce
+          - hubspot
+          - systemgoogle
+          - microsoft
+          - quickbooks
+          - close
+          - slack
+          - zendesk
+        sourceId:
+          type: string
+        instanceBaseUrl:
+          type: string
+        tokenData:
+          $ref: '#/components/schemas/TokenData'
+        token:
+          type: string
+    TokenData:
+      title: TokenData
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        subject:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          slackUser: '#/components/schemas/SlackUser'
+          slackWorkspace: '#/components/schemas/SlackWorkspace'
+          salesforceUser: '#/components/schemas/SalesforceUser'
+          hubspot: '#/components/schemas/HubspotTokenData'
+          basic: '#/components/schemas/BasicTokenData'
+    SlackWorkspace:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        workspaceBotToken:
+          type: string
+        teamId:
+          type: string
+        subject:
+          type: string
+          readOnly: true
+    SlackAppInfo:
+      required:
+      - clientId
+      type: object
+      properties:
+        clientId:
+          type: string
+        teamId:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    CreateSlackResourceRequest:
+      type: object
+      properties:
+        slackAuthCode:
+          type: string
+        stateTokenKey:
+          type: string
+        originalRedirectUri:
+          type: string
+    SlackUser:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TokenData'
+      - type: object
+        properties:
+          dmChannelId:
+            type: string
+          userToken:
+            type: string
+          subject:
+            type: string
+            readOnly: true

@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: Cacheflow Stripe API
+  version: 0.0.3
+servers:
+- url: https://api.getcacheflow.com
+  description: 'Production. Calls are tenant-routed: send Host: <org-flow-domain>.api.getcacheflow.com (per github.com/getcacheflow/api-examples SETUP.md). Host no longer resolves as of 2026-08-13.'
+- url: https://api.sandbox.getcacheflow.com
+  description: Sandbox. Tenant-routed as <org-flow-domain>.api.sandbox.getcacheflow.com. Host no longer resolves as of 2026-08-13.
+tags:
+- name: Stripe
+paths:
+  /api/latest/settings/stripe:
+    get:
+      tags:
+      - Stripe
+      summary: Retrieve Stripe connection
+      operationId: getStripeAccount
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeAccount'
+    delete:
+      tags:
+      - Stripe
+      summary: Delete Stripe connection
+      operationId: deleteConnectStripe
+      responses:
+        '200':
+          description: OK
+  /api/latest/settings/stripe/finish:
+    post:
+      tags:
+      - Stripe
+      summary: Complete Stripe connection
+      operationId: finish
+      parameters:
+      - name: code
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeAccount'
+  /api/latest/settings/stripe/countries:
+    get:
+      tags:
+      - Stripe
+      summary: List Stripe countries
+      operationId: getStripeCountries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/latest/settings/stripe/countries/{country}/currencies:
+    get:
+      tags:
+      - Stripe
+      summary: List Stripe currencies for a country
+      operationId: getStripeCountryCurrencies
+      parameters:
+      - name: country
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/latest/settings/stripe/init:
+    post:
+      tags:
+      - Stripe
+      summary: Initialize Stripe connection
+      operationId: initConnectStripe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StripeConnectRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeConnectResponse'
+  /api/latest/settings/stripe/update:
+    patch:
+      tags:
+      - Stripe
+      summary: Update Stripe connection
+      operationId: updateConnectStripe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StripeConnectRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeConnectResponse'
+components:
+  schemas:
+    StripeConnectResponse:
+      type: object
+      properties:
+        url:
+          type: string
+        accountId:
+          type: string
+        currency:
+          type: string
+    StripeAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        activatedAt:
+          type: string
+          format: date-time
+        connectAccountId:
+          type: string
+        currency:
+          type: string
+        status:
+          type: string
+        connectType:
+          type: string
+          enum:
+          - connected
+          - created
+        accountType:
+          type: string
+        active:
+          type: boolean
+    StripeConnectRequest:
+      type: object
+      properties:
+        refreshUrl:
+          type: string
+        returnUrl:
+          type: string
+        country:
+          type: string
+        currency:
+          type: string
+        accountId:
+          type: string
+        connectExisting:
+          type: boolean
+        reconnect:
+          type: boolean
