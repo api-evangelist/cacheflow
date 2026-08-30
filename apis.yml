@@ -88,6 +88,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -496,6 +498,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Currency
+  tags_raw:
   - Currencies
   properties:
   - type: OpenAPI
@@ -632,6 +636,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -768,6 +774,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -939,6 +947,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - METABASE
+  tags_raw:
   - Metabase
   properties:
   - type: OpenAPI
@@ -1041,6 +1051,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -1245,6 +1257,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -1553,6 +1567,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Self-Service
+  tags_raw:
   - Self Service
   properties:
   - type: OpenAPI
@@ -1689,6 +1705,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
@@ -1961,6 +1979,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -1995,6 +2015,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -2029,6 +2051,11 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: ParentCompany
+  url: https://apis.io/providers/hubspot/
+  name: HubSpot
+  x-relationship: acquired
+  x-evidence: "Founded in 2020 and backed by GGV Capital and GV, Cacheflow was acquired by HubSpot in 2024 and folded into HubSpot Commerce / HubSpot CPQ."
 - type: CapabilityMap
   url: capabilities/cacheflow-capability-edges.yml
   name: Cacheflow Business Capability Map
