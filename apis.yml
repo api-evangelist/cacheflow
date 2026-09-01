@@ -947,7 +947,7 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
-  - METABASE
+  - Metabase
   tags_raw:
   - Metabase
   properties:
