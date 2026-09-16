@@ -23,7 +23,10 @@ accessModel:
   - authentication
   - lifecycle
   - plans
-  - {url: 'http://www.getcacheflow.com/', status: 301, note: 'declared website redirects to https://www.hubspot.com/products/revenue/cpq — a different registrable domain (getcacheflow.com -> hubspot.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
+  - url: http://www.getcacheflow.com/
+    status: 301
+    note: declared website redirects to https://www.hubspot.com/products/revenue/cpq — a different registrable
+      domain (getcacheflow.com -> hubspot.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)
   generated: '2026-08-13'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cacheflow.png
@@ -31,14 +34,14 @@ name: Cacheflow
 description: 'Cacheflow was a B2B SaaS billing, CPQ (configure-price-quote), and subscription-management
   platform that let software companies build interactive deal rooms, automate quote-to-cash, and offer
   buyers flexible payment and financing options. Founded in 2020 and backed by GGV Capital and GV, Cacheflow
-  was acquired by HubSpot in 2024 and folded into HubSpot Commerce / HubSpot CPQ. The company shipped a
-  substantial REST API — 305 paths and 400 operations across proposals, products, customers, subscriptions,
-  billing schedules, usage, invoices, payments, refunds, approvals, e-signature and CRM/accounting
-  integrations — and that contract is still publicly published: developer.getcacheflow.com serves a live
-  ReadMe developer portal with an llms.txt and an OpenAPI 3.0.1 definition. The runtime is gone. As of
-  2026-08-13 api.getcacheflow.com, api.sandbox.getcacheflow.com, checkout, status and help all return
-  NXDOMAIN, and getcacheflow.com 301-redirects to HubSpot''s Commerce CPQ page. This profile therefore
-  records a rare shape: a fully published, machine-readable API contract that outlived the API it described.'
+  was acquired by HubSpot in 2024 and folded into HubSpot Commerce / HubSpot CPQ. The company shipped
+  a substantial REST API — 305 paths and 400 operations across proposals, products, customers, subscriptions,
+  billing schedules, usage, invoices, payments, refunds, approvals, e-signature and CRM/accounting integrations
+  — and that contract is still publicly published: developer.getcacheflow.com serves a live ReadMe developer
+  portal with an llms.txt and an OpenAPI 3.0.1 definition. The runtime is gone. As of 2026-08-13 api.getcacheflow.com,
+  api.sandbox.getcacheflow.com, checkout, status and help all return NXDOMAIN, and getcacheflow.com 301-redirects
+  to HubSpot''s Commerce CPQ page. This profile therefore records a rare shape: a fully published, machine-readable
+  API contract that outlived the API it described.'
 url: https://raw.githubusercontent.com/api-evangelist/cacheflow/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -49,13 +52,13 @@ x-tier: profiled
 x-tier-reason: published-contract-harvested
 x-status: acquired
 x-acquired-by: hubspot
-x-acquired-note: 'getcacheflow.com 301-redirects to https://www.hubspot.com/products/commerce/cpq (HubSpot
+x-acquired-note: getcacheflow.com 301-redirects to https://www.hubspot.com/products/commerce/cpq (HubSpot
   Commerce / CPQ). The standalone developer portal at developer.getcacheflow.com is still live and still
   serves the OpenAPI and llms.txt, but every runtime host (api., api.sandbox., app.sandbox., checkout.,
-  status., help., docs.) returns NXDOMAIN as of 2026-08-13.'
+  status., help., docs.) returns NXDOMAIN as of 2026-08-13.
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-08-13'
+modified: '2026-09-16'
 tags:
 - Company
 - Fintech
@@ -841,8 +844,7 @@ apis:
     url: llms/cacheflow-llms.txt
 - aid: cacheflow:cacheflow-invoice-configurations-api
   name: Cacheflow Invoice Configurations API
-  description: >-
-    The Invoice Configurations API from Cacheflow — 1 operation(s) for invoice configurations.
+  description: The Invoice Configurations API from Cacheflow — 1 operation(s) for invoice configurations.
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
@@ -1290,8 +1292,7 @@ apis:
     url: llms/cacheflow-llms.txt
 - aid: cacheflow:cacheflow-proposal-approval-rules-api
   name: Cacheflow Proposal Approval Rules API
-  description: >-
-    The Proposal Approval Rules API from Cacheflow — 2 operation(s) for proposal approval rules.
+  description: The Proposal Approval Rules API from Cacheflow — 2 operation(s) for proposal approval rules.
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
@@ -1461,8 +1462,7 @@ apis:
     url: llms/cacheflow-llms.txt
 - aid: cacheflow:cacheflow-renewal-configurations-api
   name: Cacheflow Renewal Configurations API
-  description: >-
-    The Renewal Configurations API from Cacheflow — 1 operation(s) for renewal configurations.
+  description: The Renewal Configurations API from Cacheflow — 1 operation(s) for renewal configurations.
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
@@ -2056,7 +2056,8 @@ common:
   url: https://apis.io/providers/hubspot/
   name: HubSpot
   x-relationship: acquired
-  x-evidence: "Founded in 2020 and backed by GGV Capital and GV, Cacheflow was acquired by HubSpot in 2024 and folded into HubSpot Commerce / HubSpot CPQ."
+  x-evidence: Founded in 2020 and backed by GGV Capital and GV, Cacheflow was acquired by HubSpot in 2024
+    and folded into HubSpot Commerce / HubSpot CPQ.
 - type: CapabilityMap
   url: capabilities/cacheflow-capability-edges.yml
   name: Cacheflow Business Capability Map
@@ -2073,7 +2074,7 @@ common:
 - type: GitHubOrganization
   url: https://github.com/getcacheflow
 - type: OpenAPI
-  url: openapi/cacheflow-api-openapi.yml
+  url: openapi/_original/cacheflow-api-openapi.yml
 - type: LLMsTxt
   url: llms/cacheflow-llms.txt
 - type: Authentication
@@ -2100,7 +2101,10 @@ common:
   url: rate-limits/cacheflow-rate-limits.yml
 - type: X-MCPServerCandidate
   url: mcp/cacheflow-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: AgentSkill
   url: skills/_index.yml
 - type: Overlay
@@ -2108,30 +2112,25 @@ common:
 - type: DomainSecurity
   url: security/cacheflow-domain-security.yml
 x-pointer-notes:
-  omitted_deliberately: >-
-    The following canonical pointers are NOT emitted because the underlying thing genuinely
-    does not exist on Cacheflow's surface, and emitting them would be fabrication: SDKs (no
-    client library on any registry), Idempotency (zero occurrences of "idempoten" in the
-    400-operation contract), StatusPage (status.getcacheflow.com is NXDOMAIN), Deprecation
-    (no policy published; only 3 in-spec deprecated flags), Security and
-    VulnerabilityDisclosure (no security.txt, no disclosure page, no bug bounty),
-    Compliance and TrustCenter (trust./security. subdomains are NXDOMAIN), WellKnown and
-    SecurityTxt (every /.well-known/ path 404s — see well-known/cacheflow-well-known.yml,
-    which records the absence), AgentCard (agent-card.json and agent.json 404 on every
-    resolving host), AsyncAPI (a webhook surface exists but no AsyncAPI document was ever
-    published), ChangeLog (the ReadMe project has the changelog module disabled), CLI (the
-    oclif client was never released to a registry), Postman, Roadmap, Blog, Support,
-    Pricing, SignUp, TermsOfService and PrivacyPolicy (all of those pages now 301 to
-    HubSpot and are HubSpot's, not Cacheflow's).
+  omitted_deliberately: 'The following canonical pointers are NOT emitted because the underlying thing
+    genuinely does not exist on Cacheflow''s surface, and emitting them would be fabrication: SDKs (no
+    client library on any registry), Idempotency (zero occurrences of "idempoten" in the 400-operation
+    contract), StatusPage (status.getcacheflow.com is NXDOMAIN), Deprecation (no policy published; only
+    3 in-spec deprecated flags), Security and VulnerabilityDisclosure (no security.txt, no disclosure
+    page, no bug bounty), Compliance and TrustCenter (trust./security. subdomains are NXDOMAIN), WellKnown
+    and SecurityTxt (every /.well-known/ path 404s — see well-known/cacheflow-well-known.yml, which records
+    the absence), AgentCard (agent-card.json and agent.json 404 on every resolving host), AsyncAPI (a
+    webhook surface exists but no AsyncAPI document was ever published), ChangeLog (the ReadMe project
+    has the changelog module disabled), CLI (the oclif client was never released to a registry), Postman,
+    Roadmap, Blog, Support, Pricing, SignUp, TermsOfService and PrivacyPolicy (all of those pages now
+    301 to HubSpot and are HubSpot''s, not Cacheflow''s).'
 x-enrichment:
   date: '2026-08-13'
   status: enriched
   artifacts_added: 23
   pass: local-v1
-  note: >-
-    Round 2 overturned round 1. The previous pass recorded "no independent Cacheflow API,
-    developer portal, SDKs, or MCP surface remains to harvest" after checking only the
-    marketing domain, which 301s to HubSpot. STEP 0b contract discovery found the live
-    ReadMe developer portal at developer.getcacheflow.com, its llms.txt, and a real
-    OpenAPI 3.0.1 (305 paths / 400 operations / 407 schemas) served from the ReadMe API
-    registry the portal's own reference pages point at.
+  note: Round 2 overturned round 1. The previous pass recorded "no independent Cacheflow API, developer
+    portal, SDKs, or MCP surface remains to harvest" after checking only the marketing domain, which 301s
+    to HubSpot. STEP 0b contract discovery found the live ReadMe developer portal at developer.getcacheflow.com,
+    its llms.txt, and a real OpenAPI 3.0.1 (305 paths / 400 operations / 407 schemas) served from the
+    ReadMe API registry the portal's own reference pages point at.
