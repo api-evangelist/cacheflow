@@ -814,6 +814,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Invoices
+  tags_raw:
   - Invoice
   properties:
   - type: OpenAPI
@@ -1776,6 +1778,8 @@ apis:
   humanURL: https://developer.getcacheflow.com/reference
   baseURL: https://api.getcacheflow.com
   tags:
+  - Tax
+  tags_raw:
   - Taxes
   properties:
   - type: OpenAPI
