@@ -59,6 +59,9 @@ x-acquired-note: getcacheflow.com 301-redirects to https://www.hubspot.com/produ
 specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-09-16'
+x-docs-platform: readme
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-09-21
 tags:
 - Company
 - Fintech
