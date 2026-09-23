@@ -302,6 +302,20 @@ paths:
                 $ref: '#/components/schemas/Product'
 components:
   schemas:
+    Money:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
+          type: string
+        currency:
+          type: string
+      description: Total list amount for this level. null for usage.
     ProductSummary:
       type: object
       properties:
@@ -372,6 +386,85 @@ components:
             - quarter
             - halfyear
             - year
+    PricebookEntry:
+      required:
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    PersonSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+    TaxCode:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        code:
+          type: string
+        description:
+          type: string
     ProductRequest:
       type: object
       properties:
@@ -465,33 +558,34 @@ components:
           type: array
           items:
             type: string
-    ProductTaxConfigRequest:
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
       type: object
       properties:
-        taxMode:
+        sourceType:
           type: string
           enum:
-          - inclusive
-          - exclusive
-        taxCode:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
           type: string
-    Money:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-        scale:
-          type: integer
-          format: int32
-        formattedAmount:
+        sourceLink:
           type: string
-        currency:
-          type: string
-      description: Total list amount for this level. null for usage.
-    PricebookEntry:
-      required:
-      - price
+    Unit:
       type: object
       properties:
         id:
@@ -510,18 +604,61 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        billingPeriod:
+        name:
           type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        level:
+        plural:
+          type: string
+    BundleItemRequest:
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        bundlePercent:
           type: integer
           format: int32
-        price:
-          $ref: '#/components/schemas/Money'
+        name:
+          type: string
+        description:
+          type: string
+    ProductUpgrade:
+      required:
+      - changedFields
+      - productId
+      - upgrade
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+        upgrade:
+          $ref: '#/components/schemas/Product'
+        changedFields:
+          type: array
+          items:
+            type: string
+        entryChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricebookEntryChange'
+    ProductTaxConfigRequest:
+      type: object
+      properties:
+        taxMode:
+          type: string
+          enum:
+          - inclusive
+          - exclusive
+        taxCode:
+          type: string
+    LevelRequest:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int32
     Product:
       required:
       - billing
@@ -687,33 +824,35 @@ components:
           type: string
         description:
           type: string
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
+    PricebookEntryRequest:
       type: object
       properties:
-        sourceType:
+        billingPeriod:
           type: string
           enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        sourceId:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    BundlePriceEntry:
+      required:
+      - price
+      type: object
+      properties:
+        billingPeriod:
           type: string
-        sourceLink:
-          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        price:
+          $ref: '#/components/schemas/Money'
     PricebookEntryChange:
       type: object
       properties:
@@ -750,12 +889,6 @@ components:
         level:
           type: integer
           format: int32
-    LevelRequest:
-      type: object
-      properties:
-        start:
-          type: integer
-          format: int32
     ProductTaxConfig:
       type: object
       properties:
@@ -782,159 +915,6 @@ components:
           - exclusive
         taxCode:
           $ref: '#/components/schemas/TaxCode'
-    PersonSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        firstName:
-          type: string
-        lastName:
-          type: string
-    BundleItemRequest:
-      type: object
-      properties:
-        productId:
-          type: string
-          format: uuid
-        quantity:
-          type: number
-        bundlePercent:
-          type: integer
-          format: int32
-        name:
-          type: string
-        description:
-          type: string
-    PricebookEntryRequest:
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        level:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-    ProductUpgrade:
-      required:
-      - changedFields
-      - productId
-      - upgrade
-      type: object
-      properties:
-        productId:
-          type: string
-          format: uuid
-        upgrade:
-          $ref: '#/components/schemas/Product'
-        changedFields:
-          type: array
-          items:
-            type: string
-        entryChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/PricebookEntryChange'
-    TaxCode:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        code:
-          type: string
-        description:
-          type: string
-    ProductStats:
-      required:
-      - anyVersionBundleCount
-      - anyVersionProposalCount
-      - bundleCount
-      - proposalCount
-      type: object
-      properties:
-        proposalCount:
-          type: integer
-          format: int32
-        bundleCount:
-          type: integer
-          format: int32
-        anyVersionProposalCount:
-          type: integer
-          format: int32
-        anyVersionBundleCount:
-          type: integer
-          format: int32
-    Unit:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        plural:
-          type: string
-    BundlePriceEntry:
-      required:
-      - price
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        price:
-          $ref: '#/components/schemas/Money'
     ProductLevel:
       required:
       - start
@@ -957,5 +937,25 @@ components:
           type: string
           readOnly: true
         start:
+          type: integer
+          format: int32
+    ProductStats:
+      required:
+      - anyVersionBundleCount
+      - anyVersionProposalCount
+      - bundleCount
+      - proposalCount
+      type: object
+      properties:
+        proposalCount:
+          type: integer
+          format: int32
+        bundleCount:
+          type: integer
+          format: int32
+        anyVersionProposalCount:
+          type: integer
+          format: int32
+        anyVersionBundleCount:
           type: integer
           format: int32

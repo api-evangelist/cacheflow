@@ -26,6 +26,8 @@ paths:
             application/xml: {}
       tags:
       - Latest
+      summary: Get external grammar
+      x-summary-source: derived
   /api/latest/application.wadl:
     get:
       operationId: getWadl
@@ -37,3 +39,5 @@ paths:
             application/xml: {}
       tags:
       - Latest
+      summary: Get wadl
+      x-summary-source: derived

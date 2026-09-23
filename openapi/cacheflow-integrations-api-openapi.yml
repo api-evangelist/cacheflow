@@ -867,7 +867,7 @@ paths:
     post:
       tags:
       - Integrations
-      summary: 'UnLink object based on entity '
+      summary: UnLink object based on entity
       operationId: unlinkFromExternal
       parameters:
       - name: reference
@@ -948,7 +948,12 @@ paths:
                   $ref: '#/components/schemas/ExternalObjectReference'
 components:
   schemas:
-    InvoiceLite:
+    TransferSyncSummary:
+      required:
+      - amount
+      - createdAt
+      - createdBy
+      - id
       type: object
       properties:
         id:
@@ -957,94 +962,135 @@ components:
         createdAt:
           type: string
           format: date-time
-          readOnly: true
         createdBy:
           type: string
         updatedAt:
           type: string
           format: date-time
-          readOnly: true
         updatedBy:
           type: string
-          readOnly: true
-        status:
+        processedAt:
+          type: string
+          format: date-time
+        invoice:
+          $ref: '#/components/schemas/InvoiceLite'
+        amount:
+          type: integer
+          format: int64
+        paidAmount:
+          type: integer
+          format: int64
+        parentReferenceId:
+          type: string
+          format: uuid
+        parentReferenceType:
           type: string
           enum:
-          - draft
-          - open
-          - paid
-          - past_due
-          - voided
-        invoiceNumber:
-          type: string
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
         eventDetails:
           type: array
           items:
             $ref: '#/components/schemas/SyncEventDetail'
-    ReconciliationSummaryRest:
-      required:
-      - totalSchedulesFailed
-      - totalSchedulesSynced
-      - totalTransfersFailed
-      - totalTransfersSynced
-      type: object
-      properties:
-        totalSchedulesSynced:
-          type: integer
-          format: int64
-        totalSchedulesFailed:
-          type: integer
-          format: int64
-        totalTransfersSynced:
-          type: integer
-          format: int64
-        totalTransfersFailed:
-          type: integer
-          format: int64
-    Address:
-      type: object
-      properties:
-        id:
+        status:
           type: string
-          format: uuid
-        createdAt:
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        reason:
           type: string
-          format: date-time
-          readOnly: true
-        createdBy:
+        processor:
           type: string
-        updatedAt:
+          enum:
+          - plaid
+          - stripe
+          - manual
+        reasonCode:
           type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
+          enum:
+          - invalid_account
+          - insufficient_funds
+          - flagged_account
+          - region_not_supported
+          - invalid_address
+          - requires_buyer_approval
+          - transaction_failure
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        retryAt:
           type: string
           format: date-time
+        lastEvent:
+          $ref: '#/components/schemas/SyncEventDetail'
+        lastSuccessAfterScheduleUpdate:
+          $ref: '#/components/schemas/SyncEventDetail'
+        orgId:
+          $ref: '#/components/schemas/OrgId'
+        orgName:
+          type: string
+        customerReference:
+          $ref: '#/components/schemas/ObjectReference'
+        invoiceReference:
+          $ref: '#/components/schemas/ObjectReference'
+        contractReference:
+          $ref: '#/components/schemas/ObjectReference'
+        scheduleReference:
+          $ref: '#/components/schemas/ObjectReference'
     Connectors:
       type: object
       properties:
@@ -1052,27 +1098,117 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ConnectorTestResult'
-    ReferenceIssue:
+    QuickbooksCustomField:
+      required:
+      - Type
+      type: object
+      properties:
+        DefinitionId:
+          type: string
+        Name:
+          type: string
+        Type:
+          type: string
+          enum:
+          - StringType
+          - BooleanType
+          - NumberType
+          - DateType
+        StringValue:
+          type: string
+        BooleanValue:
+          type: boolean
+        DateValue:
+          type: string
+          format: date-time
+        NumberValue:
+          type: number
+    QuickbooksAccount:
+      type: object
+      properties:
+        Id:
+          type: string
+        SyncToken:
+          type: string
+        MetaData:
+          $ref: '#/components/schemas/QuickbooksMetadata'
+        CustomField:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuickbooksCustomField'
+        AttachableRef:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachableRef'
+        domain:
+          type: string
+        status:
+          type: string
+          enum:
+          - Deleted
+          - Voided
+          - Draft
+          - Pending
+          - InTransit
+          - Synchronized
+          - SyncError
+        sparse:
+          type: boolean
+        Name:
+          type: string
+        SubAccount:
+          type: boolean
+        Description:
+          type: string
+        FullyQualifiedName:
+          type: string
+        AccountAlias:
+          type: string
+        TxnLocationType:
+          type: string
+        Active:
+          type: boolean
+        AcctNum:
+          type: string
+        AccountType:
+          type: string
+        AcctNumExtn:
+          type: string
+        BankNum:
+          type: string
+        OpeningBalance:
+          type: number
+        CurrentBalance:
+          type: number
+        CurrentBalanceWithSubAccounts:
+          type: number
+        CurrencyRef:
+          $ref: '#/components/schemas/QuickbooksReference'
+        TaxAccount:
+          type: boolean
+        TaxCodeRef:
+          type: string
+        OnlineBankingEnabled:
+          type: boolean
+        FIName:
+          type: string
+    QuickbooksReference:
       type: object
       properties:
         id:
           type: string
-          format: uuid
-        createdAt:
+        name:
           type: string
-          format: date-time
-          readOnly: true
-        createdBy:
+        value:
           type: string
-        updatedAt:
+        type:
           type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        referenceKey:
-          $ref: '#/components/schemas/ReferenceKey'
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
         sourceType:
           type: string
           enum:
@@ -1090,73 +1226,11 @@ components:
           - warmly
           - zapier
           - cacheflow_checkout
-        count:
-          type: integer
-          format: int32
-        issueType:
+        sourceId:
           type: string
-          enum:
-          - address_verification_issue
-          - external_duplication
-          - external_connector_setup
-          - missing_data
-          - connector_authentication
-          - system_error
-    BillingScheduleSyncSummary:
-      required:
-      - createdAt
-      - createdBy
-      - id
-      type: object
-      properties:
-        createdAt:
+        sourceLink:
           type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        id:
-          type: string
-          format: uuid
-        contractReference:
-          $ref: '#/components/schemas/ObjectReference'
-        invoiceReference:
-          $ref: '#/components/schemas/ObjectReference'
-        customerReference:
-          $ref: '#/components/schemas/ObjectReference'
-        scheduleDate:
-          type: string
-          format: date
-        eventDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyncEventDetail'
-        lastEvent:
-          $ref: '#/components/schemas/SyncEvent'
-        lastSuccessAfterScheduleUpdate:
-          $ref: '#/components/schemas/SyncEvent'
-        orgId:
-          $ref: '#/components/schemas/OrgId'
-        orgName:
-          type: string
-    AttachableRef:
-      type: object
-      properties:
-        EntityRef:
-          $ref: '#/components/schemas/QuickbooksReference'
-        LineInfo:
-          type: string
-        IncludeOnSend:
-          type: boolean
-        CustomField:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuickbooksCustomField'
-    ExternalObjectReference:
+    ObjectReference:
       type: object
       properties:
         referenceType:
@@ -1219,25 +1293,6 @@ components:
           type: string
         name:
           type: string
-        sourceId:
-          type: string
-        sourceType:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
         type:
           type: string
           writeOnly: true
@@ -1292,6 +1347,26 @@ components:
           - transferevent
           - unit
           - user
+    ReconciliationSummaryRest:
+      required:
+      - totalSchedulesFailed
+      - totalSchedulesSynced
+      - totalTransfersFailed
+      - totalTransfersSynced
+      type: object
+      properties:
+        totalSchedulesSynced:
+          type: integer
+          format: int64
+        totalSchedulesFailed:
+          type: integer
+          format: int64
+        totalTransfersSynced:
+          type: integer
+          format: int64
+        totalTransfersFailed:
+          type: integer
+          format: int64
     SyncEventDetail:
       title: SyncEventDetail
       required:
@@ -1419,123 +1494,66 @@ components:
         mapping:
           quickbooks: '#/components/schemas/QuickbooksSyncEventDetail'
           avalara: '#/components/schemas/AvalaraSyncEventDetail'
-    ObjectReference:
+    SyncEventsSummary:
       type: object
       properties:
-        referenceType:
+        totalCount:
+          type: integer
+          format: int64
+        successCount:
+          type: integer
+          format: int64
+        errorCount:
+          type: integer
+          format: int64
+    OrgId:
+      type: object
+      properties:
+        uuid:
           type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
+          format: uuid
+    QuickbooksMetadata:
+      type: object
+      properties:
+        CreateTime:
+          type: string
+          format: date-time
+        LastUpdatedTime:
+          type: string
+          format: date-time
+    InvoiceLite:
+      type: object
+      properties:
         id:
           type: string
           format: uuid
-        uri:
+        createdAt:
           type: string
-        name:
+          format: date-time
+          readOnly: true
+        createdBy:
           type: string
-        type:
+        updatedAt:
           type: string
-          writeOnly: true
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        status:
+          type: string
           enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
+          - draft
+          - open
+          - paid
+          - past_due
+          - voided
+        invoiceNumber:
+          type: string
+        eventDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyncEventDetail'
     ConnectorTestResult:
       title: ConnectorTestResult
       type: object
@@ -1939,55 +1957,11 @@ components:
           profitwell: '#/components/schemas/ConnectorTestResult'
           quickbooks: '#/components/schemas/ConnectorTestResult'
           salesforce: '#/components/schemas/SalesforceConnectorTestResult'
-    ConnectorSetup:
+    LinkRequest:
       type: object
       properties:
-        authorizeUrl:
+        sourceId:
           type: string
-        redirectUrl:
-          type: string
-        type:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        error:
-          type: string
-        code:
-          type: string
-        state:
-          type: string
-        config:
-          type: object
-          additionalProperties:
-            type: string
-    QuickbooksMetadata:
-      type: object
-      properties:
-        CreateTime:
-          type: string
-          format: date-time
-        LastUpdatedTime:
-          type: string
-          format: date-time
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
-      type: object
-      properties:
         sourceType:
           type: string
           enum:
@@ -2005,323 +1979,6 @@ components:
           - warmly
           - zapier
           - cacheflow_checkout
-        sourceId:
-          type: string
-        sourceLink:
-          type: string
-    OrgId:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-    QuickbooksReference:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        value:
-          type: string
-        type:
-          type: string
-    QuickbooksAccount:
-      type: object
-      properties:
-        Id:
-          type: string
-        SyncToken:
-          type: string
-        MetaData:
-          $ref: '#/components/schemas/QuickbooksMetadata'
-        CustomField:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuickbooksCustomField'
-        AttachableRef:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachableRef'
-        domain:
-          type: string
-        status:
-          type: string
-          enum:
-          - Deleted
-          - Voided
-          - Draft
-          - Pending
-          - InTransit
-          - Synchronized
-          - SyncError
-        sparse:
-          type: boolean
-        Name:
-          type: string
-        SubAccount:
-          type: boolean
-        Description:
-          type: string
-        FullyQualifiedName:
-          type: string
-        AccountAlias:
-          type: string
-        TxnLocationType:
-          type: string
-        Active:
-          type: boolean
-        AcctNum:
-          type: string
-        AccountType:
-          type: string
-        AcctNumExtn:
-          type: string
-        BankNum:
-          type: string
-        OpeningBalance:
-          type: number
-        CurrentBalance:
-          type: number
-        CurrentBalanceWithSubAccounts:
-          type: number
-        CurrencyRef:
-          $ref: '#/components/schemas/QuickbooksReference'
-        TaxAccount:
-          type: boolean
-        TaxCodeRef:
-          type: string
-        OnlineBankingEnabled:
-          type: boolean
-        FIName:
-          type: string
-    TransferSyncSummary:
-      required:
-      - amount
-      - createdAt
-      - createdBy
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        processedAt:
-          type: string
-          format: date-time
-        invoice:
-          $ref: '#/components/schemas/InvoiceLite'
-        amount:
-          type: integer
-          format: int64
-        paidAmount:
-          type: integer
-          format: int64
-        parentReferenceId:
-          type: string
-          format: uuid
-        parentReferenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        eventDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyncEventDetail'
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        reason:
-          type: string
-        processor:
-          type: string
-          enum:
-          - plaid
-          - stripe
-          - manual
-        reasonCode:
-          type: string
-          enum:
-          - invalid_account
-          - insufficient_funds
-          - flagged_account
-          - region_not_supported
-          - invalid_address
-          - requires_buyer_approval
-          - transaction_failure
-        paymentMethod:
-          $ref: '#/components/schemas/PaymentMethod'
-        retryAt:
-          type: string
-          format: date-time
-        lastEvent:
-          $ref: '#/components/schemas/SyncEventDetail'
-        lastSuccessAfterScheduleUpdate:
-          $ref: '#/components/schemas/SyncEventDetail'
-        orgId:
-          $ref: '#/components/schemas/OrgId'
-        orgName:
-          type: string
-        customerReference:
-          $ref: '#/components/schemas/ObjectReference'
-        invoiceReference:
-          $ref: '#/components/schemas/ObjectReference'
-        contractReference:
-          $ref: '#/components/schemas/ObjectReference'
-        scheduleReference:
-          $ref: '#/components/schemas/ObjectReference'
-    ReferenceKey:
-      type: object
-      properties:
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        referenceId:
-          type: string
-          format: uuid
-    QuickbooksCustomField:
-      required:
-      - Type
-      type: object
-      properties:
-        DefinitionId:
-          type: string
-        Name:
-          type: string
-        Type:
-          type: string
-          enum:
-          - StringType
-          - BooleanType
-          - NumberType
-          - DateType
-        StringValue:
-          type: string
-        BooleanValue:
-          type: boolean
-        DateValue:
-          type: string
-          format: date-time
-        NumberValue:
-          type: number
     Account:
       type: object
       properties:
@@ -2393,6 +2050,561 @@ components:
           type: string
         mandateId:
           type: string
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
+    AttachableRef:
+      type: object
+      properties:
+        EntityRef:
+          $ref: '#/components/schemas/QuickbooksReference'
+        LineInfo:
+          type: string
+        IncludeOnSend:
+          type: boolean
+        CustomField:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuickbooksCustomField'
+    BillingScheduleSyncSummary:
+      required:
+      - createdAt
+      - createdBy
+      - id
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        contractReference:
+          $ref: '#/components/schemas/ObjectReference'
+        invoiceReference:
+          $ref: '#/components/schemas/ObjectReference'
+        customerReference:
+          $ref: '#/components/schemas/ObjectReference'
+        scheduleDate:
+          type: string
+          format: date
+        eventDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyncEventDetail'
+        lastEvent:
+          $ref: '#/components/schemas/SyncEvent'
+        lastSuccessAfterScheduleUpdate:
+          $ref: '#/components/schemas/SyncEvent'
+        orgId:
+          $ref: '#/components/schemas/OrgId'
+        orgName:
+          type: string
+    SyncEvent:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        referenceId:
+          type: string
+          format: uuid
+        direction:
+          type: string
+          enum:
+          - to_cacheflow
+          - from_cacheflow
+        eventType:
+          type: string
+          enum:
+          - auth
+          - created
+          - updated
+          - deleted
+        action:
+          type: string
+          enum:
+          - create
+          - update
+          - delete
+          - upsert
+          - noop
+        externalSource:
+          $ref: '#/components/schemas/ExternalSource'
+        status:
+          type: string
+          enum:
+          - success
+          - error
+        error:
+          type: string
+        source:
+          type: string
+          deprecated: true
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        externalId:
+          type: string
+          deprecated: true
+        externalIdLink:
+          type: string
+          deprecated: true
+    ReferenceIssue:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        referenceKey:
+          $ref: '#/components/schemas/ReferenceKey'
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        count:
+          type: integer
+          format: int32
+        issueType:
+          type: string
+          enum:
+          - address_verification_issue
+          - external_duplication
+          - external_connector_setup
+          - missing_data
+          - connector_authentication
+          - system_error
+    ExternalObjectReference:
+      type: object
+      properties:
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        id:
+          type: string
+          format: uuid
+        uri:
+          type: string
+        name:
+          type: string
+        sourceId:
+          type: string
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        type:
+          type: string
+          writeOnly: true
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    ConnectorSetup:
+      type: object
+      properties:
+        authorizeUrl:
+          type: string
+        redirectUrl:
+          type: string
+        type:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        error:
+          type: string
+        code:
+          type: string
+        state:
+          type: string
+        config:
+          type: object
+          additionalProperties:
+            type: string
+    ReferenceKey:
+      type: object
+      properties:
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        referenceId:
+          type: string
+          format: uuid
+    ConnectorQuery:
+      type: object
+      properties:
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        queryParameters:
+          type: object
+          additionalProperties:
+            type: string
+        referenceId:
+          type: string
+          format: uuid
     PaymentMethod:
       type: object
       properties:
@@ -2518,215 +2730,3 @@ components:
           - user
         deleted:
           type: boolean
-    LinkRequest:
-      type: object
-      properties:
-        sourceId:
-          type: string
-        sourceType:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-    ConnectorQuery:
-      type: object
-      properties:
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        queryParameters:
-          type: object
-          additionalProperties:
-            type: string
-        referenceId:
-          type: string
-          format: uuid
-    SyncEventsSummary:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        successCount:
-          type: integer
-          format: int64
-        errorCount:
-          type: integer
-          format: int64
-    SyncEvent:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        referenceId:
-          type: string
-          format: uuid
-        direction:
-          type: string
-          enum:
-          - to_cacheflow
-          - from_cacheflow
-        eventType:
-          type: string
-          enum:
-          - auth
-          - created
-          - updated
-          - deleted
-        action:
-          type: string
-          enum:
-          - create
-          - update
-          - delete
-          - upsert
-          - noop
-        externalSource:
-          $ref: '#/components/schemas/ExternalSource'
-        status:
-          type: string
-          enum:
-          - success
-          - error
-        error:
-          type: string
-        source:
-          type: string
-          deprecated: true
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        externalId:
-          type: string
-          deprecated: true
-        externalIdLink:
-          type: string
-          deprecated: true

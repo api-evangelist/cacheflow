@@ -77,64 +77,6 @@ paths:
                   $ref: '#/components/schemas/SyncResponse'
 components:
   schemas:
-    SyncRequest:
-      type: object
-      properties:
-        externalId:
-          type: string
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
     ErrorObject:
       type: object
       properties:
@@ -503,6 +445,98 @@ components:
       properties:
         alreadyLinked:
           type: boolean
+    SyncRequest:
+      type: object
+      properties:
+        externalId:
+          type: string
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    ErrorDetail:
+      title: ErrorDetail
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - field
+          - listField
+          - filter
+          - references
+          - contactEmail
+      discriminator:
+        propertyName: type
+        mapping:
+          filter: '#/components/schemas/FilterDetail'
+          field: '#/components/schemas/FieldDetail'
+          listField: '#/components/schemas/ListFieldDetail'
+          references: '#/components/schemas/ReferencesDetail'
+          contactEmail: '#/components/schemas/ContactUserDetail'
+    SyncResponse:
+      type: object
+      properties:
+        externalId:
+          type: string
+        syncStatus:
+          type: string
+          enum:
+          - success
+          - error
+        error:
+          $ref: '#/components/schemas/ErrorObject'
+        reference:
+          $ref: '#/components/schemas/ObjectReference'
     ObjectReference:
       type: object
       properties:
@@ -620,37 +654,3 @@ components:
           - transferevent
           - unit
           - user
-    ErrorDetail:
-      title: ErrorDetail
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - field
-          - listField
-          - filter
-          - references
-          - contactEmail
-      discriminator:
-        propertyName: type
-        mapping:
-          filter: '#/components/schemas/FilterDetail'
-          field: '#/components/schemas/FieldDetail'
-          listField: '#/components/schemas/ListFieldDetail'
-          references: '#/components/schemas/ReferencesDetail'
-          contactEmail: '#/components/schemas/ContactUserDetail'
-    SyncResponse:
-      type: object
-      properties:
-        externalId:
-          type: string
-        syncStatus:
-          type: string
-          enum:
-          - success
-          - error
-        error:
-          $ref: '#/components/schemas/ErrorObject'
-        reference:
-          $ref: '#/components/schemas/ObjectReference'

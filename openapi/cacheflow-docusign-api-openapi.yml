@@ -207,6 +207,11 @@ paths:
           description: OK
 components:
   schemas:
+    DocusignUser:
+      type: object
+      properties:
+        username:
+          type: string
     DocusignEnvelopeQuota:
       required:
       - blocked
@@ -224,6 +229,34 @@ components:
           type: boolean
         unlimitedQuota:
           type: boolean
+    Signature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        title:
+          type: string
+        signatureImageData:
+          type: string
+        userId:
+          type: string
+          format: uuid
     DocusignAccount:
       required:
       - userId
@@ -255,36 +288,3 @@ components:
         hasHMACKey:
           type: boolean
           readOnly: true
-    DocusignUser:
-      type: object
-      properties:
-        username:
-          type: string
-    Signature:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        title:
-          type: string
-        signatureImageData:
-          type: string
-        userId:
-          type: string
-          format: uuid

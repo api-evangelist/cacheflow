@@ -63,6 +63,26 @@ paths:
             application/json: {}
 components:
   schemas:
+    ForceUser:
+      type: object
+      properties:
+        Id:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Email:
+          type: string
+        Title:
+          type: string
+        Username:
+          type: string
+        PackageVersion:
+          type: string
+        PackageInstalledAt:
+          type: string
+          format: date-time
     ForceAccount:
       type: object
       properties:
@@ -94,26 +114,6 @@ components:
           type: string
         OwnerId:
           type: string
-    ForceUser:
-      type: object
-      properties:
-        Id:
-          type: string
-        FirstName:
-          type: string
-        LastName:
-          type: string
-        Email:
-          type: string
-        Title:
-          type: string
-        Username:
-          type: string
-        PackageVersion:
-          type: string
-        PackageInstalledAt:
-          type: string
-          format: date-time
     ForceOpportunity:
       type: object
       properties:

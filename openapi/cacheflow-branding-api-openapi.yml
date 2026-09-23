@@ -231,7 +231,7 @@ paths:
                   $ref: '#/components/schemas/ContentTemplate'
 components:
   schemas:
-    CompanyInfo:
+    DocumentVersion:
       type: object
       properties:
         id:
@@ -250,33 +250,14 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        name:
+        versionNumber:
+          type: integer
+          format: int32
+        fileName:
           type: string
-        internalName:
+        url:
           type: string
-        brandingEnabled:
-          type: boolean
-        externalId:
-          type: string
-        source:
-          type: string
-        logoUrl:
-          type: string
-        tin:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        branding:
-          type: object
-          additionalProperties:
-            type: object
-        logo:
-          $ref: '#/components/schemas/Document'
-        defaultInfo:
-          type: boolean
-        deleted:
-          type: boolean
-        logoId:
+        documentId:
           type: string
           format: uuid
     Address:
@@ -346,6 +327,54 @@ components:
           type: string
         latestVersion:
           $ref: '#/components/schemas/DocumentVersion'
+    CompanyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        internalName:
+          type: string
+        brandingEnabled:
+          type: boolean
+        externalId:
+          type: string
+        source:
+          type: string
+        logoUrl:
+          type: string
+        tin:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        branding:
+          type: object
+          additionalProperties:
+            type: object
+        logo:
+          $ref: '#/components/schemas/Document'
+        defaultInfo:
+          type: boolean
+        deleted:
+          type: boolean
+        logoId:
+          type: string
+          format: uuid
     ContentTemplate:
       type: object
       properties:
@@ -446,32 +475,3 @@ components:
           - sync_error_event
           - items_date_truncated
           - items_date_cleared
-    DocumentVersion:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        versionNumber:
-          type: integer
-          format: int32
-        fileName:
-          type: string
-        url:
-          type: string
-        documentId:
-          type: string
-          format: uuid

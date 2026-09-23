@@ -123,29 +123,6 @@ paths:
             '*/*': {}
 components:
   schemas:
-    Document:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        fileName:
-          type: string
-        latestVersion:
-          $ref: '#/components/schemas/DocumentVersion'
     DocumentVersion:
       type: object
       properties:
@@ -175,3 +152,26 @@ components:
         documentId:
           type: string
           format: uuid
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        fileName:
+          type: string
+        latestVersion:
+          $ref: '#/components/schemas/DocumentVersion'

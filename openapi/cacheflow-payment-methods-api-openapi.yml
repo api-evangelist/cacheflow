@@ -14,7 +14,7 @@ paths:
     get:
       tags:
       - Payment Methods
-      summary: List payment methods.
+      summary: List payment methods
       operationId: getPaymentMethods
       parameters:
       - name: currency
@@ -34,7 +34,7 @@ paths:
     get:
       tags:
       - Payment Methods
-      summary: List payment methods.
+      summary: List payment methods
       operationId: getSettingsPaymentMethods
       parameters:
       - name: currency
@@ -139,6 +139,34 @@ paths:
                   $ref: '#/components/schemas/PaymentMethod'
 components:
   schemas:
+    UpdatePaymentMethodRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        isEnabledSet:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
     Address:
       type: object
       properties:
@@ -183,34 +211,77 @@ components:
         verifiedAt:
           type: string
           format: date-time
-    UpdatePaymentMethodRequest:
+    Account:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/Address'
+        institutionName:
+          type: string
         name:
           type: string
-        internalName:
+        type:
           type: string
-        description:
+          enum:
+          - depository
+          - credit
+          - manual
+          - external
+        subtype:
           type: string
-        enabled:
-          type: boolean
-        isEnabledSet:
-          type: boolean
-        billingPeriods:
-          type: array
-          items:
-            type: string
-            enum:
-            - month
-            - quarter
-            - halfyear
-            - year
-        customText:
+        mask:
           type: string
-        configuration:
-          type: object
-          additionalProperties:
-            type: object
+        legalName:
+          type: string
+        currency:
+          type: string
+        ownerType:
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        wireNumber:
+          type: string
+        expMonth:
+          type: integer
+          format: int32
+        expYear:
+          type: integer
+          format: int32
+        cvv:
+          type: integer
+          format: int32
+        bic:
+          type: string
+        iban:
+          type: string
+        sortCode:
+          type: string
+        institutionNumber:
+          type: string
+        transitNumber:
+          type: string
+        verificationLink:
+          type: string
+        mandateId:
+          type: string
     CreatePaymentMethodRequest:
       type: object
       properties:
@@ -375,74 +446,3 @@ components:
           - user
         deleted:
           type: boolean
-    Account:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/Address'
-        institutionName:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - depository
-          - credit
-          - manual
-          - external
-        subtype:
-          type: string
-        mask:
-          type: string
-        legalName:
-          type: string
-        currency:
-          type: string
-        ownerType:
-          type: string
-        routingNumber:
-          type: string
-        accountNumber:
-          type: string
-        wireNumber:
-          type: string
-        expMonth:
-          type: integer
-          format: int32
-        expYear:
-          type: integer
-          format: int32
-        cvv:
-          type: integer
-          format: int32
-        bic:
-          type: string
-        iban:
-          type: string
-        sortCode:
-          type: string
-        institutionNumber:
-          type: string
-        transitNumber:
-          type: string
-        verificationLink:
-          type: string
-        mandateId:
-          type: string

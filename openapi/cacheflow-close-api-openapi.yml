@@ -63,6 +63,23 @@ paths:
                   type: object
 components:
   schemas:
+    CloseLead:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        display_name:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloseAddress'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloseContact'
     CloseContact:
       type: object
       properties:
@@ -102,20 +119,3 @@ components:
           type: string
         email:
           type: string
-    CloseLead:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        display_name:
-          type: string
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/CloseAddress'
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/CloseContact'

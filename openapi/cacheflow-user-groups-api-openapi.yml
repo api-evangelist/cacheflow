@@ -169,14 +169,6 @@ paths:
                 $ref: '#/components/schemas/Group'
 components:
   schemas:
-    GroupUsers:
-      type: object
-      properties:
-        userIds:
-          type: array
-          items:
-            type: string
-            format: uuid
     User:
       type: object
       properties:
@@ -215,6 +207,14 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
+    GroupUsers:
+      type: object
+      properties:
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
     Group:
       type: object
       properties:

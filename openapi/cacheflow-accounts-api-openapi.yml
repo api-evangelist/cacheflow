@@ -141,19 +141,6 @@ paths:
                 $ref: '#/components/schemas/AccountLedgerItemResponse'
 components:
   schemas:
-    PlaidAccount:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        mask:
-          type: string
     CreateAccountsWithPlaidRequest:
       type: object
       properties:
@@ -170,26 +157,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PlaidAccount'
-    AccountLedgerItemResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        reason:
-          type: string
-        amount:
-          type: integer
-          format: int64
     Address:
       type: object
       properties:
@@ -234,23 +201,6 @@ components:
         verifiedAt:
           type: string
           format: date-time
-    AccountLedgerItemRequest:
-      type: object
-      properties:
-        accountId:
-          type: string
-          format: uuid
-        transferId:
-          type: string
-          format: uuid
-        type:
-          type: string
-          enum:
-          - DEBIT
-          - CREDIT
-        amount:
-          type: integer
-          format: int64
     Account:
       type: object
       properties:
@@ -322,3 +272,53 @@ components:
           type: string
         mandateId:
           type: string
+    PlaidAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        mask:
+          type: string
+    AccountLedgerItemRequest:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        transferId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - DEBIT
+          - CREDIT
+        amount:
+          type: integer
+          format: int64
+    AccountLedgerItemResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        reason:
+          type: string
+        amount:
+          type: integer
+          format: int64

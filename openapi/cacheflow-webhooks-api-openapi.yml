@@ -191,6 +191,150 @@ paths:
                 $ref: '#/components/schemas/WebhooksMetadata'
 components:
   schemas:
+    CreateApiWebhookRequest:
+      required:
+      - eventType
+      - name
+      - url
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        name:
+          type: string
+        url:
+          type: string
+    WebhooksMetadata:
+      type: object
+      properties:
+        webhooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookMetadata'
+    UpdateApiWebhookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+    WebHookData:
+      title: WebHook event data
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+    WebhookMetadata:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+    ApiWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        eventType:
+          type: string
+          enum:
+          - proposal_updated
+          - transfer_completed
+          - contract_updated
+          - billing_schedule_updated
+          - statement_posted
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        name:
+          type: string
+        url:
+          type: string
     WebhookResult:
       type: object
       properties:
@@ -273,150 +417,6 @@ components:
           type: string
         request:
           $ref: '#/components/schemas/WebHookEvent'
-    ApiWebhook:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        eventType:
-          type: string
-          enum:
-          - proposal_updated
-          - transfer_completed
-          - contract_updated
-          - billing_schedule_updated
-          - statement_posted
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        name:
-          type: string
-        url:
-          type: string
-    WebHookData:
-      title: WebHook event data
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        updatedAt:
-          type: string
-          format: date-time
-    UpdateApiWebhookRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        url:
-          type: string
-    CreateApiWebhookRequest:
-      required:
-      - eventType
-      - name
-      - url
-      type: object
-      properties:
-        eventType:
-          type: string
-          enum:
-          - proposal_updated
-          - transfer_completed
-          - contract_updated
-          - billing_schedule_updated
-          - statement_posted
-        name:
-          type: string
-        url:
-          type: string
-    WebhookMetadata:
-      type: object
-      properties:
-        eventType:
-          type: string
-          enum:
-          - proposal_updated
-          - transfer_completed
-          - contract_updated
-          - billing_schedule_updated
-          - statement_posted
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-    WebhooksMetadata:
-      type: object
-      properties:
-        webhooks:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebhookMetadata'
     WebHookEvent:
       type: object
       properties:

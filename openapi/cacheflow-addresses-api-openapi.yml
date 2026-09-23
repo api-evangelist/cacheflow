@@ -62,29 +62,6 @@ paths:
                 $ref: '#/components/schemas/VerifyAddressResponse'
 components:
   schemas:
-    AddressRequest:
-      required:
-      - city
-      - country
-      - postalCode
-      - region
-      - streetAddress
-      type: object
-      properties:
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
     AddressRest:
       required:
       - city
@@ -121,3 +98,26 @@ components:
           type: boolean
         wasSaved:
           type: boolean
+    AddressRequest:
+      required:
+      - city
+      - country
+      - postalCode
+      - region
+      - streetAddress
+      type: object
+      properties:
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string

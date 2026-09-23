@@ -74,35 +74,32 @@ paths:
                   $ref: '#/components/schemas/UserProfile'
 components:
   schemas:
-    UserEmail:
+    UserProfile:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        email:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
         user:
           $ref: '#/components/schemas/User'
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        invite:
+          type: boolean
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'
     User:
       type: object
       properties:
@@ -141,29 +138,32 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
-    UserProfile:
+    UserEmail:
       type: object
       properties:
-        user:
-          $ref: '#/components/schemas/User'
-        roleType:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        status:
           type: string
           enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-        invite:
-          type: boolean
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserEmail'
+          - pending
+          - active
+          - inactive
+        user:
+          $ref: '#/components/schemas/User'

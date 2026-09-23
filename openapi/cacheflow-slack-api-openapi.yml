@@ -105,6 +105,93 @@ paths:
           description: OK
 components:
   schemas:
+    CreateSlackResourceRequest:
+      type: object
+      properties:
+        slackAuthCode:
+          type: string
+        stateTokenKey:
+          type: string
+        originalRedirectUri:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    SlackUser:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TokenData'
+      - type: object
+        properties:
+          dmChannelId:
+            type: string
+          userToken:
+            type: string
+          subject:
+            type: string
+            readOnly: true
+    SlackAppInfo:
+      required:
+      - clientId
+      type: object
+      properties:
+        clientId:
+          type: string
+        teamId:
+          type: string
+    SlackWorkspace:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        workspaceBotToken:
+          type: string
+        teamId:
+          type: string
+        subject:
+          type: string
+          readOnly: true
     IdentityToken:
       type: object
       properties:
@@ -169,90 +256,3 @@ components:
           salesforceUser: '#/components/schemas/SalesforceUser'
           hubspot: '#/components/schemas/HubspotTokenData'
           basic: '#/components/schemas/BasicTokenData'
-    SlackWorkspace:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - basic
-          - hubspot
-          - slackUser
-          - slackWorkspace
-          - salesforceUser
-        workspaceBotToken:
-          type: string
-        teamId:
-          type: string
-        subject:
-          type: string
-          readOnly: true
-    SlackAppInfo:
-      required:
-      - clientId
-      type: object
-      properties:
-        clientId:
-          type: string
-        teamId:
-          type: string
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
-          type: string
-          format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
-    CreateSlackResourceRequest:
-      type: object
-      properties:
-        slackAuthCode:
-          type: string
-        stateTokenKey:
-          type: string
-        originalRedirectUri:
-          type: string
-    SlackUser:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TokenData'
-      - type: object
-        properties:
-          dmChannelId:
-            type: string
-          userToken:
-            type: string
-          subject:
-            type: string
-            readOnly: true

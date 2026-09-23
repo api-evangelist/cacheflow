@@ -123,15 +123,6 @@ paths:
                 $ref: '#/components/schemas/StripeConnectResponse'
 components:
   schemas:
-    StripeConnectResponse:
-      type: object
-      properties:
-        url:
-          type: string
-        accountId:
-          type: string
-        currency:
-          type: string
     StripeAccount:
       type: object
       properties:
@@ -169,6 +160,15 @@ components:
           type: string
         active:
           type: boolean
+    StripeConnectResponse:
+      type: object
+      properties:
+        url:
+          type: string
+        accountId:
+          type: string
+        currency:
+          type: string
     StripeConnectRequest:
       type: object
       properties:

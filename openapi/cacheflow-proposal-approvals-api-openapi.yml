@@ -105,44 +105,6 @@ paths:
                 $ref: '#/components/schemas/ApprovalRequirements'
 components:
   schemas:
-    ApprovalRuleResult:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        ruleType:
-          type: string
-          enum:
-          - proposalAmountDecrease
-          - proposalAmount
-          - proposalAttachments
-          - proposalAutoRenewal
-          - proposalBillingPeriods
-          - proposalCountry
-          - proposalCustom
-          - proposalCustomTerms
-          - proposalDiscountPercent
-          - proposalDocusign
-          - proposalDuplicateProducts
-          - proposalExternalCrm
-          - proposalFreeMonths
-          - proposalItemQuantity
-          - proposalPaymentTerms
-          - proposalProductDiscountPercent
-          - proposalProducts
-          - proposalTermLength
-        required:
-          type: boolean
-        groups:
-          type: array
-          items:
-            type: string
-            format: uuid
     ApprovalAction:
       type: object
       properties:
@@ -204,40 +166,6 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
-    Approver:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        userId:
-          type: string
-          format: uuid
-        groupId:
-          type: string
-          format: uuid
-    ApprovalRequirements:
-      type: object
-      properties:
-        requiresApproval:
-          type: boolean
-        currentStatus:
-          type: string
-          enum:
-          - pending
-          - approved
-          - rejected
-          - canceled
-        ruleResults:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRuleResult'
     ProposalApprovalRequest:
       type: object
       properties:
@@ -325,3 +253,75 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApprovalRuleSummary'
+    ApprovalRuleResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        ruleType:
+          type: string
+          enum:
+          - proposalAmountDecrease
+          - proposalAmount
+          - proposalAttachments
+          - proposalAutoRenewal
+          - proposalBillingPeriods
+          - proposalCountry
+          - proposalCustom
+          - proposalCustomTerms
+          - proposalDiscountPercent
+          - proposalDocusign
+          - proposalDuplicateProducts
+          - proposalExternalCrm
+          - proposalFreeMonths
+          - proposalItemQuantity
+          - proposalPaymentTerms
+          - proposalProductDiscountPercent
+          - proposalProducts
+          - proposalTermLength
+        required:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: string
+            format: uuid
+    Approver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+    ApprovalRequirements:
+      type: object
+      properties:
+        requiresApproval:
+          type: boolean
+        currentStatus:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          - canceled
+        ruleResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRuleResult'
