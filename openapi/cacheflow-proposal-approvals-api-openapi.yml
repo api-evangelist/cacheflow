@@ -166,11 +166,6 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
-    ProposalApprovalRequest:
-      type: object
-      properties:
-        message:
-          type: string
     ApprovalRuleSummary:
       type: object
       properties:
@@ -202,6 +197,40 @@ components:
           - proposalTermLength
         description:
           type: string
+    Approver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+    ApprovalRequirements:
+      type: object
+      properties:
+        requiresApproval:
+          type: boolean
+        currentStatus:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          - canceled
+        ruleResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRuleResult'
     ApprovalRequest:
       type: object
       properties:
@@ -253,6 +282,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApprovalRuleSummary'
+    ProposalApprovalRequest:
+      type: object
+      properties:
+        message:
+          type: string
     ApprovalRuleResult:
       type: object
       properties:
@@ -291,37 +325,3 @@ components:
           items:
             type: string
             format: uuid
-    Approver:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        userId:
-          type: string
-          format: uuid
-        groupId:
-          type: string
-          format: uuid
-    ApprovalRequirements:
-      type: object
-      properties:
-        requiresApproval:
-          type: boolean
-        currentStatus:
-          type: string
-          enum:
-          - pending
-          - approved
-          - rejected
-          - canceled
-        ruleResults:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRuleResult'

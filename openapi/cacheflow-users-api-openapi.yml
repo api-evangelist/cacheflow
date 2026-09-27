@@ -377,88 +377,6 @@ paths:
                   $ref: '#/components/schemas/UserConfig'
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
-          type: string
-          format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
-    ReferenceSet:
-      type: object
-      properties:
-        references:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Reference'
-    Group:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        roleType:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-        name:
-          type: string
     Profile:
       required:
       - role
@@ -557,71 +475,6 @@ components:
             - user
         isSysAdmin:
           type: boolean
-    Identity:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        username:
-          type: string
-        identityType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        firstName:
-          type: string
-        lastName:
-          type: string
     InviteRequest:
       type: object
       properties:
@@ -668,7 +521,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserEmail'
-    UserEmail:
+    Invite:
       type: object
       properties:
         id:
@@ -689,14 +542,21 @@ components:
           readOnly: true
         email:
           type: string
+        code:
+          type: string
         status:
           type: string
           enum:
           - pending
           - active
           - inactive
-        user:
-          $ref: '#/components/schemas/User'
+        expiresAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+        group:
+          $ref: '#/components/schemas/Group'
     TokenResponse:
       type: object
       properties:
@@ -776,6 +636,109 @@ components:
           - buyer_guest
           - buyer_preview
           - buyer
+    Identity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        identityType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        firstName:
+          type: string
+        lastName:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
     UserConfig:
       type: object
       properties:
@@ -804,6 +767,35 @@ components:
         userId:
           type: string
           format: uuid
+    UserEmail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        user:
+          $ref: '#/components/schemas/User'
     Reference:
       type: object
       properties:
@@ -883,7 +875,15 @@ components:
             - billing_information
             - billing_payment
             - accept
-    Invite:
+    ReferenceSet:
+      type: object
+      properties:
+        references:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Reference'
+    Group:
       type: object
       properties:
         id:
@@ -902,20 +902,20 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        email:
-          type: string
-        code:
-          type: string
-        status:
+        roleType:
           type: string
           enum:
-          - pending
-          - active
-          - inactive
-        expiresAt:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        name:
           type: string
-          format: date-time
-        source:
-          type: string
-        group:
-          $ref: '#/components/schemas/Group'

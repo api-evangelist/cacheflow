@@ -52,19 +52,6 @@ paths:
                 $ref: '#/components/schemas/InvoiceConfiguration'
 components:
   schemas:
-    InvoiceConfigurationRequest:
-      type: object
-      properties:
-        invoiceInAdvance:
-          type: boolean
-        invoiceInAdvanceDays:
-          type: integer
-          format: int32
-        invoiceInAdvanceDate:
-          type: string
-          enum:
-          - advance_date
-          - billing_period_start_date
     InvoiceConfiguration:
       type: object
       properties:
@@ -84,6 +71,19 @@ components:
         updatedBy:
           type: string
           readOnly: true
+        invoiceInAdvance:
+          type: boolean
+        invoiceInAdvanceDays:
+          type: integer
+          format: int32
+        invoiceInAdvanceDate:
+          type: string
+          enum:
+          - advance_date
+          - billing_period_start_date
+    InvoiceConfigurationRequest:
+      type: object
+      properties:
         invoiceInAdvance:
           type: boolean
         invoiceInAdvanceDays:

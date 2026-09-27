@@ -48,62 +48,27 @@ paths:
                 $ref: '#/components/schemas/StripeMigrationResponse'
 components:
   schemas:
-    DocumentVersion:
+    QuantityOverride:
+      required:
+      - billingPeriod
+      - quantity
       type: object
       properties:
-        id:
+        billingPeriod:
           type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        versionNumber:
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        quantity:
+          type: number
+        startIndex:
           type: integer
           format: int32
-        fileName:
-          type: string
-        url:
-          type: string
-        documentId:
-          type: string
-          format: uuid
-    ProposalConversionRequest:
-      type: object
-      properties:
-        proposalId:
-          type: string
-          format: uuid
-        contractOptions:
-          $ref: '#/components/schemas/ContractOptions'
-        customerId:
-          type: string
-          format: uuid
-        externalCustomerId:
-          type: string
-    Money:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-        scale:
+        duration:
           type: integer
           format: int32
-        formattedAmount:
-          type: string
-        currency:
-          type: string
-      description: Total list amount for this level. null for usage.
     CustomerRequest:
       type: object
       properties:
@@ -226,21 +191,138 @@ components:
           - transferevent
           - unit
           - user
-    ItemLevelRequest:
+    ContractOptions:
       type: object
       properties:
-        visibilityOverride:
+        contractStatus:
+          type: string
+          enum:
+          - active
+          - paused
+          - cancelled
+          - ended
+        markPastSchedulesAsPaid:
           type: boolean
-        start:
-          type: integer
-          format: int32
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
+        markSchedulesAsInvoiced:
+          type: boolean
+        paymentMethodSource:
+          type: string
+        paymentMethodId:
+          type: string
+        paymentMethodType:
+          type: string
+    ItemScheduleRequest:
       type: object
       properties:
-        sourceType:
+        id:
+          type: string
+          description: ID used to reference an existing schedule in bulk requests.
+          format: uuid
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        productId:
+          type: string
+          description: Product id for a specific version of the product. Must have the same root as the parent Item.
+          format: uuid
+        startIndex:
+          type: integer
+          description: Start at regular payment index. Used for relative dates to the start date.
+          format: int32
+        endIndex:
+          type: integer
+          description: Inclusive end at regular payment index. Used for relative dates to the start date.
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        quantity:
+          type: number
+          description: Quantity
+        discount:
+          type: boolean
+          description: Indicates whether the price should be considered a discount. May not be true if price is higher than listPrice.
+        levels:
+          type: array
+          description: Level price and discount info. Required for tiered products.
+          items:
+            $ref: '#/components/schemas/ItemScheduleLevelRequest'
+    ProposalItemRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        quantity:
+          type: number
+        productId:
+          type: string
+          format: uuid
+        quantityOverrides:
+          type: array
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/QuantityOverride'
+        overrides:
+          type: array
+          deprecated: true
+          items:
+            $ref: '#/components/schemas/ItemOverrideRequest'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemLevelRequest'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemScheduleRequest'
+        levelVisibility:
+          type: string
+          enum:
+          - all
+          - active
+          - active_plus_one
+          - active_plus_three
+          - active_plus_prior_next
+          - active_plus_prior_next_three
+    ProposalConversionRequest:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          format: uuid
+        contractOptions:
+          $ref: '#/components/schemas/ContractOptions'
+        customerId:
+          type: string
+          format: uuid
+        externalCustomerId:
+          type: string
+    CreateContactRequest:
+      required:
+      - email
+      - firstName
+      - lastName
+      type: object
+      properties:
+        externalId:
+          type: string
+        source:
           type: string
           enum:
           - manual
@@ -257,9 +339,78 @@ components:
           - warmly
           - zapier
           - cacheflow_checkout
-        sourceId:
+        firstName:
           type: string
-        sourceLink:
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        externalSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+    StripeMigrationResponse:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+        proposal:
+          $ref: '#/components/schemas/ObjectReference'
+        contract:
+          $ref: '#/components/schemas/ObjectReference'
+        customer:
+          $ref: '#/components/schemas/ObjectReference'
+        status:
+          type: string
+          enum:
+          - not_processed
+          - success
+          - failed
+        error:
+          type: string
+    ItemLevelRequest:
+      type: object
+      properties:
+        visibilityOverride:
+          type: boolean
+        start:
+          type: integer
+          format: int32
+    ItemLevelOverrideRequest:
+      required:
+      - level
+      - price
+      type: object
+      properties:
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        level:
+          type: integer
+          format: int32
+    StripeMigrationRequest:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+        autoRenewable:
+          type: boolean
+        autoRenewalTermLength:
+          type: integer
+          format: int32
+        createProposalRequest:
+          $ref: '#/components/schemas/CreateProposalRequest'
+        skipContract:
+          type: boolean
+        contractOptions:
+          $ref: '#/components/schemas/ContractOptions'
+        customerId:
+          type: string
+          format: uuid
+        externalCustomerId:
           type: string
     ObjectReference:
       type: object
@@ -378,15 +529,7 @@ components:
           - transferevent
           - unit
           - user
-    ItemScheduleLevelRequest:
-      type: object
-      properties:
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-      description: Level price and discount info. Required for tiered products.
-    Address:
+    DocumentVersion:
       type: object
       properties:
         id:
@@ -405,190 +548,30 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
-    CreateContactRequest:
-      required:
-      - email
-      - firstName
-      - lastName
-      type: object
-      properties:
-        externalId:
-          type: string
-        source:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        role:
-          type: string
-        externalSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-    StripeMigrationResponse:
-      type: object
-      properties:
-        subscriptionId:
-          type: string
-        proposal:
-          $ref: '#/components/schemas/ObjectReference'
-        contract:
-          $ref: '#/components/schemas/ObjectReference'
-        customer:
-          $ref: '#/components/schemas/ObjectReference'
-        status:
-          type: string
-          enum:
-          - not_processed
-          - success
-          - failed
-        error:
-          type: string
-    ContractOptions:
-      type: object
-      properties:
-        contractStatus:
-          type: string
-          enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-        markPastSchedulesAsPaid:
-          type: boolean
-        markSchedulesAsInvoiced:
-          type: boolean
-        paymentMethodSource:
-          type: string
-        paymentMethodId:
-          type: string
-        paymentMethodType:
-          type: string
-    ItemLevelOverrideRequest:
-      required:
-      - level
-      - price
-      type: object
-      properties:
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        level:
+        versionNumber:
           type: integer
           format: int32
-    QuantityOverride:
-      required:
-      - billingPeriod
-      - quantity
-      type: object
-      properties:
-        billingPeriod:
+        fileName:
           type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        quantity:
-          type: number
-        startIndex:
-          type: integer
-          format: int32
-        duration:
-          type: integer
-          format: int32
-    ProposalItemRequest:
-      type: object
-      properties:
-        id:
+        url:
+          type: string
+        documentId:
           type: string
           format: uuid
-        name:
+    Money:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
           type: string
-        description:
+        currency:
           type: string
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        quantity:
-          type: number
-        productId:
-          type: string
-          format: uuid
-        quantityOverrides:
-          type: array
-          deprecated: true
-          items:
-            $ref: '#/components/schemas/QuantityOverride'
-        overrides:
-          type: array
-          deprecated: true
-          items:
-            $ref: '#/components/schemas/ItemOverrideRequest'
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemLevelRequest'
-        schedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemScheduleRequest'
-        levelVisibility:
-          type: string
-          enum:
-          - all
-          - active
-          - active_plus_one
-          - active_plus_three
-          - active_plus_prior_next
-          - active_plus_prior_next_three
+      description: Total list amount for this level. null for usage.
     ItemOverrideRequest:
       required:
       - discount
@@ -617,47 +600,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ItemLevelOverrideRequest'
-    ItemScheduleRequest:
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
       type: object
       properties:
-        id:
-          type: string
-          description: ID used to reference an existing schedule in bulk requests.
-          format: uuid
-        billingPeriod:
+        sourceType:
           type: string
           enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        productId:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
           type: string
-          description: Product id for a specific version of the product. Must have the same root as the parent Item.
-          format: uuid
-        startIndex:
-          type: integer
-          description: Start at regular payment index. Used for relative dates to the start date.
-          format: int32
-        endIndex:
-          type: integer
-          description: Inclusive end at regular payment index. Used for relative dates to the start date.
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        quantity:
-          type: number
-          description: Quantity
-        discount:
-          type: boolean
-          description: Indicates whether the price should be considered a discount. May not be true if price is higher than listPrice.
-        levels:
-          type: array
-          description: Level price and discount info. Required for tiered products.
-          items:
-            $ref: '#/components/schemas/ItemScheduleLevelRequest'
+        sourceLink:
+          type: string
     CreateProposalRequest:
       type: object
       properties:
@@ -805,27 +774,58 @@ components:
           $ref: '#/components/schemas/ExternalSource'
         purchaseOrderNumber:
           type: string
-    StripeMigrationRequest:
+    ItemScheduleLevelRequest:
       type: object
       properties:
-        subscriptionId:
-          type: string
-        autoRenewable:
-          type: boolean
-        autoRenewalTermLength:
-          type: integer
-          format: int32
-        createProposalRequest:
-          $ref: '#/components/schemas/CreateProposalRequest'
-        skipContract:
-          type: boolean
-        contractOptions:
-          $ref: '#/components/schemas/ContractOptions'
-        customerId:
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+      description: Level price and discount info. Required for tiered products.
+    Address:
+      type: object
+      properties:
+        id:
           type: string
           format: uuid
-        externalCustomerId:
+        createdAt:
           type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ProposalAttachment:
       type: object
       properties:

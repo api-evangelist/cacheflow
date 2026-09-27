@@ -141,22 +141,26 @@ paths:
                 $ref: '#/components/schemas/AccountLedgerItemResponse'
 components:
   schemas:
-    CreateAccountsWithPlaidRequest:
+    AccountLedgerItemResponse:
       type: object
       properties:
-        publicToken:
+        status:
           type: string
-        institutionName:
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        reason:
           type: string
-        legalName:
-          type: string
-        authorizeAmount:
+        amount:
           type: integer
           format: int64
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaidAccount'
     Address:
       type: object
       properties:
@@ -201,6 +205,35 @@ components:
         verifiedAt:
           type: string
           format: date-time
+    CreateAccountsWithPlaidRequest:
+      type: object
+      properties:
+        publicToken:
+          type: string
+        institutionName:
+          type: string
+        legalName:
+          type: string
+        authorizeAmount:
+          type: integer
+          format: int64
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaidAccount'
+    PlaidAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        mask:
+          type: string
     Account:
       type: object
       properties:
@@ -272,19 +305,6 @@ components:
           type: string
         mandateId:
           type: string
-    PlaidAccount:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        mask:
-          type: string
     AccountLedgerItemRequest:
       type: object
       properties:
@@ -299,26 +319,6 @@ components:
           enum:
           - DEBIT
           - CREDIT
-        amount:
-          type: integer
-          format: int64
-    AccountLedgerItemResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        reason:
-          type: string
         amount:
           type: integer
           format: int64

@@ -117,17 +117,6 @@ paths:
                 $ref: '#/components/schemas/Contact'
 components:
   schemas:
-    UpdateContactRequest:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        role:
-          type: string
     CreateContactRequest:
       required:
       - email
@@ -402,3 +391,14 @@ components:
           - transferevent
           - unit
           - user
+    UpdateContactRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string

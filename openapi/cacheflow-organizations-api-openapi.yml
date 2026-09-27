@@ -113,6 +113,23 @@ paths:
                   $ref: '#/components/schemas/OrganizationSummary'
 components:
   schemas:
+    JobDescription:
+      type: object
+      properties:
+        jobName:
+          type: string
+        jobType:
+          type: string
+          enum:
+          - migration
+          - refresh
+    OrganizationAccountRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        fundingAccount:
+          $ref: '#/components/schemas/Account'
     OrganizationSummary:
       type: object
       properties:
@@ -131,6 +148,12 @@ components:
           type: object
           additionalProperties:
             type: object
+    OrgId:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
     Address:
       type: object
       properties:
@@ -175,132 +198,26 @@ components:
         verifiedAt:
           type: string
           format: date-time
-    Account:
+    ErrorDetail:
+      title: ErrorDetail
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/Address'
-        institutionName:
-          type: string
-        name:
-          type: string
         type:
           type: string
           enum:
-          - depository
-          - credit
-          - manual
-          - external
-        subtype:
-          type: string
-        mask:
-          type: string
-        legalName:
-          type: string
-        currency:
-          type: string
-        ownerType:
-          type: string
-        routingNumber:
-          type: string
-        accountNumber:
-          type: string
-        wireNumber:
-          type: string
-        expMonth:
-          type: integer
-          format: int32
-        expYear:
-          type: integer
-          format: int32
-        cvv:
-          type: integer
-          format: int32
-        bic:
-          type: string
-        iban:
-          type: string
-        sortCode:
-          type: string
-        institutionNumber:
-          type: string
-        transitNumber:
-          type: string
-        verificationLink:
-          type: string
-        mandateId:
-          type: string
-    OrgId:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-    Organization:
-      required:
-      - defaultCurrency
-      - domainName
-      - flowDomain
-      - status
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        domainName:
-          type: string
-        name:
-          type: string
-        internalName:
-          type: string
-        flowDomain:
-          type: string
-        options:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        deletedAt:
-          type: string
-          format: date-time
-        defaultCurrency:
-          type: string
-        active:
-          type: boolean
-        orgId:
-          $ref: '#/components/schemas/OrgId'
+          - field
+          - listField
+          - filter
+          - references
+          - contactEmail
+      discriminator:
+        propertyName: type
+        mapping:
+          filter: '#/components/schemas/FilterDetail'
+          field: '#/components/schemas/FieldDetail'
+          listField: '#/components/schemas/ListFieldDetail'
+          references: '#/components/schemas/ReferencesDetail'
+          contactEmail: '#/components/schemas/ContactUserDetail'
     ErrorObject:
       type: object
       properties:
@@ -664,40 +581,123 @@ components:
           type: string
         detail:
           $ref: '#/components/schemas/ErrorDetail'
-    JobDescription:
+    Account:
       type: object
       properties:
-        jobName:
+        id:
           type: string
-        jobType:
+          format: uuid
+        createdAt:
           type: string
-          enum:
-          - migration
-          - refresh
-    OrganizationAccountRequest:
-      type: object
-      properties:
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/Address'
+        institutionName:
+          type: string
         name:
           type: string
-        fundingAccount:
-          $ref: '#/components/schemas/Account'
-    ErrorDetail:
-      title: ErrorDetail
-      type: object
-      properties:
         type:
           type: string
           enum:
-          - field
-          - listField
-          - filter
-          - references
-          - contactEmail
-      discriminator:
-        propertyName: type
-        mapping:
-          filter: '#/components/schemas/FilterDetail'
-          field: '#/components/schemas/FieldDetail'
-          listField: '#/components/schemas/ListFieldDetail'
-          references: '#/components/schemas/ReferencesDetail'
-          contactEmail: '#/components/schemas/ContactUserDetail'
+          - depository
+          - credit
+          - manual
+          - external
+        subtype:
+          type: string
+        mask:
+          type: string
+        legalName:
+          type: string
+        currency:
+          type: string
+        ownerType:
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        wireNumber:
+          type: string
+        expMonth:
+          type: integer
+          format: int32
+        expYear:
+          type: integer
+          format: int32
+        cvv:
+          type: integer
+          format: int32
+        bic:
+          type: string
+        iban:
+          type: string
+        sortCode:
+          type: string
+        institutionNumber:
+          type: string
+        transitNumber:
+          type: string
+        verificationLink:
+          type: string
+        mandateId:
+          type: string
+    Organization:
+      required:
+      - defaultCurrency
+      - domainName
+      - flowDomain
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        domainName:
+          type: string
+        name:
+          type: string
+        internalName:
+          type: string
+        flowDomain:
+          type: string
+        options:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        deletedAt:
+          type: string
+          format: date-time
+        defaultCurrency:
+          type: string
+        active:
+          type: boolean
+        orgId:
+          $ref: '#/components/schemas/OrgId'

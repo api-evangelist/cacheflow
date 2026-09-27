@@ -63,6 +63,33 @@ paths:
             application/json: {}
 components:
   schemas:
+    ForceOpportunity:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Amount:
+          type: number
+          format: double
+        StageName:
+          type: string
+        Account:
+          $ref: '#/components/schemas/ForceAccount'
+        AccountId:
+          type: string
+        HasOpportunityLineItem:
+          type: boolean
+        Pricebook2Id:
+          type: string
+        CurrencyIsoCode:
+          type: string
+        CloseDate:
+          type: string
+          format: date
+        OwnerId:
+          type: string
     ForceUser:
       type: object
       properties:
@@ -112,32 +139,5 @@ components:
           type: string
         CurrencyIsoCode:
           type: string
-        OwnerId:
-          type: string
-    ForceOpportunity:
-      type: object
-      properties:
-        Id:
-          type: string
-        Name:
-          type: string
-        Amount:
-          type: number
-          format: double
-        StageName:
-          type: string
-        Account:
-          $ref: '#/components/schemas/ForceAccount'
-        AccountId:
-          type: string
-        HasOpportunityLineItem:
-          type: boolean
-        Pricebook2Id:
-          type: string
-        CurrencyIsoCode:
-          type: string
-        CloseDate:
-          type: string
-          format: date
         OwnerId:
           type: string

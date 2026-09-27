@@ -224,16 +224,6 @@ components:
           format: int64
         currency:
           type: string
-    TaxCodeRest:
-      required:
-      - code
-      - description
-      type: object
-      properties:
-        code:
-          type: string
-        description:
-          type: string
     CreateTaxCodeRequest:
       required:
       - code
@@ -249,5 +239,15 @@ components:
       - description
       type: object
       properties:
+        description:
+          type: string
+    TaxCodeRest:
+      required:
+      - code
+      - description
+      type: object
+      properties:
+        code:
+          type: string
         description:
           type: string

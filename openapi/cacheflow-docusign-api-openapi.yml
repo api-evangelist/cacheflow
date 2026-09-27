@@ -207,11 +207,6 @@ paths:
           description: OK
 components:
   schemas:
-    DocusignUser:
-      type: object
-      properties:
-        username:
-          type: string
     DocusignEnvelopeQuota:
       required:
       - blocked
@@ -257,6 +252,11 @@ components:
         userId:
           type: string
           format: uuid
+    DocusignUser:
+      type: object
+      properties:
+        username:
+          type: string
     DocusignAccount:
       required:
       - userId

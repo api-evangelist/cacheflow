@@ -105,15 +105,46 @@ paths:
           description: OK
 components:
   schemas:
-    CreateSlackResourceRequest:
+    SlackWorkspace:
       type: object
       properties:
-        slackAuthCode:
+        type:
           type: string
-        stateTokenKey:
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        workspaceBotToken:
           type: string
-        originalRedirectUri:
+        teamId:
           type: string
+        subject:
+          type: string
+          readOnly: true
+    TokenData:
+      title: TokenData
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        subject:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          slackUser: '#/components/schemas/SlackUser'
+          slackWorkspace: '#/components/schemas/SlackWorkspace'
+          salesforceUser: '#/components/schemas/SalesforceUser'
+          hubspot: '#/components/schemas/HubspotTokenData'
+          basic: '#/components/schemas/BasicTokenData'
     User:
       type: object
       properties:
@@ -174,24 +205,6 @@ components:
           type: string
         teamId:
           type: string
-    SlackWorkspace:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - basic
-          - hubspot
-          - slackUser
-          - slackWorkspace
-          - salesforceUser
-        workspaceBotToken:
-          type: string
-        teamId:
-          type: string
-        subject:
-          type: string
-          readOnly: true
     IdentityToken:
       type: object
       properties:
@@ -234,25 +247,12 @@ components:
           $ref: '#/components/schemas/TokenData'
         token:
           type: string
-    TokenData:
-      title: TokenData
+    CreateSlackResourceRequest:
       type: object
       properties:
-        type:
+        slackAuthCode:
           type: string
-          enum:
-          - basic
-          - hubspot
-          - slackUser
-          - slackWorkspace
-          - salesforceUser
-        subject:
+        stateTokenKey:
           type: string
-      discriminator:
-        propertyName: type
-        mapping:
-          slackUser: '#/components/schemas/SlackUser'
-          slackWorkspace: '#/components/schemas/SlackWorkspace'
-          salesforceUser: '#/components/schemas/SalesforceUser'
-          hubspot: '#/components/schemas/HubspotTokenData'
-          basic: '#/components/schemas/BasicTokenData'
+        originalRedirectUri:
+          type: string

@@ -62,7 +62,7 @@ paths:
                 $ref: '#/components/schemas/VerifyAddressResponse'
 components:
   schemas:
-    AddressRest:
+    AddressRequest:
       required:
       - city
       - country
@@ -74,6 +74,8 @@ components:
         streetAddress:
           type: string
         subAddress:
+          type: string
+        otherAddress:
           type: string
         city:
           type: string
@@ -98,7 +100,7 @@ components:
           type: boolean
         wasSaved:
           type: boolean
-    AddressRequest:
+    AddressRest:
       required:
       - city
       - country
@@ -110,8 +112,6 @@ components:
         streetAddress:
           type: string
         subAddress:
-          type: string
-        otherAddress:
           type: string
         city:
           type: string

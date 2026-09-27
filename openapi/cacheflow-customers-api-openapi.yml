@@ -143,50 +143,6 @@ paths:
                 $ref: '#/components/schemas/Customer'
 components:
   schemas:
-    Address:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
     CreateContactRequest:
       required:
       - email
@@ -347,125 +303,6 @@ components:
           - transferevent
           - unit
           - user
-    Customer:
-      required:
-      - createdAt
-      - deleted
-      - id
-      - name
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-        name:
-          type: string
-        tin:
-          type: string
-        defaultCurrency:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        shippingAddress:
-          $ref: '#/components/schemas/Address'
-        billingContact:
-          $ref: '#/components/schemas/Contact'
-        deleted:
-          type: boolean
-        taxUseCode:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-          - D
-          - E
-          - F
-          - G
-          - H
-          - I
-          - J
-          - K
-          - L
-          - M
-          - N
-          - P
-          - Q
-          - R
-        partner:
-          type: boolean
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        taxExempt:
-          type: boolean
-        syncable:
-          type: boolean
     Contact:
       required:
       - createdAt
@@ -585,6 +422,169 @@ components:
           type: string
         sourceLink:
           type: string
+    Customer:
+      required:
+      - createdAt
+      - deleted
+      - id
+      - name
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        name:
+          type: string
+        tin:
+          type: string
+        defaultCurrency:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+        billingContact:
+          $ref: '#/components/schemas/Contact'
+        deleted:
+          type: boolean
+        taxUseCode:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+          - J
+          - K
+          - L
+          - M
+          - N
+          - P
+          - Q
+          - R
+        partner:
+          type: boolean
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        taxExempt:
+          type: boolean
+        syncable:
+          type: boolean
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ObjectReference:
       type: object
       properties:
