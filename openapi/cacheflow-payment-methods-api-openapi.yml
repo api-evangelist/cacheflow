@@ -139,6 +139,34 @@ paths:
                   $ref: '#/components/schemas/PaymentMethod'
 components:
   schemas:
+    UpdatePaymentMethodRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        isEnabledSet:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
     PaymentMethod:
       type: object
       properties:
@@ -264,78 +292,6 @@ components:
           - user
         deleted:
           type: boolean
-    Address:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
-    UpdatePaymentMethodRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        internalName:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        isEnabledSet:
-          type: boolean
-        billingPeriods:
-          type: array
-          items:
-            type: string
-            enum:
-            - month
-            - quarter
-            - halfyear
-            - year
-        customText:
-          type: string
-        configuration:
-          type: object
-          additionalProperties:
-            type: object
     Account:
       type: object
       properties:
@@ -407,6 +363,50 @@ components:
           type: string
         mandateId:
           type: string
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     CreatePaymentMethodRequest:
       type: object
       properties:

@@ -117,44 +117,6 @@ paths:
                 $ref: '#/components/schemas/Contact'
 components:
   schemas:
-    CreateContactRequest:
-      required:
-      - email
-      - firstName
-      - lastName
-      type: object
-      properties:
-        externalId:
-          type: string
-        source:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        role:
-          type: string
-        externalSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
     Contact:
       required:
       - createdAt
@@ -247,32 +209,16 @@ components:
           - transferevent
           - unit
           - user
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
+    UpdateContactRequest:
       type: object
       properties:
-        sourceType:
+        firstName:
           type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        sourceId:
+        lastName:
           type: string
-        sourceLink:
+        email:
+          type: string
+        role:
           type: string
     ObjectReference:
       type: object
@@ -391,9 +337,32 @@ components:
           - transferevent
           - unit
           - user
-    UpdateContactRequest:
+    CreateContactRequest:
+      required:
+      - email
+      - firstName
+      - lastName
       type: object
       properties:
+        externalId:
+          type: string
+        source:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
         firstName:
           type: string
         lastName:
@@ -401,4 +370,35 @@ components:
         email:
           type: string
         role:
+          type: string
+        externalSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
+          type: string
+        sourceLink:
           type: string

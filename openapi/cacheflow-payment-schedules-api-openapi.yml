@@ -112,6 +112,60 @@ components:
           type: string
         listAmountFormatted:
           type: string
+    Payment:
+      required:
+      - amount
+      - baseAmount
+      - currency
+      - dueDate
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        scheduleDate:
+          type: string
+          format: date
+        amount:
+          type: integer
+          format: int64
+        baseAmount:
+          type: integer
+          format: int64
+        listAmount:
+          type: integer
+          format: int64
+        changeProposalId:
+          type: string
+          format: uuid
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentComponent'
+        baseAmountFormatted:
+          type: string
+        amountFormatted:
+          type: string
+        listAmountFormatted:
+          type: string
     PaymentSchedule:
       required:
       - currency
@@ -180,58 +234,4 @@ components:
         listTotalFormatted:
           type: string
         totalDiscountFormatted:
-          type: string
-    Payment:
-      required:
-      - amount
-      - baseAmount
-      - currency
-      - dueDate
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        currency:
-          type: string
-        dueDate:
-          type: string
-          format: date
-        scheduleDate:
-          type: string
-          format: date
-        amount:
-          type: integer
-          format: int64
-        baseAmount:
-          type: integer
-          format: int64
-        listAmount:
-          type: integer
-          format: int64
-        changeProposalId:
-          type: string
-          format: uuid
-        components:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentComponent'
-        baseAmountFormatted:
-          type: string
-        amountFormatted:
-          type: string
-        listAmountFormatted:
           type: string

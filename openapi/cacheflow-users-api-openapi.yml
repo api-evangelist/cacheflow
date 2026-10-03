@@ -377,6 +377,81 @@ paths:
                   $ref: '#/components/schemas/UserConfig'
 components:
   schemas:
+    UserProfile:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        invite:
+          type: boolean
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'
+    InviteRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        type:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+    UserEmail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        user:
+          $ref: '#/components/schemas/User'
     Profile:
       required:
       - role
@@ -475,167 +550,6 @@ components:
             - user
         isSysAdmin:
           type: boolean
-    InviteRequest:
-      type: object
-      properties:
-        email:
-          type: string
-        type:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-    UserProfile:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        roleType:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-        invite:
-          type: boolean
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserEmail'
-    Invite:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        email:
-          type: string
-        code:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        expiresAt:
-          type: string
-          format: date-time
-        source:
-          type: string
-        group:
-          $ref: '#/components/schemas/Group'
-    TokenResponse:
-      type: object
-      properties:
-        token:
-          type: string
-        actorType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        orgId:
-          type: string
-        userId:
-          type: string
-        redirectUrl:
-          type: string
-        role:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
     Identity:
       type: object
       properties:
@@ -739,6 +653,14 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
+    ReferenceSet:
+      type: object
+      properties:
+        references:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Reference'
     UserConfig:
       type: object
       properties:
@@ -767,7 +689,7 @@ components:
         userId:
           type: string
           format: uuid
-    UserEmail:
+    Invite:
       type: object
       properties:
         id:
@@ -788,14 +710,57 @@ components:
           readOnly: true
         email:
           type: string
+        code:
+          type: string
         status:
           type: string
           enum:
           - pending
           - active
           - inactive
-        user:
-          $ref: '#/components/schemas/User'
+        expiresAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+        group:
+          $ref: '#/components/schemas/Group'
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        name:
+          type: string
     Reference:
       type: object
       properties:
@@ -875,34 +840,71 @@ components:
             - billing_information
             - billing_payment
             - accept
-    ReferenceSet:
+    TokenResponse:
       type: object
       properties:
-        references:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/Reference'
-    Group:
-      type: object
-      properties:
-        id:
+        token:
           type: string
-          format: uuid
-        createdAt:
+        actorType:
           type: string
-          format: date-time
-          readOnly: true
-        createdBy:
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        orgId:
           type: string
-        updatedAt:
+        userId:
           type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
+        redirectUrl:
           type: string
-          readOnly: true
-        roleType:
+        role:
           type: string
           enum:
           - anonymous
@@ -917,5 +919,3 @@ components:
           - buyer_guest
           - buyer_preview
           - buyer
-        name:
-          type: string

@@ -141,6 +141,23 @@ paths:
                 $ref: '#/components/schemas/AccountLedgerItemResponse'
 components:
   schemas:
+    AccountLedgerItemRequest:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        transferId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - DEBIT
+          - CREDIT
+        amount:
+          type: integer
+          format: int64
     AccountLedgerItemResponse:
       type: object
       properties:
@@ -161,79 +178,6 @@ components:
         amount:
           type: integer
           format: int64
-    Address:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
-    CreateAccountsWithPlaidRequest:
-      type: object
-      properties:
-        publicToken:
-          type: string
-        institutionName:
-          type: string
-        legalName:
-          type: string
-        authorizeAmount:
-          type: integer
-          format: int64
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaidAccount'
-    PlaidAccount:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        mask:
-          type: string
     Account:
       type: object
       properties:
@@ -305,20 +249,76 @@ components:
           type: string
         mandateId:
           type: string
-    AccountLedgerItemRequest:
+    Address:
       type: object
       properties:
-        accountId:
+        id:
           type: string
           format: uuid
-        transferId:
+        createdAt:
           type: string
-          format: uuid
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
         type:
           type: string
-          enum:
-          - DEBIT
-          - CREDIT
-        amount:
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
+    PlaidAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        mask:
+          type: string
+    CreateAccountsWithPlaidRequest:
+      type: object
+      properties:
+        publicToken:
+          type: string
+        institutionName:
+          type: string
+        legalName:
+          type: string
+        authorizeAmount:
           type: integer
           format: int64
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaidAccount'

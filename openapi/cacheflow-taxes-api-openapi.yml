@@ -162,6 +162,23 @@ paths:
                   $ref: '#/components/schemas/TaxItem'
 components:
   schemas:
+    UpdateTaxCodeRequest:
+      required:
+      - description
+      type: object
+      properties:
+        description:
+          type: string
+    CreateTaxCodeRequest:
+      required:
+      - code
+      - description
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
     TaxItem:
       required:
       - currency
@@ -223,23 +240,6 @@ components:
           type: integer
           format: int64
         currency:
-          type: string
-    CreateTaxCodeRequest:
-      required:
-      - code
-      - description
-      type: object
-      properties:
-        code:
-          type: string
-        description:
-          type: string
-    UpdateTaxCodeRequest:
-      required:
-      - description
-      type: object
-      properties:
-        description:
           type: string
     TaxCodeRest:
       required:

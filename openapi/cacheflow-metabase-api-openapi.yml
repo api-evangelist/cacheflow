@@ -48,6 +48,15 @@ paths:
                 $ref: '#/components/schemas/MetabaseResponse'
 components:
   schemas:
+    MetabaseResponse:
+      required:
+      - token
+      type: object
+      properties:
+        token:
+          type: string
+        dashboardHome:
+          type: string
     MetabaseRequest:
       type: object
       properties:
@@ -66,12 +75,3 @@ components:
         question:
           type: integer
           format: int32
-    MetabaseResponse:
-      required:
-      - token
-      type: object
-      properties:
-        token:
-          type: string
-        dashboardHome:
-          type: string

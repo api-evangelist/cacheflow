@@ -101,27 +101,6 @@ paths:
                   $ref: '#/components/schemas/CurrencyListing'
 components:
   schemas:
-    CurrencyListing:
-      required:
-      - code
-      - defaultScale
-      - description
-      - extendedScale
-      - symbol
-      type: object
-      properties:
-        code:
-          type: string
-        description:
-          type: string
-        symbol:
-          type: string
-        defaultScale:
-          type: integer
-          format: int32
-        extendedScale:
-          type: integer
-          format: int32
     Currency:
       required:
       - active
@@ -149,6 +128,27 @@ components:
         reportExchangeRate:
           type: integer
           format: int64
+        symbol:
+          type: string
+        defaultScale:
+          type: integer
+          format: int32
+        extendedScale:
+          type: integer
+          format: int32
+    CurrencyListing:
+      required:
+      - code
+      - defaultScale
+      - description
+      - extendedScale
+      - symbol
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
         symbol:
           type: string
         defaultScale:

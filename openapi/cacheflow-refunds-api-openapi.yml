@@ -150,27 +150,191 @@ paths:
                 $ref: '#/components/schemas/Refund'
 components:
   schemas:
-    ActivityDetails:
-      title: ActivityDetails
+    Refund:
+      required:
+      - amount
+      - amountFormatted
+      - createdAt
+      - id
+      - processDate
+      - status
+      - transfer
+      - updatedAt
       type: object
       properties:
-        message:
+        id:
           type: string
-        type:
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        amount:
+          type: integer
+          format: int64
+        amountFormatted:
+          type: string
+        processDate:
+          type: string
+          format: date
+        status:
           type: string
           enum:
-          - base
-          - transaction
-          - notification
-          - integration
-          - field_changes
-      discriminator:
-        propertyName: type
-        mapping:
-          transaction: '#/components/schemas/TransactionActivityDetails'
-          integration: '#/components/schemas/SyncActivityDetails'
-          field_changes: '#/components/schemas/FieldChangeActivityDetails'
-          notification: '#/components/schemas/NotificationActivityDetails'
+          - pending
+          - in_progress
+          - posted
+          - failed
+          - cancelled
+          - reversed
+        transferStatus:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        transfer:
+          $ref: '#/components/schemas/Transfer'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        note:
+          type: string
+        lastSyncEvent:
+          $ref: '#/components/schemas/SyncEvent'
+    Customer:
+      required:
+      - createdAt
+      - deleted
+      - id
+      - name
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        name:
+          type: string
+        tin:
+          type: string
+        defaultCurrency:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+        billingContact:
+          $ref: '#/components/schemas/Contact'
+        deleted:
+          type: boolean
+        taxUseCode:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+          - J
+          - K
+          - L
+          - M
+          - N
+          - P
+          - Q
+          - R
+        partner:
+          type: boolean
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        taxExempt:
+          type: boolean
+        syncable:
+          type: boolean
     PaymentMethod:
       type: object
       properties:
@@ -388,115 +552,12 @@ components:
           - transferevent
           - unit
           - user
-    CreateRefundRequest:
-      required:
-      - amount
-      - processDate
-      - transferId
+    SyncEvent:
       type: object
       properties:
-        processDate:
-          type: string
-          format: date
-        amount:
-          type: integer
-          format: int64
-        transferId:
-          type: string
-          format: uuid
-        note:
-          maxLength: 255
-          minLength: 0
-          type: string
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
-      type: object
-      properties:
-        sourceType:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        sourceId:
-          type: string
-        sourceLink:
-          type: string
-    Customer:
-      required:
-      - createdAt
-      - deleted
-      - id
-      - name
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
         createdAt:
           type: string
           format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-        name:
-          type: string
-        tin:
-          type: string
-        defaultCurrency:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        shippingAddress:
-          $ref: '#/components/schemas/Address'
-        billingContact:
-          $ref: '#/components/schemas/Contact'
-        deleted:
-          type: boolean
-        taxUseCode:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-          - D
-          - E
-          - F
-          - G
-          - H
-          - I
-          - J
-          - K
-          - L
-          - M
-          - N
-          - P
-          - Q
-          - R
-        partner:
-          type: boolean
         referenceType:
           type: string
           enum:
@@ -550,143 +611,62 @@ components:
           - transferevent
           - unit
           - user
-        taxExempt:
-          type: boolean
-        syncable:
-          type: boolean
-    Address:
-      type: object
-      properties:
-        id:
+        referenceId:
           type: string
           format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
-    Refund:
-      required:
-      - amount
-      - amountFormatted
-      - createdAt
-      - id
-      - processDate
-      - status
-      - transfer
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-        amount:
-          type: integer
-          format: int64
-        amountFormatted:
-          type: string
-        processDate:
-          type: string
-          format: date
-        status:
+        direction:
           type: string
           enum:
-          - pending
-          - in_progress
-          - posted
-          - failed
-          - cancelled
-          - reversed
-        transferStatus:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        transfer:
-          $ref: '#/components/schemas/Transfer'
-        customer:
-          $ref: '#/components/schemas/Customer'
-        note:
-          type: string
-        lastSyncEvent:
-          $ref: '#/components/schemas/SyncEvent'
-    ActivityEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        actor:
-          $ref: '#/components/schemas/ActivityActor'
+          - to_cacheflow
+          - from_cacheflow
         eventType:
           type: string
           enum:
-          - transfer
-          - integration
-          - notification
-          - record_changed
+          - auth
           - created
-        eventCode:
+          - updated
+          - deleted
+        action:
           type: string
-        details:
-          $ref: '#/components/schemas/ActivityDetails'
-        createdAt:
+          enum:
+          - create
+          - update
+          - delete
+          - upsert
+          - noop
+        externalSource:
+          $ref: '#/components/schemas/ExternalSource'
+        status:
           type: string
-          format: date-time
+          enum:
+          - success
+          - error
+        error:
+          type: string
+        source:
+          type: string
+          deprecated: true
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        externalId:
+          type: string
+          deprecated: true
+        externalIdLink:
+          type: string
+          deprecated: true
     ObjectReference:
       type: object
       properties:
@@ -804,121 +784,6 @@ components:
           - transferevent
           - unit
           - user
-    SyncEvent:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        referenceId:
-          type: string
-          format: uuid
-        direction:
-          type: string
-          enum:
-          - to_cacheflow
-          - from_cacheflow
-        eventType:
-          type: string
-          enum:
-          - auth
-          - created
-          - updated
-          - deleted
-        action:
-          type: string
-          enum:
-          - create
-          - update
-          - delete
-          - upsert
-          - noop
-        externalSource:
-          $ref: '#/components/schemas/ExternalSource'
-        status:
-          type: string
-          enum:
-          - success
-          - error
-        error:
-          type: string
-        source:
-          type: string
-          deprecated: true
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        externalId:
-          type: string
-          deprecated: true
-        externalIdLink:
-          type: string
-          deprecated: true
     Transfer:
       required:
       - amount
@@ -1167,6 +1032,50 @@ components:
           type: string
         deleted:
           type: boolean
+    ActivityDetails:
+      title: ActivityDetails
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+          enum:
+          - base
+          - transaction
+          - notification
+          - integration
+          - field_changes
+      discriminator:
+        propertyName: type
+        mapping:
+          transaction: '#/components/schemas/TransactionActivityDetails'
+          integration: '#/components/schemas/SyncActivityDetails'
+          field_changes: '#/components/schemas/FieldChangeActivityDetails'
+          notification: '#/components/schemas/NotificationActivityDetails'
+    ActivityEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        actor:
+          $ref: '#/components/schemas/ActivityActor'
+        eventType:
+          type: string
+          enum:
+          - transfer
+          - integration
+          - notification
+          - record_changed
+          - created
+        eventCode:
+          type: string
+        details:
+          $ref: '#/components/schemas/ActivityDetails'
+        createdAt:
+          type: string
+          format: date-time
     Account:
       type: object
       properties:
@@ -1238,6 +1147,50 @@ components:
           type: string
         mandateId:
           type: string
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
     ActivityActor:
       type: object
       properties:
@@ -1249,4 +1202,51 @@ components:
         system:
           type: boolean
         identifier:
+          type: string
+    CreateRefundRequest:
+      required:
+      - amount
+      - processDate
+      - transferId
+      type: object
+      properties:
+        processDate:
+          type: string
+          format: date
+        amount:
+          type: integer
+          format: int64
+        transferId:
+          type: string
+          format: uuid
+        note:
+          maxLength: 255
+          minLength: 0
+          type: string
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
+          type: string
+        sourceLink:
           type: string

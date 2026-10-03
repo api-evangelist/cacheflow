@@ -38,27 +38,12 @@ paths:
                   $ref: '#/components/schemas/ItemDeltaSpansResponse'
 components:
   schemas:
-    PricebookEntry:
+    QuantityOverride:
       required:
-      - price
+      - billingPeriod
+      - quantity
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
         billingPeriod:
           type: string
           enum:
@@ -66,12 +51,50 @@ components:
           - quarter
           - halfyear
           - year
-        level:
+        quantity:
+          type: number
+        startIndex:
           type: integer
           format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-    ProductTaxConfig:
+        duration:
+          type: integer
+          format: int32
+    ItemLevel:
+      required:
+      - index
+      - start
+      - visible
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        hidden:
+          type: boolean
+        visibilityOverride:
+          type: boolean
+        visible:
+          type: object
+          additionalProperties:
+            type: boolean
+    Money:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
+          type: string
+        currency:
+          type: string
+      description: Total list amount for this level. null for usage.
+    Unit:
       type: object
       properties:
         id:
@@ -90,13 +113,145 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        taxMode:
+        name:
+          type: string
+        plural:
+          type: string
+    ItemOverride:
+      required:
+      - discount
+      type: object
+      properties:
+        billingPeriod:
           type: string
           enum:
-          - inclusive
-          - exclusive
-        taxCode:
-          $ref: '#/components/schemas/TaxCode'
+          - month
+          - quarter
+          - halfyear
+          - year
+        discount:
+          type: boolean
+        duration:
+          type: integer
+          format: int32
+        startIndex:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemLevelOverride'
+    LineItemLevel:
+      type: object
+      properties:
+        quantity:
+          type: number
+        visible:
+          type: boolean
+        start:
+          type: integer
+          format: int32
+        unitPricing:
+          $ref: '#/components/schemas/Money'
+        baseUnitPricing:
+          $ref: '#/components/schemas/Money'
+    TaxCode:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        code:
+          type: string
+        description:
+          type: string
+    ItemSchedule:
+      required:
+      - productId
+      - startDate
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          description: Product id for a specific version of the product. Must have the same root as the parent Item.
+          format: uuid
+        billingPeriod:
+          type: string
+          description: Billing period context.
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        startIndex:
+          type: integer
+          description: Regular payment start index.
+          format: int32
+        endIndex:
+          type: integer
+          description: Inclusive regular payment end index.
+          format: int32
+        startDate:
+          type: string
+          description: Absolute start date. Absolute date when scheduled is true, otherwise calculated.
+          format: date
+        endDate:
+          type: string
+          description: Inclusive absolute end date. Absolute date when scheduled is true, otherwise null.
+          format: date
+        scheduled:
+          type: boolean
+          description: Indicates schedule has explicitly scheduled dates.
+        price:
+          $ref: '#/components/schemas/Money'
+        basePrice:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          $ref: '#/components/schemas/Money'
+        listAmount:
+          $ref: '#/components/schemas/Money'
+        quantity:
+          type: number
+        discount:
+          type: boolean
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemScheduleLevel'
     SpanGroup:
       required:
       - days
@@ -153,28 +308,35 @@ components:
           $ref: '#/components/schemas/Money'
         amount:
           $ref: '#/components/schemas/Money'
-    QuantityOverride:
+    BundleItem:
       required:
-      - billingPeriod
-      - quantity
+      - entries
+      - id
+      - name
+      - product
       type: object
       properties:
-        billingPeriod:
+        id:
           type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
+          format: uuid
+        product:
+          $ref: '#/components/schemas/Product'
         quantity:
           type: number
-        startIndex:
+        bundlePercent:
           type: integer
           format: int32
-        duration:
-          type: integer
-          format: int32
-    Unit:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundlePriceEntry'
+        name:
+          type: string
+        description:
+          type: string
+    PricebookEntry:
+      required:
+      - price
       type: object
       properties:
         id:
@@ -193,10 +355,346 @@ components:
         updatedBy:
           type: string
           readOnly: true
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    ItemDeltaSpansResponse:
+      required:
+      - item
+      - spans
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/Item'
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemSpan'
+    ProductTaxConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        taxMode:
+          type: string
+          enum:
+          - inclusive
+          - exclusive
+        taxCode:
+          $ref: '#/components/schemas/TaxCode'
+    ProductLevel:
+      required:
+      - start
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        start:
+          type: integer
+          format: int32
+    ItemScheduleLevel:
+      required:
+      - basePrice
+      - level
+      - listPrice
+      - price
+      - start
+      type: object
+      properties:
+        level:
+          type: integer
+          description: Level index, 0-based
+          format: int32
+        start:
+          type: integer
+          description: Level start value
+          format: int32
+        quantity:
+          type: number
+          description: Portion of ItemSchedule quantity assigned to this level. null for usage
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        basePrice:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          $ref: '#/components/schemas/Money'
+        listAmount:
+          $ref: '#/components/schemas/Money'
+    Item:
+      required:
+      - createdAt
+      - customized
+      - customizedLevels
+      - groups
+      - id
+      - key
+      - product
+      - schedules
+      - spans
+      - updatedAt
+      - updatedBy
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        product:
+          $ref: '#/components/schemas/Product'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
         name:
           type: string
-        plural:
+        description:
           type: string
+        descriptionText:
+          type: string
+        customized:
+          type: boolean
+        customizedLevels:
+          type: boolean
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemLevel'
+        overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemOverride'
+        quantityOverrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOverride'
+        spans:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/LineItemSpan'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemSchedule'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpanGroup'
+        levelVisibility:
+          type: string
+          enum:
+          - all
+          - active
+          - active_plus_one
+          - active_plus_three
+          - active_plus_prior_next
+          - active_plus_prior_next_three
+    BundlePriceEntry:
+      required:
+      - price
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        price:
+          $ref: '#/components/schemas/Money'
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
+        sourceType:
+          type: string
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
+          type: string
+        sourceLink:
+          type: string
+    Duration:
+      required:
+      - days
+      - months
+      type: object
+      properties:
+        months:
+          type: integer
+          format: int32
+        days:
+          type: integer
+          format: int32
+    ItemLevelOverride:
+      required:
+      - level
+      - price
+      type: object
+      properties:
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+    LineItemSpan:
+      required:
+      - amount
+      - baseAmount
+      - listAmount
+      - proposalId
+      - proratedTotalAmount
+      - proratedTotalListAmount
+      - spanType
+      type: object
+      properties:
+        spanType:
+          type: string
+          enum:
+          - regular
+          - free
+          - removed
+        proposalId:
+          type: string
+          format: uuid
+        itemScheduleId:
+          type: string
+          format: uuid
+        startIndex:
+          type: integer
+          format: int32
+          deprecated: true
+        duration:
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        quantity:
+          type: number
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemLevel'
+        durationDesc:
+          $ref: '#/components/schemas/Duration'
+        baseAmount:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+        listAmount:
+          $ref: '#/components/schemas/Money'
+        discount:
+          $ref: '#/components/schemas/Money'
+        discountPercent:
+          type: integer
+          format: int32
+        prorating:
+          type: number
+        fullDays:
+          type: integer
+          format: int32
+        proratedDays:
+          type: integer
+          format: int32
+        proratedAmount:
+          $ref: '#/components/schemas/Money'
+        proratedBaseAmount:
+          $ref: '#/components/schemas/Money'
+        proratedListAmount:
+          $ref: '#/components/schemas/Money'
+        proratedTotalListAmount:
+          $ref: '#/components/schemas/Money'
+        proratedTotalAmount:
+          $ref: '#/components/schemas/Money'
+        unitPricing:
+          $ref: '#/components/schemas/Money'
+        baseUnitPricing:
+          $ref: '#/components/schemas/Money'
+        unitPricingDiscount:
+          $ref: '#/components/schemas/Money'
+        groupId:
+          type: integer
+          format: int32
     Product:
       required:
       - billing
@@ -336,501 +834,3 @@ components:
           type: array
           items:
             type: string
-    ItemOverride:
-      required:
-      - discount
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        discount:
-          type: boolean
-        duration:
-          type: integer
-          format: int32
-        startIndex:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemLevelOverride'
-    BundleItem:
-      required:
-      - entries
-      - id
-      - name
-      - product
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        product:
-          $ref: '#/components/schemas/Product'
-        quantity:
-          type: number
-        bundlePercent:
-          type: integer
-          format: int32
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/BundlePriceEntry'
-        name:
-          type: string
-        description:
-          type: string
-    Item:
-      required:
-      - createdAt
-      - customized
-      - customizedLevels
-      - groups
-      - id
-      - key
-      - product
-      - schedules
-      - spans
-      - updatedAt
-      - updatedBy
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-          format: uuid
-        quantity:
-          type: number
-        product:
-          $ref: '#/components/schemas/Product'
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        name:
-          type: string
-        description:
-          type: string
-        descriptionText:
-          type: string
-        customized:
-          type: boolean
-        customizedLevels:
-          type: boolean
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemLevel'
-        overrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemOverride'
-        quantityOverrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityOverride'
-        spans:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/LineItemSpan'
-        schedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemSchedule'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpanGroup'
-        levelVisibility:
-          type: string
-          enum:
-          - all
-          - active
-          - active_plus_one
-          - active_plus_three
-          - active_plus_prior_next
-          - active_plus_prior_next_three
-    TaxCode:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        code:
-          type: string
-        description:
-          type: string
-    ItemSchedule:
-      required:
-      - productId
-      - startDate
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        id:
-          type: string
-          format: uuid
-        productId:
-          type: string
-          description: Product id for a specific version of the product. Must have the same root as the parent Item.
-          format: uuid
-        billingPeriod:
-          type: string
-          description: Billing period context.
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        startIndex:
-          type: integer
-          description: Regular payment start index.
-          format: int32
-        endIndex:
-          type: integer
-          description: Inclusive regular payment end index.
-          format: int32
-        startDate:
-          type: string
-          description: Absolute start date. Absolute date when scheduled is true, otherwise calculated.
-          format: date
-        endDate:
-          type: string
-          description: Inclusive absolute end date. Absolute date when scheduled is true, otherwise null.
-          format: date
-        scheduled:
-          type: boolean
-          description: Indicates schedule has explicitly scheduled dates.
-        price:
-          $ref: '#/components/schemas/Money'
-        basePrice:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
-        baseAmount:
-          $ref: '#/components/schemas/Money'
-        listAmount:
-          $ref: '#/components/schemas/Money'
-        quantity:
-          type: number
-        discount:
-          type: boolean
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemScheduleLevel'
-    ItemDeltaSpansResponse:
-      required:
-      - item
-      - spans
-      type: object
-      properties:
-        item:
-          $ref: '#/components/schemas/Item'
-        spans:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemSpan'
-    Money:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-        scale:
-          type: integer
-          format: int32
-        formattedAmount:
-          type: string
-        currency:
-          type: string
-      description: Total list amount for this level. null for usage.
-    ItemScheduleLevel:
-      required:
-      - basePrice
-      - level
-      - listPrice
-      - price
-      - start
-      type: object
-      properties:
-        level:
-          type: integer
-          description: Level index, 0-based
-          format: int32
-        start:
-          type: integer
-          description: Level start value
-          format: int32
-        quantity:
-          type: number
-          description: Portion of ItemSchedule quantity assigned to this level. null for usage
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        basePrice:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
-        baseAmount:
-          $ref: '#/components/schemas/Money'
-        listAmount:
-          $ref: '#/components/schemas/Money'
-    LineItemLevel:
-      type: object
-      properties:
-        quantity:
-          type: number
-        visible:
-          type: boolean
-        start:
-          type: integer
-          format: int32
-        unitPricing:
-          $ref: '#/components/schemas/Money'
-        baseUnitPricing:
-          $ref: '#/components/schemas/Money'
-    ItemLevelOverride:
-      required:
-      - level
-      - price
-      type: object
-      properties:
-        level:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-    LineItemSpan:
-      required:
-      - amount
-      - baseAmount
-      - listAmount
-      - proposalId
-      - proratedTotalAmount
-      - proratedTotalListAmount
-      - spanType
-      type: object
-      properties:
-        spanType:
-          type: string
-          enum:
-          - regular
-          - free
-          - removed
-        proposalId:
-          type: string
-          format: uuid
-        itemScheduleId:
-          type: string
-          format: uuid
-        startIndex:
-          type: integer
-          format: int32
-          deprecated: true
-        duration:
-          type: integer
-          format: int32
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        quantity:
-          type: number
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemLevel'
-        durationDesc:
-          $ref: '#/components/schemas/Duration'
-        baseAmount:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
-        listAmount:
-          $ref: '#/components/schemas/Money'
-        discount:
-          $ref: '#/components/schemas/Money'
-        discountPercent:
-          type: integer
-          format: int32
-        prorating:
-          type: number
-        fullDays:
-          type: integer
-          format: int32
-        proratedDays:
-          type: integer
-          format: int32
-        proratedAmount:
-          $ref: '#/components/schemas/Money'
-        proratedBaseAmount:
-          $ref: '#/components/schemas/Money'
-        proratedListAmount:
-          $ref: '#/components/schemas/Money'
-        proratedTotalListAmount:
-          $ref: '#/components/schemas/Money'
-        proratedTotalAmount:
-          $ref: '#/components/schemas/Money'
-        unitPricing:
-          $ref: '#/components/schemas/Money'
-        baseUnitPricing:
-          $ref: '#/components/schemas/Money'
-        unitPricingDiscount:
-          $ref: '#/components/schemas/Money'
-        groupId:
-          type: integer
-          format: int32
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
-      type: object
-      properties:
-        sourceType:
-          type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        sourceId:
-          type: string
-        sourceLink:
-          type: string
-    Duration:
-      required:
-      - days
-      - months
-      type: object
-      properties:
-        months:
-          type: integer
-          format: int32
-        days:
-          type: integer
-          format: int32
-    BundlePriceEntry:
-      required:
-      - price
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        price:
-          $ref: '#/components/schemas/Money'
-    ProductLevel:
-      required:
-      - start
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        start:
-          type: integer
-          format: int32
-    ItemLevel:
-      required:
-      - index
-      - start
-      - visible
-      type: object
-      properties:
-        index:
-          type: integer
-          format: int32
-        start:
-          type: integer
-          format: int32
-        hidden:
-          type: boolean
-        visibilityOverride:
-          type: boolean
-        visible:
-          type: object
-          additionalProperties:
-            type: boolean

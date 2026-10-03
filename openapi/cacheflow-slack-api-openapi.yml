@@ -123,28 +123,6 @@ components:
         subject:
           type: string
           readOnly: true
-    TokenData:
-      title: TokenData
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - basic
-          - hubspot
-          - slackUser
-          - slackWorkspace
-          - salesforceUser
-        subject:
-          type: string
-      discriminator:
-        propertyName: type
-        mapping:
-          slackUser: '#/components/schemas/SlackUser'
-          slackWorkspace: '#/components/schemas/SlackWorkspace'
-          salesforceUser: '#/components/schemas/SalesforceUser'
-          hubspot: '#/components/schemas/HubspotTokenData'
-          basic: '#/components/schemas/BasicTokenData'
     User:
       type: object
       properties:
@@ -183,6 +161,37 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
+    TokenData:
+      title: TokenData
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        subject:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          slackUser: '#/components/schemas/SlackUser'
+          slackWorkspace: '#/components/schemas/SlackWorkspace'
+          salesforceUser: '#/components/schemas/SalesforceUser'
+          hubspot: '#/components/schemas/HubspotTokenData'
+          basic: '#/components/schemas/BasicTokenData'
+    CreateSlackResourceRequest:
+      type: object
+      properties:
+        slackAuthCode:
+          type: string
+        stateTokenKey:
+          type: string
+        originalRedirectUri:
+          type: string
     SlackUser:
       type: object
       allOf:
@@ -246,13 +255,4 @@ components:
         tokenData:
           $ref: '#/components/schemas/TokenData'
         token:
-          type: string
-    CreateSlackResourceRequest:
-      type: object
-      properties:
-        slackAuthCode:
-          type: string
-        stateTokenKey:
-          type: string
-        originalRedirectUri:
           type: string
