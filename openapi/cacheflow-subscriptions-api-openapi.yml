@@ -485,28 +485,931 @@ paths:
                 $ref: '#/components/schemas/BillingSchedule'
 components:
   schemas:
-    RenewalConfigurationChange:
+    Product:
+      required:
+      - billing
+      - consumption
+      - createdAt
+      - customizable
+      - discountable
+      - displayQuantityOnInvoicePdf
+      - entries
+      - extendedScale
+      - hidden
+      - id
+      - listPriceAdjustable
+      - pricing
+      - productType
+      - recurrence
+      - status
+      - updatedAt
       type: object
       properties:
-        changeType:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        hidden:
+          type: boolean
+        rootId:
+          type: string
+          format: uuid
+        productType:
           type: string
           enum:
-          - modify
-          - remove
-          - add
-        configurationId:
+          - single
+          - bundleTopDown
+          - bundleBottomUp
+        status:
           type: string
-          format: uuid
-        originalConfigurationId:
+          enum:
+          - active
+          - inactive
+        name:
           type: string
-          format: uuid
-        renewalClauseChange:
+        internalName:
+          type: string
+        description:
+          type: string
+        recurrence:
+          type: string
+          enum:
+          - one_time
+          - recurring
+          - usage
+        pricing:
+          type: string
+          enum:
+          - fixed
+          - graduated
+          - stairstep
+          - volume
+        consumption:
+          type: string
+          enum:
+          - single
+          - multiple
+        billing:
+          type: string
+          enum:
+          - scheduled
+          - fixed
+        unit:
+          $ref: '#/components/schemas/Unit'
+        extendedScale:
           type: boolean
-        renewalTermLengthMonthsChange:
+        customizable:
+          type: boolean
+        discountable:
+          type: boolean
+        displayQuantityOnInvoicePdf:
+          type: boolean
+        listPriceAdjustable:
+          type: boolean
+        descriptionCustomizable:
+          type: boolean
+        nameCustomizable:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        currencies:
+          type: array
+          items:
+            type: string
+        taxConfig:
+          $ref: '#/components/schemas/ProductTaxConfig'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricebookEntry'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLevel'
+        showProductsOnInvoice:
+          type: boolean
+        showProductPricesOnInvoice:
+          type: boolean
+        showProductsOnProposal:
+          type: boolean
+        bundleItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundleItem'
+        bundleBottomUpEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundlePriceEntry'
+        bundleGroups:
+          type: array
+          items:
+            type: string
+    ProductLevel:
+      required:
+      - start
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        start:
           type: integer
           format: int32
-        removedConfiguration:
-          $ref: '#/components/schemas/RenewalConfiguration'
+    Unit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        plural:
+          type: string
+    Item:
+      required:
+      - createdAt
+      - customized
+      - customizedLevels
+      - groups
+      - id
+      - key
+      - product
+      - schedules
+      - spans
+      - updatedAt
+      - updatedBy
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        product:
+          $ref: '#/components/schemas/Product'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        name:
+          type: string
+        description:
+          type: string
+        descriptionText:
+          type: string
+        customized:
+          type: boolean
+        customizedLevels:
+          type: boolean
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemLevel'
+        overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemOverride'
+        quantityOverrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuantityOverride'
+        spans:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/LineItemSpan'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemSchedule'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpanGroup'
+        levelVisibility:
+          type: string
+          enum:
+          - all
+          - active
+          - active_plus_one
+          - active_plus_three
+          - active_plus_prior_next
+          - active_plus_prior_next_three
+    CreateAccountsWithStripeRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+        paymentMethodId:
+          type: string
+        authorizeAmount:
+          type: integer
+          format: int64
+    SyncEvent:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        referenceId:
+          type: string
+          format: uuid
+        direction:
+          type: string
+          enum:
+          - to_cacheflow
+          - from_cacheflow
+        eventType:
+          type: string
+          enum:
+          - auth
+          - created
+          - updated
+          - deleted
+        action:
+          type: string
+          enum:
+          - create
+          - update
+          - delete
+          - upsert
+          - noop
+        externalSource:
+          $ref: '#/components/schemas/ExternalSource'
+        status:
+          type: string
+          enum:
+          - success
+          - error
+        error:
+          type: string
+        source:
+          type: string
+          deprecated: true
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        externalId:
+          type: string
+          deprecated: true
+        externalIdLink:
+          type: string
+          deprecated: true
+    Money:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
+          type: string
+        currency:
+          type: string
+      description: Total list amount for this level. null for usage.
+    ItemLevel:
+      required:
+      - index
+      - start
+      - visible
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+        start:
+          type: integer
+          format: int32
+        hidden:
+          type: boolean
+        visibilityOverride:
+          type: boolean
+        visible:
+          type: object
+          additionalProperties:
+            type: boolean
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/Address'
+        institutionName:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - depository
+          - credit
+          - manual
+          - external
+        subtype:
+          type: string
+        mask:
+          type: string
+        legalName:
+          type: string
+        currency:
+          type: string
+        ownerType:
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        wireNumber:
+          type: string
+        expMonth:
+          type: integer
+          format: int32
+        expYear:
+          type: integer
+          format: int32
+        cvv:
+          type: integer
+          format: int32
+        bic:
+          type: string
+        iban:
+          type: string
+        sortCode:
+          type: string
+        institutionNumber:
+          type: string
+        transitNumber:
+          type: string
+        verificationLink:
+          type: string
+        mandateId:
+          type: string
+    SigningDocument:
+      required:
+      - externalId
+      - provider
+      - signer
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        provider:
+          type: string
+          enum:
+          - docusign
+        externalId:
+          type: string
+        signedAt:
+          type: string
+          format: date-time
+        polledAt:
+          type: string
+          format: date-time
+        signer:
+          $ref: '#/components/schemas/_ContactInternal'
+    Transfer:
+      required:
+      - amount
+      - currency
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        processedAt:
+          type: string
+          format: date-time
+        externalId:
+          type: string
+        currency:
+          type: string
+        amount:
+          type: integer
+          format: int64
+        paidAmount:
+          type: integer
+          format: int64
+        fromAccount:
+          $ref: '#/components/schemas/Account'
+        referenceTransferId:
+          type: string
+          format: uuid
+        fromAccountId:
+          type: string
+          format: uuid
+          writeOnly: true
+        toAccount:
+          $ref: '#/components/schemas/Account'
+        toAccountId:
+          type: string
+          format: uuid
+          writeOnly: true
+        reason:
+          type: string
+        parentReferenceId:
+          type: string
+          format: uuid
+        parentReferenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        status:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        type:
+          type: string
+          enum:
+          - DEBIT
+          - CREDIT
+        processor:
+          type: string
+          enum:
+          - plaid
+          - stripe
+          - manual
+        paymentType:
+          type: string
+          deprecated: true
+          enum:
+          - ach
+          - cc
+          - check
+          - custom
+          - direct_debit
+          - wire
+          - external
+          - manual
+        category:
+          type: string
+          enum:
+          - FEE
+          - PAYMENT
+          - PAYOUT
+          - REFUND
+          - ADJUSTMENT
+        reasonCode:
+          type: string
+          enum:
+          - invalid_account
+          - insufficient_funds
+          - flagged_account
+          - region_not_supported
+          - invalid_address
+          - requires_buyer_approval
+          - transaction_failure
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        achType:
+          type: string
+          enum:
+          - arc
+          - cbr
+          - ccd
+          - cie
+          - cor
+          - ctx
+          - iat
+          - mte
+          - pbr
+          - pop
+          - pos
+          - ppd
+          - rck
+          - tel
+          - web
+        failures:
+          type: integer
+          format: int32
+        retryAt:
+          type: string
+          format: date-time
+        referenceNumber:
+          type: string
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        paidAmountFormatted:
+          type: string
+        amountFormatted:
+          type: string
+        deleted:
+          type: boolean
+    ProposalAttachment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          enum:
+          - document
+          - link
+        attachmentConfigId:
+          type: string
+          format: uuid
+        documentId:
+          type: string
+          format: uuid
+        documentVersion:
+          $ref: '#/components/schemas/DocumentVersion'
+        inEnvelope:
+          type: boolean
+        name:
+          type: string
+        linkUrl:
+          type: string
+    UpdateContractRequest:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - cancelled
+          - ended
+        purchaseOrderNumber:
+          type: string
+    PaymentSchedule:
+      required:
+      - currency
+      - payEvery
+      - scheduleType
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        payEvery:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        scheduleType:
+          type: string
+          enum:
+          - standard
+          - upfront
+        paymentMethodIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        total:
+          type: integer
+          format: int64
+        baseTotal:
+          type: integer
+          format: int64
+        listTotal:
+          type: integer
+          format: int64
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        totalDiscount:
+          type: integer
+          format: int64
+        totalDiscountPercent:
+          type: integer
+          format: int32
+        totalFormatted:
+          type: string
+        baseTotalFormatted:
+          type: string
+        listTotalFormatted:
+          type: string
+        totalDiscountFormatted:
+          type: string
+    CreateContractRequest:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          format: uuid
+        contactId:
+          type: string
+          format: uuid
+        paymentMethod:
+          $ref: '#/components/schemas/BillingMethodRequest'
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - cancelled
+          - ended
     Customer:
       required:
       - createdAt
@@ -626,43 +1529,6 @@ components:
           type: boolean
         syncable:
           type: boolean
-    SigningDocument:
-      required:
-      - externalId
-      - provider
-      - signer
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        provider:
-          type: string
-          enum:
-          - docusign
-        externalId:
-          type: string
-        signedAt:
-          type: string
-          format: date-time
-        polledAt:
-          type: string
-          format: date-time
-        signer:
-          $ref: '#/components/schemas/_ContactInternal'
     Contact:
       required:
       - createdAt
@@ -755,166 +1621,245 @@ components:
           - transferevent
           - unit
           - user
-    ContractSummary:
-      required:
-      - billingMethod
-      - billingPeriod
-      - buyer
-      - createdAt
-      - currency
-      - endDate
-      - id
-      - name
-      - proposalNumber
-      - renewalType
-      - startDate
-      - status
-      - totalAmount
+    Address:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        name:
-          type: string
-        currency:
-          type: string
-        totalAmount:
-          type: integer
-          format: int64
-        proposalNumber:
-          type: string
-        status:
-          type: string
-          enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        billingMethod:
-          $ref: '#/components/schemas/BillingMethodSummary'
-        nextPaymentDue:
-          $ref: '#/components/schemas/NextPaymentDueSummary'
-        buyer:
-          $ref: '#/components/schemas/CustomerSummary'
-        contractNumber:
-          type: string
-        renewalType:
-          type: string
-          enum:
-          - none
-          - autoRenewal
         createdAt:
           type: string
           format: date-time
-        archived:
-          type: boolean
-        totalAmountFormatted:
+          readOnly: true
+        createdBy:
           type: string
-    QuantityOverride:
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time
+    ItemSchedule:
       required:
-      - billingPeriod
-      - quantity
+      - productId
+      - startDate
       type: object
       properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        id:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          description: Product id for a specific version of the product. Must have the same root as the parent Item.
+          format: uuid
         billingPeriod:
           type: string
+          description: Billing period context.
           enum:
           - month
           - quarter
           - halfyear
           - year
-        quantity:
-          type: number
         startIndex:
           type: integer
+          description: Regular payment start index.
           format: int32
-        duration:
+        endIndex:
           type: integer
+          description: Inclusive regular payment end index.
           format: int32
-    ApprovalRuleSummary:
+        startDate:
+          type: string
+          description: Absolute start date. Absolute date when scheduled is true, otherwise calculated.
+          format: date
+        endDate:
+          type: string
+          description: Inclusive absolute end date. Absolute date when scheduled is true, otherwise null.
+          format: date
+        scheduled:
+          type: boolean
+          description: Indicates schedule has explicitly scheduled dates.
+        price:
+          $ref: '#/components/schemas/Money'
+        basePrice:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          $ref: '#/components/schemas/Money'
+        listAmount:
+          $ref: '#/components/schemas/Money'
+        quantity:
+          type: number
+        discount:
+          type: boolean
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemScheduleLevel'
+    PaymentMethod:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
         name:
           type: string
-        ruleType:
+        internalName:
           type: string
-          enum:
-          - proposalAmountDecrease
-          - proposalAmount
-          - proposalAttachments
-          - proposalAutoRenewal
-          - proposalBillingPeriods
-          - proposalCountry
-          - proposalCustom
-          - proposalCustomTerms
-          - proposalDiscountPercent
-          - proposalDocusign
-          - proposalDuplicateProducts
-          - proposalExternalCrm
-          - proposalFreeMonths
-          - proposalItemQuantity
-          - proposalPaymentTerms
-          - proposalProductDiscountPercent
-          - proposalProducts
-          - proposalTermLength
         description:
           type: string
-    CreateContractRequest:
-      type: object
-      properties:
-        proposalId:
+        enabled:
+          type: boolean
+        configured:
+          type: boolean
+        managed:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        account:
+          $ref: '#/components/schemas/Account'
+        accountId:
           type: string
           format: uuid
-        contactId:
-          type: string
-          format: uuid
-        paymentMethod:
-          $ref: '#/components/schemas/BillingMethodRequest'
-        status:
+        paymentType:
           type: string
           enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-    ItemLevel:
-      required:
-      - index
-      - start
-      - visible
-      type: object
-      properties:
-        index:
-          type: integer
-          format: int32
-        start:
-          type: integer
-          format: int32
-        hidden:
-          type: boolean
-        visibilityOverride:
-          type: boolean
-        visible:
+          - ach
+          - cc
+          - check
+          - custom
+          - direct_debit
+          - wire
+          - external
+          - manual
+        customText:
+          type: string
+        configuration:
           type: object
           additionalProperties:
-            type: boolean
+            type: object
+        processor:
+          type: string
+          enum:
+          - plaid
+          - stripe
+          - manual
+        activePaymentMethod:
+          type: boolean
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        deleted:
+          type: boolean
     ContractEvent:
       type: object
       properties:
@@ -1008,152 +1953,11 @@ components:
           type: string
         instanceRef:
           type: string
-    ObjectReference:
-      type: object
-      properties:
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        id:
-          type: string
-          format: uuid
-        uri:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          writeOnly: true
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-    ContractUsageSummary:
+    BundlePriceEntry:
       required:
-      - billingPeriod
-      - buyer
-      - contractNumber
-      - currency
-      - id
-      - name
-      - status
+      - price
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        contractNumber:
-          type: string
-        status:
-          type: string
-          enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-        currency:
-          type: string
-        billingMethod:
-          $ref: '#/components/schemas/BillingMethod'
         billingPeriod:
           type: string
           enum:
@@ -1161,10 +1965,525 @@ components:
           - quarter
           - halfyear
           - year
-        buyer:
-          $ref: '#/components/schemas/Customer'
-        currentUsageSchedule:
-          $ref: '#/components/schemas/BillingSchedule'
+        price:
+          $ref: '#/components/schemas/Money'
+    CreateAccountsWithManualRequest:
+      type: object
+      properties:
+        institutionName:
+          type: string
+        legalName:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - depository
+          - credit
+          - manual
+          - external
+        subtype:
+          type: string
+        currency:
+          type: string
+        ownerType:
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        wireNumber:
+          type: string
+    PaymentMethodSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        paymentType:
+          type: string
+          enum:
+          - ach
+          - cc
+          - check
+          - custom
+          - direct_debit
+          - wire
+          - external
+          - manual
+        name:
+          type: string
+        managed:
+          type: boolean
+        processor:
+          type: string
+          enum:
+          - plaid
+          - stripe
+          - manual
+    ItemScheduleLevel:
+      required:
+      - basePrice
+      - level
+      - listPrice
+      - price
+      - start
+      type: object
+      properties:
+        level:
+          type: integer
+          description: Level index, 0-based
+          format: int32
+        start:
+          type: integer
+          description: Level start value
+          format: int32
+        quantity:
+          type: number
+          description: Portion of ItemSchedule quantity assigned to this level. null for usage
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        basePrice:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          $ref: '#/components/schemas/Money'
+        listAmount:
+          $ref: '#/components/schemas/Money'
+    BillingMethodSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethodSummary'
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - external
+        isManaged:
+          type: boolean
+    ProposalContact:
+      required:
+      - createdAt
+      - id
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        acceptedAt:
+          type: string
+          format: date-time
+        contact:
+          $ref: '#/components/schemas/Contact'
+    VirtualAccount:
+      type: object
+      properties:
+        name:
+          type: string
+    BillingSchedule:
+      required:
+      - amountDue
+      - amountWithoutTax
+      - billingItems
+      - contract
+      - createdAt
+      - currency
+      - dueDate
+      - externalInvoiced
+      - id
+      - issueDate
+      - scheduleDate
+      - updatedAt
+      - usageEntryActive
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+        scheduleDate:
+          type: string
+          format: date
+        currency:
+          type: string
+        amountDue:
+          type: integer
+          format: int64
+        amountWithoutTax:
+          type: integer
+          format: int64
+        taxAmount:
+          type: integer
+          format: int64
+        dueDate:
+          type: string
+          format: date
+        issueDate:
+          type: string
+          format: date
+        invoiceDate:
+          type: string
+          format: date
+        invoiceStatus:
+          type: string
+          enum:
+          - draft
+          - open
+          - paid
+          - past_due
+          - voided
+        statementSentAt:
+          type: string
+          format: date-time
+        billingItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingItem'
+        invoiceId:
+          type: string
+          format: uuid
+        transferStatus:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        transfer:
+          $ref: '#/components/schemas/Transfer'
+        contract:
+          $ref: '#/components/schemas/ObjectReference'
+        usageEntryStartTime:
+          type: string
+          format: date-time
+        usageEntryEndTime:
+          type: string
+          format: date-time
+        usageEntryActive:
+          type: boolean
+        externalInvoiced:
+          type: boolean
+        lastSyncEvent:
+          $ref: '#/components/schemas/SyncEvent'
+        source:
+          type: string
+          deprecated: true
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        externalId:
+          type: string
+          deprecated: true
+        amountDueFormatted:
+          type: string
+        amountWithoutTaxFormatted:
+          type: string
+        taxAmountFormatted:
+          type: string
+        externalLink:
+          type: string
+          deprecated: true
+        sourceDisplayId:
+          type: string
+          deprecated: true
+    BillingItem:
+      required:
+      - amountDue
+      - amountDueFormatted
+      - amountWithoutTax
+      - amountWithoutTaxFormatted
+      - createdAt
+      - currency
+      - id
+      - itemId
+      - product
+      - serviceEndDate
+      - serviceStartDate
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        serviceStartDate:
+          type: string
+          format: date
+        serviceEndDate:
+          type: string
+          format: date
+        currency:
+          type: string
+        amountDue:
+          type: integer
+          format: int64
+        amountDueFormatted:
+          type: string
+        amountWithoutTax:
+          type: integer
+          format: int64
+        amountWithoutTaxFormatted:
+          type: string
+        taxAmount:
+          type: integer
+          format: int64
+        taxAmountFormatted:
+          type: string
+        product:
+          $ref: '#/components/schemas/ObjectReference'
+        itemId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        descriptionText:
+          type: string
+        bundle:
+          $ref: '#/components/schemas/ObjectReference'
+        bundleName:
+          type: string
+        bundleDescription:
+          type: string
+        bundleDescriptionText:
+          type: string
+        bundleQuantity:
+          type: number
+        quantity:
+          type: number
+        proration:
+          type: integer
+          format: int32
+        latestProductUsage:
+          $ref: '#/components/schemas/ProductUsage'
+        displayQuantityOnInvoicePdf:
+          type: boolean
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    _ContactInternal:
+      required:
+      - email
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        deleted:
+          type: boolean
+        customerReference:
+          $ref: '#/components/schemas/ObjectReference'
+        gdprDeleted:
+          type: boolean
+    OrganizationSummary:
+      type: object
+      properties:
+        logoUrl:
+          type: string
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        internalName:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        branding:
+          type: object
+          additionalProperties:
+            type: object
+    ItemOverride:
+      required:
+      - discount
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        discount:
+          type: boolean
+        duration:
+          type: integer
+          format: int32
+        startIndex:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+        levels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemLevelOverride'
+    NextPaymentDueSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        currency:
+          type: string
+        amountDue:
+          type: integer
+          format: int64
+        scheduleDate:
+          type: string
+          format: date
+        dueDate:
+          type: string
+          format: date
+        transfer:
+          $ref: '#/components/schemas/TransferSummary'
+        amountDueFormatted:
+          type: string
     Contract:
       required:
       - baseAmount
@@ -1302,6 +2621,99 @@ components:
           enum:
           - daily
           - monthly
+    PersonSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+    CustomerSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        billingContact:
+          $ref: '#/components/schemas/PersonSummary'
+    QuantityOverride:
+      required:
+      - billingPeriod
+      - quantity
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        quantity:
+          type: number
+        startIndex:
+          type: integer
+          format: int32
+        duration:
+          type: integer
+          format: int32
+    ProductTaxConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        taxMode:
+          type: string
+          enum:
+          - inclusive
+          - exclusive
+        taxCode:
+          $ref: '#/components/schemas/TaxCode'
     InvoiceConfiguration:
       type: object
       properties:
@@ -1331,685 +2743,6 @@ components:
           enum:
           - advance_date
           - billing_period_start_date
-    BillingItem:
-      required:
-      - amountDue
-      - amountDueFormatted
-      - amountWithoutTax
-      - amountWithoutTaxFormatted
-      - createdAt
-      - currency
-      - id
-      - itemId
-      - product
-      - serviceEndDate
-      - serviceStartDate
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        serviceStartDate:
-          type: string
-          format: date
-        serviceEndDate:
-          type: string
-          format: date
-        currency:
-          type: string
-        amountDue:
-          type: integer
-          format: int64
-        amountDueFormatted:
-          type: string
-        amountWithoutTax:
-          type: integer
-          format: int64
-        amountWithoutTaxFormatted:
-          type: string
-        taxAmount:
-          type: integer
-          format: int64
-        taxAmountFormatted:
-          type: string
-        product:
-          $ref: '#/components/schemas/ObjectReference'
-        itemId:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        descriptionText:
-          type: string
-        bundle:
-          $ref: '#/components/schemas/ObjectReference'
-        bundleName:
-          type: string
-        bundleDescription:
-          type: string
-        bundleDescriptionText:
-          type: string
-        bundleQuantity:
-          type: number
-        quantity:
-          type: number
-        proration:
-          type: integer
-          format: int32
-        latestProductUsage:
-          $ref: '#/components/schemas/ProductUsage'
-        displayQuantityOnInvoicePdf:
-          type: boolean
-    Money:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-        scale:
-          type: integer
-          format: int32
-        formattedAmount:
-          type: string
-        currency:
-          type: string
-      description: Total list amount for this level. null for usage.
-    BillingSchedule:
-      required:
-      - amountDue
-      - amountWithoutTax
-      - billingItems
-      - contract
-      - createdAt
-      - currency
-      - dueDate
-      - externalInvoiced
-      - id
-      - issueDate
-      - scheduleDate
-      - updatedAt
-      - usageEntryActive
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-        scheduleDate:
-          type: string
-          format: date
-        currency:
-          type: string
-        amountDue:
-          type: integer
-          format: int64
-        amountWithoutTax:
-          type: integer
-          format: int64
-        taxAmount:
-          type: integer
-          format: int64
-        dueDate:
-          type: string
-          format: date
-        issueDate:
-          type: string
-          format: date
-        invoiceDate:
-          type: string
-          format: date
-        invoiceStatus:
-          type: string
-          enum:
-          - draft
-          - open
-          - paid
-          - past_due
-          - voided
-        statementSentAt:
-          type: string
-          format: date-time
-        billingItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/BillingItem'
-        invoiceId:
-          type: string
-          format: uuid
-        transferStatus:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        transfer:
-          $ref: '#/components/schemas/Transfer'
-        contract:
-          $ref: '#/components/schemas/ObjectReference'
-        usageEntryStartTime:
-          type: string
-          format: date-time
-        usageEntryEndTime:
-          type: string
-          format: date-time
-        usageEntryActive:
-          type: boolean
-        externalInvoiced:
-          type: boolean
-        lastSyncEvent:
-          $ref: '#/components/schemas/SyncEvent'
-        source:
-          type: string
-          deprecated: true
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        externalId:
-          type: string
-          deprecated: true
-        amountDueFormatted:
-          type: string
-        amountWithoutTaxFormatted:
-          type: string
-        taxAmountFormatted:
-          type: string
-        externalLink:
-          type: string
-          deprecated: true
-        sourceDisplayId:
-          type: string
-          deprecated: true
-    Unit:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        plural:
-          type: string
-    UpdateIssueDatesRequest:
-      type: object
-      properties:
-        gracePeriod:
-          type: integer
-          format: int32
-        gracePeriodIsSet:
-          type: boolean
-    ItemOverride:
-      required:
-      - discount
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        discount:
-          type: boolean
-        duration:
-          type: integer
-          format: int32
-        startIndex:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemLevelOverride'
-    TaxCode:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        code:
-          type: string
-        description:
-          type: string
-    LineItemLevel:
-      type: object
-      properties:
-        quantity:
-          type: number
-        visible:
-          type: boolean
-        start:
-          type: integer
-          format: int32
-        unitPricing:
-          $ref: '#/components/schemas/Money'
-        baseUnitPricing:
-          $ref: '#/components/schemas/Money'
-    CreateAccountsWithPlaidRequest:
-      type: object
-      properties:
-        publicToken:
-          type: string
-        institutionName:
-          type: string
-        legalName:
-          type: string
-        authorizeAmount:
-          type: integer
-          format: int64
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaidAccount'
-    CustomerSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        billingContact:
-          $ref: '#/components/schemas/PersonSummary'
-    ItemSchedule:
-      required:
-      - productId
-      - startDate
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        id:
-          type: string
-          format: uuid
-        productId:
-          type: string
-          description: Product id for a specific version of the product. Must have the same root as the parent Item.
-          format: uuid
-        billingPeriod:
-          type: string
-          description: Billing period context.
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        startIndex:
-          type: integer
-          description: Regular payment start index.
-          format: int32
-        endIndex:
-          type: integer
-          description: Inclusive regular payment end index.
-          format: int32
-        startDate:
-          type: string
-          description: Absolute start date. Absolute date when scheduled is true, otherwise calculated.
-          format: date
-        endDate:
-          type: string
-          description: Inclusive absolute end date. Absolute date when scheduled is true, otherwise null.
-          format: date
-        scheduled:
-          type: boolean
-          description: Indicates schedule has explicitly scheduled dates.
-        price:
-          $ref: '#/components/schemas/Money'
-        basePrice:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
-        baseAmount:
-          $ref: '#/components/schemas/Money'
-        listAmount:
-          $ref: '#/components/schemas/Money'
-        quantity:
-          type: number
-        discount:
-          type: boolean
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemScheduleLevel'
-    BillingMethodSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        paymentMethod:
-          $ref: '#/components/schemas/PaymentMethodSummary'
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-          - external
-        isManaged:
-          type: boolean
-    BillingMethodRequest:
-      type: object
-      properties:
-        plaidAccounts:
-          $ref: '#/components/schemas/CreateAccountsWithPlaidRequest'
-        stripeAccounts:
-          $ref: '#/components/schemas/CreateAccountsWithStripeRequest'
-        manualRequest:
-          $ref: '#/components/schemas/CreateAccountsWithManualRequest'
-        virtualAccount:
-          $ref: '#/components/schemas/VirtualAccount'
-        paymentMethodId:
-          type: string
-          format: uuid
-    PaymentMethod:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        internalName:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        configured:
-          type: boolean
-        managed:
-          type: boolean
-        billingPeriods:
-          type: array
-          items:
-            type: string
-            enum:
-            - month
-            - quarter
-            - halfyear
-            - year
-        account:
-          $ref: '#/components/schemas/Account'
-        accountId:
-          type: string
-          format: uuid
-        paymentType:
-          type: string
-          enum:
-          - ach
-          - cc
-          - check
-          - custom
-          - direct_debit
-          - wire
-          - external
-          - manual
-        customText:
-          type: string
-        configuration:
-          type: object
-          additionalProperties:
-            type: object
-        processor:
-          type: string
-          enum:
-          - plaid
-          - stripe
-          - manual
-        activePaymentMethod:
-          type: boolean
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        deleted:
-          type: boolean
-    OrganizationSummary:
-      type: object
-      properties:
-        logoUrl:
-          type: string
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        internalName:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        branding:
-          type: object
-          additionalProperties:
-            type: object
-    SpanGroup:
-      required:
-      - days
-      - durationDesc
-      - endDate
-      - id
-      - listTotal
-      - proposalId
-      - spanType
-      - startDate
-      - total
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        spanType:
-          type: string
-          enum:
-          - regular
-          - free
-          - removed
-        proposalId:
-          type: string
-          format: uuid
-        itemScheduleId:
-          type: string
-          format: uuid
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        quantity:
-          type: number
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        days:
-          type: integer
-          format: int32
-        durationDesc:
-          $ref: '#/components/schemas/Duration'
-        total:
-          $ref: '#/components/schemas/Money'
-        listTotal:
-          $ref: '#/components/schemas/Money'
-        unitPricing:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
     MultipleIdRequest:
       type: object
       properties:
@@ -2018,831 +2751,6 @@ components:
           items:
             type: string
             format: uuid
-    BundleItem:
-      required:
-      - entries
-      - id
-      - name
-      - product
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        product:
-          $ref: '#/components/schemas/Product'
-        quantity:
-          type: number
-        bundlePercent:
-          type: integer
-          format: int32
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/BundlePriceEntry'
-        name:
-          type: string
-        description:
-          type: string
-    ProposalContact:
-      required:
-      - createdAt
-      - id
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        acceptedAt:
-          type: string
-          format: date-time
-        contact:
-          $ref: '#/components/schemas/Contact'
-    _ContactInternal:
-      required:
-      - email
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        role:
-          type: string
-        deleted:
-          type: boolean
-        customerReference:
-          $ref: '#/components/schemas/ObjectReference'
-        gdprDeleted:
-          type: boolean
-    Account:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/Address'
-        institutionName:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - depository
-          - credit
-          - manual
-          - external
-        subtype:
-          type: string
-        mask:
-          type: string
-        legalName:
-          type: string
-        currency:
-          type: string
-        ownerType:
-          type: string
-        routingNumber:
-          type: string
-        accountNumber:
-          type: string
-        wireNumber:
-          type: string
-        expMonth:
-          type: integer
-          format: int32
-        expYear:
-          type: integer
-          format: int32
-        cvv:
-          type: integer
-          format: int32
-        bic:
-          type: string
-        iban:
-          type: string
-        sortCode:
-          type: string
-        institutionNumber:
-          type: string
-        transitNumber:
-          type: string
-        verificationLink:
-          type: string
-        mandateId:
-          type: string
-    PricebookEntry:
-      required:
-      - price
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        level:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-    TransferSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        amount:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-    UpdateContractRequest:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-        purchaseOrderNumber:
-          type: string
-    RenewalConfiguration:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        termLengthMonths:
-          type: integer
-          format: int32
-        cancellationDeadlineDays:
-          type: integer
-          format: int32
-        renewalClause:
-          type: string
-        priceIncrease:
-          minimum: 0
-          type: number
-        renewalClauseDescription:
-          type: string
-    PaymentMethodSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        paymentType:
-          type: string
-          enum:
-          - ach
-          - cc
-          - check
-          - custom
-          - direct_debit
-          - wire
-          - external
-          - manual
-        name:
-          type: string
-        managed:
-          type: boolean
-        processor:
-          type: string
-          enum:
-          - plaid
-          - stripe
-          - manual
-    ProductUsage:
-      required:
-      - currency
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        billingItemId:
-          type: string
-          format: uuid
-        quantity:
-          type: number
-        amount:
-          type: integer
-          format: int64
-        currency:
-          type: string
-        amountFormatted:
-          type: string
-    ProductTaxConfig:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        taxMode:
-          type: string
-          enum:
-          - inclusive
-          - exclusive
-        taxCode:
-          $ref: '#/components/schemas/TaxCode'
-    PersonSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        firstName:
-          type: string
-        lastName:
-          type: string
-    SyncEvent:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        referenceId:
-          type: string
-          format: uuid
-        direction:
-          type: string
-          enum:
-          - to_cacheflow
-          - from_cacheflow
-        eventType:
-          type: string
-          enum:
-          - auth
-          - created
-          - updated
-          - deleted
-        action:
-          type: string
-          enum:
-          - create
-          - update
-          - delete
-          - upsert
-          - noop
-        externalSource:
-          $ref: '#/components/schemas/ExternalSource'
-        status:
-          type: string
-          enum:
-          - success
-          - error
-        error:
-          type: string
-        source:
-          type: string
-          deprecated: true
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        externalId:
-          type: string
-          deprecated: true
-        externalIdLink:
-          type: string
-          deprecated: true
-    ProductLevel:
-      required:
-      - start
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        start:
-          type: integer
-          format: int32
-    ProposalEventDetails:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - draft
-          - pending_approval
-          - approved
-          - schedule_selection
-          - payment_selection
-          - active
-          - pending_renewal
-          - accepted
-          - expired
-          - cancelled
-          - deleted
-        message:
-          type: string
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRuleSummary'
-    NextPaymentDueSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        currency:
-          type: string
-        amountDue:
-          type: integer
-          format: int64
-        scheduleDate:
-          type: string
-          format: date
-        dueDate:
-          type: string
-          format: date
-        transfer:
-          $ref: '#/components/schemas/TransferSummary'
-        amountDueFormatted:
-          type: string
-    ItemScheduleLevel:
-      required:
-      - basePrice
-      - level
-      - listPrice
-      - price
-      - start
-      type: object
-      properties:
-        level:
-          type: integer
-          description: Level index, 0-based
-          format: int32
-        start:
-          type: integer
-          description: Level start value
-          format: int32
-        quantity:
-          type: number
-          description: Portion of ItemSchedule quantity assigned to this level. null for usage
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-        basePrice:
-          $ref: '#/components/schemas/Money'
-        amount:
-          $ref: '#/components/schemas/Money'
-        baseAmount:
-          $ref: '#/components/schemas/Money'
-        listAmount:
-          $ref: '#/components/schemas/Money'
-    Item:
-      required:
-      - createdAt
-      - customized
-      - customizedLevels
-      - groups
-      - id
-      - key
-      - product
-      - schedules
-      - spans
-      - updatedAt
-      - updatedBy
-      type: object
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-          format: uuid
-        quantity:
-          type: number
-        product:
-          $ref: '#/components/schemas/Product'
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        name:
-          type: string
-        description:
-          type: string
-        descriptionText:
-          type: string
-        customized:
-          type: boolean
-        customizedLevels:
-          type: boolean
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemLevel'
-        overrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemOverride'
-        quantityOverrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuantityOverride'
-        spans:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/LineItemSpan'
-        schedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemSchedule'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpanGroup'
-        levelVisibility:
-          type: string
-          enum:
-          - all
-          - active
-          - active_plus_one
-          - active_plus_three
-          - active_plus_prior_next
-          - active_plus_prior_next_three
-    CreateAccountsWithManualRequest:
-      type: object
-      properties:
-        institutionName:
-          type: string
-        legalName:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - depository
-          - credit
-          - manual
-          - external
-        subtype:
-          type: string
-        currency:
-          type: string
-        ownerType:
-          type: string
-        routingNumber:
-          type: string
-        accountNumber:
-          type: string
-        wireNumber:
-          type: string
-    ProposalEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        eventType:
-          type: string
-          enum:
-          - created
-          - updated
-          - archived
-          - restore
-          - activated
-          - started
-          - set_to_draft
-          - contact_added
-          - contact_removed
-          - expired
-          - cancelled
-          - deleted
-          - buyer_downloaded
-          - buyer_printed
-          - seller_downloaded
-          - signing
-          - viewed
-          - unviewable_status
-          - request_new
-          - accepted
-          - invited
-          - created_signing_doc
-          - cancelled_signing_doc
-          - signed
-          - buyer_updated
-          - billing_method_added
-          - renewal_pending
-          - approval_requested
-          - approval_approved
-          - approval_rejected
-          - approval_canceled
-          - items_date_truncated
-          - items_date_cleared
-        user:
-          $ref: '#/components/schemas/User'
-        contact:
-          $ref: '#/components/schemas/_ContactInternal'
-        recipient:
-          $ref: '#/components/schemas/_ContactInternal'
-        details:
-          $ref: '#/components/schemas/ProposalEventDetails'
-        correlationRef:
-          type: string
-        instanceRef:
-          type: string
-    PlaidAccount:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        mask:
-          type: string
-    BillingMethod:
-      required:
-      - createdAt
-      - customer
-      - id
-      - paymentMethod
-      - status
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        updatedAt:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        createdBy:
-          type: string
-        name:
-          type: string
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-          - external
-        customer:
-          $ref: '#/components/schemas/Customer'
-        account:
-          $ref: '#/components/schemas/Account'
-        paymentMethod:
-          $ref: '#/components/schemas/PaymentMethod'
-        stripeCustomerId:
-          type: string
-        stripePaymentMethodId:
-          type: string
-    VirtualAccount:
-      type: object
-      properties:
-        name:
-          type: string
     ExternalSource:
       required:
       - sourceId
@@ -2869,413 +2777,6 @@ components:
         sourceId:
           type: string
         sourceLink:
-          type: string
-    ProposalChanges:
-      type: object
-      properties:
-        customTermsChange:
-          type: boolean
-        originalAmount:
-          type: integer
-          format: int64
-        amountChange:
-          type: integer
-          format: int64
-        itemChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProposalItemChange'
-        termLengthMonthsChange:
-          type: integer
-          format: int32
-        renewalConfigurationChange:
-          $ref: '#/components/schemas/RenewalConfigurationChange'
-        originalAmountFormatted:
-          type: string
-        amountChangeFormatted:
-          type: string
-    BundlePriceEntry:
-      required:
-      - price
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        price:
-          $ref: '#/components/schemas/Money'
-    DocumentVersion:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        versionNumber:
-          type: integer
-          format: int32
-        fileName:
-          type: string
-        url:
-          type: string
-        documentId:
-          type: string
-          format: uuid
-    CompanyInfo:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        internalName:
-          type: string
-        brandingEnabled:
-          type: boolean
-        externalId:
-          type: string
-        source:
-          type: string
-        logoUrl:
-          type: string
-        tin:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        branding:
-          type: object
-          additionalProperties:
-            type: object
-        logo:
-          $ref: '#/components/schemas/Document'
-        defaultInfo:
-          type: boolean
-        deleted:
-          type: boolean
-        logoId:
-          type: string
-          format: uuid
-    Duration:
-      required:
-      - days
-      - months
-      type: object
-      properties:
-        months:
-          type: integer
-          format: int32
-        days:
-          type: integer
-          format: int32
-    Document:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        fileName:
-          type: string
-        latestVersion:
-          $ref: '#/components/schemas/DocumentVersion'
-    OverrideRange:
-      required:
-      - billingPeriod
-      type: object
-      properties:
-        billingPeriod:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        startIndex:
-          type: integer
-          format: int32
-        endIndex:
-          type: integer
-          format: int32
-    CreateAccountsWithStripeRequest:
-      type: object
-      properties:
-        customerId:
-          type: string
-        paymentMethodId:
-          type: string
-        authorizeAmount:
-          type: integer
-          format: int64
-    ProposalItemChange:
-      type: object
-      properties:
-        changeType:
-          type: string
-          enum:
-          - modify
-          - remove
-          - add
-        productId:
-          type: string
-          format: uuid
-        key:
-          type: string
-          format: uuid
-        quantity:
-          type: number
-          deprecated: true
-        originalQuantity:
-          type: number
-          deprecated: true
-        quantityChange:
-          type: number
-          deprecated: true
-        name:
-          type: string
-        upgraded:
-          type: boolean
-        priceOverrideChange:
-          type: boolean
-        quantitiesChange:
-          type: boolean
-        originalItem:
-          $ref: '#/components/schemas/Item'
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
-          type: string
-          format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
-    ItemLevelOverride:
-      required:
-      - level
-      - price
-      type: object
-      properties:
-        level:
-          type: integer
-          format: int32
-        price:
-          $ref: '#/components/schemas/Money'
-        listPrice:
-          $ref: '#/components/schemas/Money'
-    PaymentSchedule:
-      required:
-      - currency
-      - payEvery
-      - scheduleType
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        currency:
-          type: string
-        payEvery:
-          type: string
-          enum:
-          - month
-          - quarter
-          - halfyear
-          - year
-        scheduleType:
-          type: string
-          enum:
-          - standard
-          - upfront
-        paymentMethodIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        total:
-          type: integer
-          format: int64
-        baseTotal:
-          type: integer
-          format: int64
-        listTotal:
-          type: integer
-          format: int64
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
-        totalDiscount:
-          type: integer
-          format: int64
-        totalDiscountPercent:
-          type: integer
-          format: int32
-        totalFormatted:
-          type: string
-        baseTotalFormatted:
-          type: string
-        listTotalFormatted:
-          type: string
-        totalDiscountFormatted:
-          type: string
-    PaymentComponent:
-      required:
-      - amount
-      - baseAmount
-      - currency
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        currency:
-          type: string
-        productId:
-          type: string
-          format: uuid
-        bundleId:
-          type: string
-          format: uuid
-        bundleItemId:
-          type: string
-          format: uuid
-        itemId:
-          type: string
-          format: uuid
-        itemKey:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        bundleName:
-          type: string
-        bundleDescription:
-          type: string
-        bundleQuantity:
-          type: number
-        amount:
-          type: integer
-          format: int64
-        baseAmount:
-          type: integer
-          format: int64
-        listAmount:
-          type: integer
-          format: int64
-        taxAmount:
-          type: integer
-          format: int64
-        proration:
-          type: integer
-          format: int32
-        quantity:
-          type: number
-        taxAmountFormatted:
-          type: string
-        baseAmountFormatted:
-          type: string
-        amountFormatted:
-          type: string
-        listAmountFormatted:
           type: string
     Proposal:
       required:
@@ -3651,6 +3152,188 @@ components:
         orderNumber:
           type: string
           deprecated: true
+    DocumentVersion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        versionNumber:
+          type: integer
+          format: int32
+        fileName:
+          type: string
+        url:
+          type: string
+        documentId:
+          type: string
+          format: uuid
+    PlaidAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        mask:
+          type: string
+    ProposalEventDetails:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - draft
+          - pending_approval
+          - approved
+          - schedule_selection
+          - payment_selection
+          - active
+          - pending_renewal
+          - accepted
+          - expired
+          - cancelled
+          - deleted
+        message:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRuleSummary'
+    ObjectReference:
+      type: object
+      properties:
+        referenceType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        id:
+          type: string
+          format: uuid
+        uri:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          writeOnly: true
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
     LineItemSpan:
       required:
       - amount
@@ -3733,6 +3416,569 @@ components:
         groupId:
           type: integer
           format: int32
+    ProposalChanges:
+      type: object
+      properties:
+        customTermsChange:
+          type: boolean
+        originalAmount:
+          type: integer
+          format: int64
+        amountChange:
+          type: integer
+          format: int64
+        itemChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalItemChange'
+        termLengthMonthsChange:
+          type: integer
+          format: int32
+        renewalConfigurationChange:
+          $ref: '#/components/schemas/RenewalConfigurationChange'
+        originalAmountFormatted:
+          type: string
+        amountChangeFormatted:
+          type: string
+    OverrideRange:
+      required:
+      - billingPeriod
+      type: object
+      properties:
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        startIndex:
+          type: integer
+          format: int32
+        endIndex:
+          type: integer
+          format: int32
+    TransferSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+    ProposalItemChange:
+      type: object
+      properties:
+        changeType:
+          type: string
+          enum:
+          - modify
+          - remove
+          - add
+        productId:
+          type: string
+          format: uuid
+        key:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+          deprecated: true
+        originalQuantity:
+          type: number
+          deprecated: true
+        quantityChange:
+          type: number
+          deprecated: true
+        name:
+          type: string
+        upgraded:
+          type: boolean
+        priceOverrideChange:
+          type: boolean
+        quantitiesChange:
+          type: boolean
+        originalItem:
+          $ref: '#/components/schemas/Item'
+    ContractSummary:
+      required:
+      - billingMethod
+      - billingPeriod
+      - buyer
+      - createdAt
+      - currency
+      - endDate
+      - id
+      - name
+      - proposalNumber
+      - renewalType
+      - startDate
+      - status
+      - totalAmount
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        currency:
+          type: string
+        totalAmount:
+          type: integer
+          format: int64
+        proposalNumber:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - cancelled
+          - ended
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        billingMethod:
+          $ref: '#/components/schemas/BillingMethodSummary'
+        nextPaymentDue:
+          $ref: '#/components/schemas/NextPaymentDueSummary'
+        buyer:
+          $ref: '#/components/schemas/CustomerSummary'
+        contractNumber:
+          type: string
+        renewalType:
+          type: string
+          enum:
+          - none
+          - autoRenewal
+        createdAt:
+          type: string
+          format: date-time
+        archived:
+          type: boolean
+        totalAmountFormatted:
+          type: string
+    UpdateIssueDatesRequest:
+      type: object
+      properties:
+        gracePeriod:
+          type: integer
+          format: int32
+        gracePeriodIsSet:
+          type: boolean
+    ApprovalRuleSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        ruleType:
+          type: string
+          enum:
+          - proposalAmountDecrease
+          - proposalAmount
+          - proposalAttachments
+          - proposalAutoRenewal
+          - proposalBillingPeriods
+          - proposalCountry
+          - proposalCustom
+          - proposalCustomTerms
+          - proposalDiscountPercent
+          - proposalDocusign
+          - proposalDuplicateProducts
+          - proposalExternalCrm
+          - proposalFreeMonths
+          - proposalItemQuantity
+          - proposalPaymentTerms
+          - proposalProductDiscountPercent
+          - proposalProducts
+          - proposalTermLength
+        description:
+          type: string
+    RenewalConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        termLengthMonths:
+          type: integer
+          format: int32
+        cancellationDeadlineDays:
+          type: integer
+          format: int32
+        renewalClause:
+          type: string
+        priceIncrease:
+          minimum: 0
+          type: number
+        renewalClauseDescription:
+          type: string
+    BillingMethod:
+      required:
+      - createdAt
+      - customer
+      - id
+      - paymentMethod
+      - status
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        createdBy:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - external
+        customer:
+          $ref: '#/components/schemas/Customer'
+        account:
+          $ref: '#/components/schemas/Account'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        stripeCustomerId:
+          type: string
+        stripePaymentMethodId:
+          type: string
+    LineItemLevel:
+      type: object
+      properties:
+        quantity:
+          type: number
+        visible:
+          type: boolean
+        start:
+          type: integer
+          format: int32
+        unitPricing:
+          $ref: '#/components/schemas/Money'
+        baseUnitPricing:
+          $ref: '#/components/schemas/Money'
+    Duration:
+      required:
+      - days
+      - months
+      type: object
+      properties:
+        months:
+          type: integer
+          format: int32
+        days:
+          type: integer
+          format: int32
+    PricebookEntry:
+      required:
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+    CreateAccountsWithPlaidRequest:
+      type: object
+      properties:
+        publicToken:
+          type: string
+        institutionName:
+          type: string
+        legalName:
+          type: string
+        authorizeAmount:
+          type: integer
+          format: int64
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaidAccount'
+    ContractUsageSummary:
+      required:
+      - billingPeriod
+      - buyer
+      - contractNumber
+      - currency
+      - id
+      - name
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        contractNumber:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - paused
+          - cancelled
+          - ended
+        currency:
+          type: string
+        billingMethod:
+          $ref: '#/components/schemas/BillingMethod'
+        billingPeriod:
+          type: string
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        buyer:
+          $ref: '#/components/schemas/Customer'
+        currentUsageSchedule:
+          $ref: '#/components/schemas/BillingSchedule'
+    CompanyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        internalName:
+          type: string
+        brandingEnabled:
+          type: boolean
+        externalId:
+          type: string
+        source:
+          type: string
+        logoUrl:
+          type: string
+        tin:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        branding:
+          type: object
+          additionalProperties:
+            type: object
+        logo:
+          $ref: '#/components/schemas/Document'
+        defaultInfo:
+          type: boolean
+        deleted:
+          type: boolean
+        logoId:
+          type: string
+          format: uuid
+    BundleItem:
+      required:
+      - entries
+      - id
+      - name
+      - product
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: number
+        bundlePercent:
+          type: integer
+          format: int32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/BundlePriceEntry'
+        name:
+          type: string
+        description:
+          type: string
+    ItemLevelOverride:
+      required:
+      - level
+      - price
+      type: object
+      properties:
+        level:
+          type: integer
+          format: int32
+        price:
+          $ref: '#/components/schemas/Money'
+        listPrice:
+          $ref: '#/components/schemas/Money'
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        fileName:
+          type: string
+        latestVersion:
+          $ref: '#/components/schemas/DocumentVersion'
+    ProposalEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        eventType:
+          type: string
+          enum:
+          - created
+          - updated
+          - archived
+          - restore
+          - activated
+          - started
+          - set_to_draft
+          - contact_added
+          - contact_removed
+          - expired
+          - cancelled
+          - deleted
+          - buyer_downloaded
+          - buyer_printed
+          - seller_downloaded
+          - signing
+          - viewed
+          - unviewable_status
+          - request_new
+          - accepted
+          - invited
+          - created_signing_doc
+          - cancelled_signing_doc
+          - signed
+          - buyer_updated
+          - billing_method_added
+          - renewal_pending
+          - approval_requested
+          - approval_approved
+          - approval_rejected
+          - approval_canceled
+          - items_date_truncated
+          - items_date_cleared
+        user:
+          $ref: '#/components/schemas/User'
+        contact:
+          $ref: '#/components/schemas/_ContactInternal'
+        recipient:
+          $ref: '#/components/schemas/_ContactInternal'
+        details:
+          $ref: '#/components/schemas/ProposalEventDetails'
+        correlationRef:
+          type: string
+        instanceRef:
+          type: string
     Payment:
       required:
       - amount
@@ -3787,91 +4033,64 @@ components:
           type: string
         listAmountFormatted:
           type: string
-    Address:
+    SpanGroup:
+      required:
+      - days
+      - durationDesc
+      - endDate
+      - id
+      - listTotal
+      - proposalId
+      - spanType
+      - startDate
+      - total
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
-    ProposalAttachment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        type:
+          type: integer
+          format: int32
+        spanType:
           type: string
           enum:
-          - document
-          - link
-        attachmentConfigId:
+          - regular
+          - free
+          - removed
+        proposalId:
           type: string
           format: uuid
-        documentId:
+        itemScheduleId:
           type: string
           format: uuid
-        documentVersion:
-          $ref: '#/components/schemas/DocumentVersion'
-        inEnvelope:
-          type: boolean
-        name:
+        billingPeriod:
           type: string
-        linkUrl:
+          enum:
+          - month
+          - quarter
+          - halfyear
+          - year
+        quantity:
+          type: number
+        startDate:
           type: string
-    Transfer:
+          format: date
+        endDate:
+          type: string
+          format: date
+        days:
+          type: integer
+          format: int32
+        durationDesc:
+          $ref: '#/components/schemas/Duration'
+        total:
+          $ref: '#/components/schemas/Money'
+        listTotal:
+          $ref: '#/components/schemas/Money'
+        unitPricing:
+          $ref: '#/components/schemas/Money'
+        amount:
+          $ref: '#/components/schemas/Money'
+    ProductUsage:
       required:
-      - amount
       - currency
       type: object
       properties:
@@ -3891,250 +4110,19 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        processedAt:
+        billingItemId:
           type: string
-          format: date-time
-        externalId:
-          type: string
-        currency:
-          type: string
+          format: uuid
+        quantity:
+          type: number
         amount:
           type: integer
           format: int64
-        paidAmount:
-          type: integer
-          format: int64
-        fromAccount:
-          $ref: '#/components/schemas/Account'
-        referenceTransferId:
-          type: string
-          format: uuid
-        fromAccountId:
-          type: string
-          format: uuid
-          writeOnly: true
-        toAccount:
-          $ref: '#/components/schemas/Account'
-        toAccountId:
-          type: string
-          format: uuid
-          writeOnly: true
-        reason:
-          type: string
-        parentReferenceId:
-          type: string
-          format: uuid
-        parentReferenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        type:
-          type: string
-          enum:
-          - DEBIT
-          - CREDIT
-        processor:
-          type: string
-          enum:
-          - plaid
-          - stripe
-          - manual
-        paymentType:
-          type: string
-          deprecated: true
-          enum:
-          - ach
-          - cc
-          - check
-          - custom
-          - direct_debit
-          - wire
-          - external
-          - manual
-        category:
-          type: string
-          enum:
-          - FEE
-          - PAYMENT
-          - PAYOUT
-          - REFUND
-          - ADJUSTMENT
-        reasonCode:
-          type: string
-          enum:
-          - invalid_account
-          - insufficient_funds
-          - flagged_account
-          - region_not_supported
-          - invalid_address
-          - requires_buyer_approval
-          - transaction_failure
-        paymentMethod:
-          $ref: '#/components/schemas/PaymentMethod'
-        achType:
-          type: string
-          enum:
-          - arc
-          - cbr
-          - ccd
-          - cie
-          - cor
-          - ctx
-          - iat
-          - mte
-          - pbr
-          - pop
-          - pos
-          - ppd
-          - rck
-          - tel
-          - web
-        failures:
-          type: integer
-          format: int32
-        retryAt:
-          type: string
-          format: date-time
-        referenceNumber:
-          type: string
-        referenceType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        paidAmountFormatted:
+        currency:
           type: string
         amountFormatted:
           type: string
-        deleted:
-          type: boolean
-    Product:
-      required:
-      - billing
-      - consumption
-      - createdAt
-      - customizable
-      - discountable
-      - displayQuantityOnInvoicePdf
-      - entries
-      - extendedScale
-      - hidden
-      - id
-      - listPriceAdjustable
-      - pricing
-      - productType
-      - recurrence
-      - status
-      - updatedAt
+    TaxCode:
       type: object
       properties:
         id:
@@ -4143,116 +4131,128 @@ components:
         createdAt:
           type: string
           format: date-time
+          readOnly: true
         createdBy:
           type: string
         updatedAt:
           type: string
           format: date-time
+          readOnly: true
         updatedBy:
           type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-        hidden:
-          type: boolean
-        rootId:
-          type: string
-          format: uuid
-        productType:
-          type: string
-          enum:
-          - single
-          - bundleTopDown
-          - bundleBottomUp
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-        name:
-          type: string
-        internalName:
+          readOnly: true
+        code:
           type: string
         description:
           type: string
-        recurrence:
+    BillingMethodRequest:
+      type: object
+      properties:
+        plaidAccounts:
+          $ref: '#/components/schemas/CreateAccountsWithPlaidRequest'
+        stripeAccounts:
+          $ref: '#/components/schemas/CreateAccountsWithStripeRequest'
+        manualRequest:
+          $ref: '#/components/schemas/CreateAccountsWithManualRequest'
+        virtualAccount:
+          $ref: '#/components/schemas/VirtualAccount'
+        paymentMethodId:
+          type: string
+          format: uuid
+    RenewalConfigurationChange:
+      type: object
+      properties:
+        changeType:
           type: string
           enum:
-          - one_time
-          - recurring
-          - usage
-        pricing:
+          - modify
+          - remove
+          - add
+        configurationId:
           type: string
-          enum:
-          - fixed
-          - graduated
-          - stairstep
-          - volume
-        consumption:
+          format: uuid
+        originalConfigurationId:
           type: string
-          enum:
-          - single
-          - multiple
-        billing:
+          format: uuid
+        renewalClauseChange:
+          type: boolean
+        renewalTermLengthMonthsChange:
+          type: integer
+          format: int32
+        removedConfiguration:
+          $ref: '#/components/schemas/RenewalConfiguration'
+    PaymentComponent:
+      required:
+      - amount
+      - baseAmount
+      - currency
+      type: object
+      properties:
+        id:
           type: string
-          enum:
-          - scheduled
-          - fixed
-        unit:
-          $ref: '#/components/schemas/Unit'
-        extendedScale:
-          type: boolean
-        customizable:
-          type: boolean
-        discountable:
-          type: boolean
-        displayQuantityOnInvoicePdf:
-          type: boolean
-        listPriceAdjustable:
-          type: boolean
-        descriptionCustomizable:
-          type: boolean
-        nameCustomizable:
-          type: boolean
-        billingPeriods:
-          type: array
-          items:
-            type: string
-            enum:
-            - month
-            - quarter
-            - halfyear
-            - year
-        currencies:
-          type: array
-          items:
-            type: string
-        taxConfig:
-          $ref: '#/components/schemas/ProductTaxConfig'
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/PricebookEntry'
-        levels:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductLevel'
-        showProductsOnInvoice:
-          type: boolean
-        showProductPricesOnInvoice:
-          type: boolean
-        showProductsOnProposal:
-          type: boolean
-        bundleItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/BundleItem'
-        bundleBottomUpEntries:
-          type: array
-          items:
-            $ref: '#/components/schemas/BundlePriceEntry'
-        bundleGroups:
-          type: array
-          items:
-            type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+        productId:
+          type: string
+          format: uuid
+        bundleId:
+          type: string
+          format: uuid
+        bundleItemId:
+          type: string
+          format: uuid
+        itemId:
+          type: string
+          format: uuid
+        itemKey:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        bundleName:
+          type: string
+        bundleDescription:
+          type: string
+        bundleQuantity:
+          type: number
+        amount:
+          type: integer
+          format: int64
+        baseAmount:
+          type: integer
+          format: int64
+        listAmount:
+          type: integer
+          format: int64
+        taxAmount:
+          type: integer
+          format: int64
+        proration:
+          type: integer
+          format: int32
+        quantity:
+          type: number
+        taxAmountFormatted:
+          type: string
+        baseAmountFormatted:
+          type: string
+        amountFormatted:
+          type: string
+        listAmountFormatted:
+          type: string

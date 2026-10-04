@@ -67,19 +67,6 @@ paths:
                 $ref: '#/components/schemas/RenewalConfiguration'
 components:
   schemas:
-    RenewalConfigurationRequest:
-      type: object
-      properties:
-        termLengthMonths:
-          type: integer
-          format: int32
-        renewalClause:
-          type: string
-        priceIncrease:
-          type: number
-        cancellationDeadlineDays:
-          type: integer
-          format: int32
     RenewalConfiguration:
       type: object
       properties:
@@ -112,3 +99,16 @@ components:
           type: number
         renewalClauseDescription:
           type: string
+    RenewalConfigurationRequest:
+      type: object
+      properties:
+        termLengthMonths:
+          type: integer
+          format: int32
+        renewalClause:
+          type: string
+        priceIncrease:
+          type: number
+        cancellationDeadlineDays:
+          type: integer
+          format: int32

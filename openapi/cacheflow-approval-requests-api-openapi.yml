@@ -27,7 +27,7 @@ paths:
                   $ref: '#/components/schemas/ApprovalRequestSummary'
 components:
   schemas:
-    PersonSummary:
+    CustomerSummary:
       type: object
       properties:
         id:
@@ -46,52 +46,11 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        firstName:
+        name:
           type: string
-        lastName:
-          type: string
-    ApprovalRequestSummary:
-      required:
-      - approvalGroup
-      - id
-      - requester
-      - status
-      - strategy
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        proposal:
-          $ref: '#/components/schemas/ProposalSummary'
-        requester:
-          $ref: '#/components/schemas/User'
-        status:
-          type: string
-          enum:
-          - pending
-          - approved
-          - rejected
-          - canceled
-        strategy:
-          type: string
-          enum:
-          - any
-        message:
-          type: string
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalAction'
-        approvalGroup:
-          $ref: '#/components/schemas/ApprovalGroup'
-    User:
+        billingContact:
+          $ref: '#/components/schemas/PersonSummary'
+    ApprovalGroup:
       type: object
       properties:
         id:
@@ -110,25 +69,91 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        username:
+        group:
+          $ref: '#/components/schemas/Group'
+        priority:
+          type: integer
+          format: int32
+    ProposalSummaryEvent:
+      type: object
+      properties:
+        id:
           type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
+          format: uuid
+        createdAt:
           type: string
           format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
+          readOnly: true
+        createdBy:
+          type: string
+        eventType:
+          type: string
+          enum:
+          - created
+          - updated
+          - archived
+          - restore
+          - activated
+          - started
+          - set_to_draft
+          - contact_added
+          - contact_removed
+          - expired
+          - cancelled
+          - deleted
+          - buyer_downloaded
+          - buyer_printed
+          - seller_downloaded
+          - signing
+          - viewed
+          - unviewable_status
+          - request_new
+          - accepted
+          - invited
+          - created_signing_doc
+          - cancelled_signing_doc
+          - signed
+          - buyer_updated
+          - billing_method_added
+          - renewal_pending
+          - approval_requested
+          - approval_approved
+          - approval_rejected
+          - approval_canceled
+          - items_date_truncated
+          - items_date_cleared
+        user:
+          $ref: '#/components/schemas/PersonSummary'
+        contact:
+          $ref: '#/components/schemas/PersonSummary'
+    SigningDocumentSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        signedAt:
+          type: string
+          format: date-time
+    OrgId:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
     ProposalSummary:
       required:
       - amount
@@ -269,7 +294,7 @@ components:
             type: boolean
         amountFormatted:
           type: string
-    ApprovalGroup:
+    User:
       type: object
       properties:
         id:
@@ -288,18 +313,32 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        group:
-          $ref: '#/components/schemas/Group'
-        priority:
-          type: integer
-          format: int32
-    OrgId:
-      type: object
-      properties:
-        uuid:
+        username:
           type: string
-          format: uuid
-    ApprovalAction:
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    ApprovalRequestSummary:
+      required:
+      - approvalGroup
+      - id
+      - requester
+      - status
+      - strategy
       type: object
       properties:
         id:
@@ -308,94 +347,32 @@ components:
         createdAt:
           type: string
           format: date-time
-          readOnly: true
-        createdBy:
+        updatedAt:
           type: string
-        user:
+          format: date-time
+        proposal:
+          $ref: '#/components/schemas/ProposalSummary'
+        requester:
           $ref: '#/components/schemas/User'
-        action:
+        status:
           type: string
           enum:
-          - approve
-          - reject
-          - cancel
-          - comment
+          - pending
+          - approved
+          - rejected
+          - canceled
+        strategy:
+          type: string
+          enum:
+          - any
         message:
           type: string
-    SigningDocumentSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        signedAt:
-          type: string
-          format: date-time
-    ProposalSummaryEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        eventType:
-          type: string
-          enum:
-          - created
-          - updated
-          - archived
-          - restore
-          - activated
-          - started
-          - set_to_draft
-          - contact_added
-          - contact_removed
-          - expired
-          - cancelled
-          - deleted
-          - buyer_downloaded
-          - buyer_printed
-          - seller_downloaded
-          - signing
-          - viewed
-          - unviewable_status
-          - request_new
-          - accepted
-          - invited
-          - created_signing_doc
-          - cancelled_signing_doc
-          - signed
-          - buyer_updated
-          - billing_method_added
-          - renewal_pending
-          - approval_requested
-          - approval_approved
-          - approval_rejected
-          - approval_canceled
-          - items_date_truncated
-          - items_date_cleared
-        user:
-          $ref: '#/components/schemas/PersonSummary'
-        contact:
-          $ref: '#/components/schemas/PersonSummary'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalAction'
+        approvalGroup:
+          $ref: '#/components/schemas/ApprovalGroup'
     Group:
       type: object
       properties:
@@ -432,7 +409,7 @@ components:
           - buyer
         name:
           type: string
-    CustomerSummary:
+    PersonSummary:
       type: object
       properties:
         id:
@@ -451,7 +428,30 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        name:
+        firstName:
           type: string
-        billingContact:
-          $ref: '#/components/schemas/PersonSummary'
+        lastName:
+          type: string
+    ApprovalAction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        action:
+          type: string
+          enum:
+          - approve
+          - reject
+          - cancel
+          - comment
+        message:
+          type: string

@@ -117,33 +117,32 @@ paths:
                 $ref: '#/components/schemas/Contact'
 components:
   schemas:
-    Contact:
+    CreateContactRequest:
       required:
-      - createdAt
-      - customerReference
-      - deleted
       - email
-      - id
-      - updatedAt
+      - firstName
+      - lastName
       type: object
       properties:
-        id:
+        externalId:
           type: string
-          format: uuid
-        createdAt:
+        source:
           type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
+          enum:
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
         firstName:
           type: string
         lastName:
@@ -152,63 +151,37 @@ components:
           type: string
         role:
           type: string
-        deleted:
-          type: boolean
-        customerReference:
-          $ref: '#/components/schemas/ObjectReference'
-        referenceType:
+        externalSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
+    ExternalSource:
+      required:
+      - sourceId
+      - sourceType
+      type: object
+      properties:
+        sourceType:
           type: string
           enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
+          - manual
+          - close
+          - plaid
+          - stripe
+          - hubspot
+          - salesforce
+          - avalara
+          - quickbooks
+          - profitwell
+          - netsuite
+          - google
+          - warmly
+          - zapier
+          - cacheflow_checkout
+        sourceId:
+          type: string
+        sourceLink:
+          type: string
     UpdateContactRequest:
       type: object
       properties:
@@ -337,32 +310,33 @@ components:
           - transferevent
           - unit
           - user
-    CreateContactRequest:
+    Contact:
       required:
+      - createdAt
+      - customerReference
+      - deleted
       - email
-      - firstName
-      - lastName
+      - id
+      - updatedAt
       type: object
       properties:
-        externalId:
+        id:
           type: string
-        source:
+          format: uuid
+        createdAt:
           type: string
-          enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalSource'
         firstName:
           type: string
         lastName:
@@ -371,34 +345,60 @@ components:
           type: string
         role:
           type: string
-        externalSources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalSource'
-    ExternalSource:
-      required:
-      - sourceId
-      - sourceType
-      type: object
-      properties:
-        sourceType:
+        deleted:
+          type: boolean
+        customerReference:
+          $ref: '#/components/schemas/ObjectReference'
+        referenceType:
           type: string
           enum:
-          - manual
-          - close
-          - plaid
-          - stripe
-          - hubspot
-          - salesforce
-          - avalara
-          - quickbooks
-          - profitwell
-          - netsuite
-          - google
-          - warmly
-          - zapier
-          - cacheflow_checkout
-        sourceId:
-          type: string
-        sourceLink:
-          type: string
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user

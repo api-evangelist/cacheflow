@@ -105,90 +105,44 @@ paths:
                 $ref: '#/components/schemas/ApprovalRequirements'
 components:
   schemas:
-    ProposalApprovalRequest:
-      type: object
-      properties:
-        message:
-          type: string
-    Approver:
+    ApprovalRuleResult:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        createdAt:
+        name:
           type: string
-          format: date-time
-          readOnly: true
-        createdBy:
+        description:
           type: string
-        userId:
-          type: string
-          format: uuid
-        groupId:
-          type: string
-          format: uuid
-    ApprovalAction:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        user:
-          $ref: '#/components/schemas/User'
-        action:
+        ruleType:
           type: string
           enum:
-          - approve
-          - reject
-          - cancel
-          - comment
-        message:
-          type: string
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
-          type: string
-          format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
+          - proposalAmountDecrease
+          - proposalAmount
+          - proposalAttachments
+          - proposalAutoRenewal
+          - proposalBillingPeriods
+          - proposalCountry
+          - proposalCustom
+          - proposalCustomTerms
+          - proposalDiscountPercent
+          - proposalDocusign
+          - proposalDuplicateProducts
+          - proposalExternalCrm
+          - proposalFreeMonths
+          - proposalItemQuantity
+          - proposalPaymentTerms
+          - proposalProductDiscountPercent
+          - proposalProducts
+          - proposalTermLength
+        required:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: string
+            format: uuid
     ApprovalRuleSummary:
       type: object
       properties:
@@ -271,44 +225,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApprovalRuleSummary'
-    ApprovalRuleResult:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        ruleType:
-          type: string
-          enum:
-          - proposalAmountDecrease
-          - proposalAmount
-          - proposalAttachments
-          - proposalAutoRenewal
-          - proposalBillingPeriods
-          - proposalCountry
-          - proposalCustom
-          - proposalCustomTerms
-          - proposalDiscountPercent
-          - proposalDocusign
-          - proposalDuplicateProducts
-          - proposalExternalCrm
-          - proposalFreeMonths
-          - proposalItemQuantity
-          - proposalPaymentTerms
-          - proposalProductDiscountPercent
-          - proposalProducts
-          - proposalTermLength
-        required:
-          type: boolean
-        groups:
-          type: array
-          items:
-            type: string
-            format: uuid
     ApprovalRequirements:
       type: object
       properties:
@@ -325,3 +241,87 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApprovalRuleResult'
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    Approver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        userId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+    ApprovalAction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        action:
+          type: string
+          enum:
+          - approve
+          - reject
+          - cancel
+          - comment
+        message:
+          type: string
+    ProposalApprovalRequest:
+      type: object
+      properties:
+        message:
+          type: string

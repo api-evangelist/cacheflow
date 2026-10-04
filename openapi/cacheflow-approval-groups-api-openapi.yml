@@ -124,6 +124,41 @@ paths:
                   $ref: '#/components/schemas/ApprovalGroup'
 components:
   schemas:
+    ApprovalGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        groupId:
+          type: string
+          format: uuid
+    ApprovalGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        group:
+          $ref: '#/components/schemas/Group'
+        priority:
+          type: integer
+          format: int32
     Group:
       type: object
       properties:
@@ -160,38 +195,3 @@ components:
           - buyer
         name:
           type: string
-    ApprovalGroup:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        group:
-          $ref: '#/components/schemas/Group'
-        priority:
-          type: integer
-          format: int32
-    ApprovalGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        priority:
-          type: integer
-          format: int32
-        groupId:
-          type: string
-          format: uuid

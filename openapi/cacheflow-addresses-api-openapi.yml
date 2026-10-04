@@ -62,6 +62,21 @@ paths:
                 $ref: '#/components/schemas/VerifyAddressResponse'
 components:
   schemas:
+    VerifyAddressResponse:
+      required:
+      - originalAddress
+      type: object
+      properties:
+        originalAddress:
+          $ref: '#/components/schemas/AddressRest'
+        verifiedAddress:
+          $ref: '#/components/schemas/AddressRest'
+        couldNotBeVerified:
+          type: boolean
+        badCountry:
+          type: boolean
+        wasSaved:
+          type: boolean
     AddressRequest:
       required:
       - city
@@ -85,21 +100,6 @@ components:
           type: string
         country:
           type: string
-    VerifyAddressResponse:
-      required:
-      - originalAddress
-      type: object
-      properties:
-        originalAddress:
-          $ref: '#/components/schemas/AddressRest'
-        verifiedAddress:
-          $ref: '#/components/schemas/AddressRest'
-        couldNotBeVerified:
-          type: boolean
-        badCountry:
-          type: boolean
-        wasSaved:
-          type: boolean
     AddressRest:
       required:
       - city

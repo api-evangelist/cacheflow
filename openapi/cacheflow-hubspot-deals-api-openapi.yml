@@ -77,11 +77,6 @@ paths:
                   $ref: '#/components/schemas/SyncResponse'
 components:
   schemas:
-    HubspotAccountLinkedRest:
-      type: object
-      properties:
-        alreadyLinked:
-          type: boolean
     ErrorObject:
       type: object
       properties:
@@ -445,6 +440,45 @@ components:
           type: string
         detail:
           $ref: '#/components/schemas/ErrorDetail'
+    HubspotAccountLinkedRest:
+      type: object
+      properties:
+        alreadyLinked:
+          type: boolean
+    SyncResponse:
+      type: object
+      properties:
+        externalId:
+          type: string
+        syncStatus:
+          type: string
+          enum:
+          - success
+          - error
+        error:
+          $ref: '#/components/schemas/ErrorObject'
+        reference:
+          $ref: '#/components/schemas/ObjectReference'
+    ErrorDetail:
+      title: ErrorDetail
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - field
+          - listField
+          - filter
+          - references
+          - contactEmail
+      discriminator:
+        propertyName: type
+        mapping:
+          filter: '#/components/schemas/FilterDetail'
+          field: '#/components/schemas/FieldDetail'
+          listField: '#/components/schemas/ListFieldDetail'
+          references: '#/components/schemas/ReferencesDetail'
+          contactEmail: '#/components/schemas/ContactUserDetail'
     SyncRequest:
       type: object
       properties:
@@ -503,26 +537,6 @@ components:
           - transferevent
           - unit
           - user
-    ErrorDetail:
-      title: ErrorDetail
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - field
-          - listField
-          - filter
-          - references
-          - contactEmail
-      discriminator:
-        propertyName: type
-        mapping:
-          filter: '#/components/schemas/FilterDetail'
-          field: '#/components/schemas/FieldDetail'
-          listField: '#/components/schemas/ListFieldDetail'
-          references: '#/components/schemas/ReferencesDetail'
-          contactEmail: '#/components/schemas/ContactUserDetail'
     ObjectReference:
       type: object
       properties:
@@ -640,17 +654,3 @@ components:
           - transferevent
           - unit
           - user
-    SyncResponse:
-      type: object
-      properties:
-        externalId:
-          type: string
-        syncStatus:
-          type: string
-          enum:
-          - success
-          - error
-        error:
-          $ref: '#/components/schemas/ErrorObject'
-        reference:
-          $ref: '#/components/schemas/ObjectReference'

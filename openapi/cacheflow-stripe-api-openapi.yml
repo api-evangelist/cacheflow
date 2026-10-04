@@ -123,6 +123,23 @@ paths:
                 $ref: '#/components/schemas/StripeConnectResponse'
 components:
   schemas:
+    StripeConnectRequest:
+      type: object
+      properties:
+        refreshUrl:
+          type: string
+        returnUrl:
+          type: string
+        country:
+          type: string
+        currency:
+          type: string
+        accountId:
+          type: string
+        connectExisting:
+          type: boolean
+        reconnect:
+          type: boolean
     StripeConnectResponse:
       type: object
       properties:
@@ -168,21 +185,4 @@ components:
         accountType:
           type: string
         active:
-          type: boolean
-    StripeConnectRequest:
-      type: object
-      properties:
-        refreshUrl:
-          type: string
-        returnUrl:
-          type: string
-        country:
-          type: string
-        currency:
-          type: string
-        accountId:
-          type: string
-        connectExisting:
-          type: boolean
-        reconnect:
           type: boolean

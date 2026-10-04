@@ -832,33 +832,59 @@ paths:
                 $ref: '#/components/schemas/OrgId'
 components:
   schemas:
-    UserProfile:
+    EventResults:
       type: object
       properties:
-        user:
-          $ref: '#/components/schemas/User'
-        roleType:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-        invite:
-          type: boolean
-        emails:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/UserEmail'
-    UserEmail:
+            $ref: '#/components/schemas/EventResult'
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+    OrgId:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+    KnexDbMigration:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        batch:
+          type: integer
+          format: int32
+        migrationTime:
+          type: string
+          format: date-time
+          readOnly: true
+    RenewalsDueResponse:
+      type: object
+      properties:
+        dueRenewals:
+          type: array
+          items:
+            $ref: '#/components/schemas/RenewalRequest'
+    OrgLogin:
+      type: object
+      properties:
+        orgId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+    Organization:
+      required:
+      - defaultCurrency
+      - domainName
+      - flowDomain
+      - status
       type: object
       properties:
         id:
@@ -877,23 +903,6 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        email:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        user:
-          $ref: '#/components/schemas/User'
-    ProvisionOrganizationRequest:
-      type: object
-      properties:
-        domainAliases:
-          type: array
-          items:
-            type: string
         domainName:
           type: string
         name:
@@ -902,35 +911,145 @@ components:
           type: string
         flowDomain:
           type: string
-        expireDate:
+        options:
           type: string
-          format: date
         status:
           type: string
           enum:
           - pending
           - active
           - inactive
-        profile:
-          $ref: '#/components/schemas/UserProfile'
-        orgType:
+        deletedAt:
+          type: string
+          format: date-time
+        defaultCurrency:
+          type: string
+        active:
+          type: boolean
+        orgId:
+          $ref: '#/components/schemas/OrgId'
+    NotificationEvent:
+      required:
+      - contractId
+      - dateToSend
+      - eventType
+      - recipients
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        contractId:
+          type: string
+          format: uuid
+        dateToSend:
+          type: string
+          format: date
+        sentAt:
+          type: string
+          format: date-time
+        recipients:
+          type: array
+          items:
+            type: string
+        type:
           type: string
           enum:
-          - basicTest
-        options:
+          - email
+        eventType:
+          type: string
+          enum:
+          - auto_renewal_reminder
+    Status:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        profiles:
+          type: array
+          items:
+            type: string
+        branch:
+          type: string
+        sha:
+          type: string
+        runId:
+          type: string
+        runNumber:
+          type: string
+        fullProperty:
+          type: string
+        error:
+          type: string
+        buildTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        features:
           type: object
           additionalProperties:
             type: boolean
-        defaultCurrency:
-          type: string
-    OrgResetRequest:
+        maintenance:
+          type: boolean
+        orgFeatures:
+          type: object
+          additionalProperties:
+            type: boolean
+    ContractRenewalSummary:
       type: object
       properties:
-        strategy:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        currency:
+          type: string
+        totalAmount:
+          type: integer
+          format: int64
+        proposalNumber:
+          type: string
+        status:
           type: string
           enum:
-          - non_settings
-          - all
+          - active
+          - paused
+          - cancelled
+          - ended
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        buyer:
+          $ref: '#/components/schemas/CustomerSummary'
+        paymentTerm:
+          type: string
+        renewalNotificationSentAt:
+          type: string
+          format: date-time
+        renewalNotificationSentForEndDate:
+          type: string
+          format: date
     UpcomingBillingResponse:
       type: object
       properties:
@@ -985,258 +1104,24 @@ components:
           type: string
         amountDueFormatted:
           type: string
-    ContractRenewalSummary:
+    OrgResetRequest:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        currency:
-          type: string
-        totalAmount:
-          type: integer
-          format: int64
-        proposalNumber:
-          type: string
-        status:
+        strategy:
           type: string
           enum:
-          - active
-          - paused
-          - cancelled
-          - ended
-        startDate:
-          type: string
-          format: date
-        endDate:
-          type: string
-          format: date
-        buyer:
-          $ref: '#/components/schemas/CustomerSummary'
-        paymentTerm:
-          type: string
-        renewalNotificationSentAt:
-          type: string
-          format: date-time
-        renewalNotificationSentForEndDate:
-          type: string
-          format: date
-    Notification:
-      required:
-      - from
-      - id
-      - orgId
-      - orgName
-      - processedAt
-      - recipients
-      - success
-      - type
+          - non_settings
+          - all
+    JobDescription:
       type: object
       properties:
-        id:
+        jobName:
           type: string
-          format: uuid
-        orgId:
-          $ref: '#/components/schemas/OrgId'
-        orgName:
-          type: string
-        emailKey:
+        jobType:
           type: string
           enum:
-          - otp_created
-          - approval
-          - auto_renewal_reminder_buyer
-          - billing_invite
-          - billing_method_updated_buyer
-          - billing_method_updated_seller
-          - change_accepted_buyer
-          - change_accepted_seller
-          - contract_confirmation_buyer
-          - contract_confirmation_seller
-          - invite_created
-          - negative_charge
-          - payment_error_buyer
-          - payment_error_seller
-          - payment_receipt_buyer
-          - renewal_accepted_buyer
-          - renewal_accepted_seller
-          - renewal_upcoming_buyer
-          - renewal_upcoming_seller
-          - subscription_renewed_buyer
-          - subscription_renewed_seller
-          - invoice_pdf
-          - invoice_buyer
-          - billing_method_verification_buyer
-          - items_date_truncated_seller
-          - items_date_cleared_seller
-        type:
-          type: string
-          enum:
-          - email
-        recipients:
-          type: array
-          items:
-            type: string
-        emailAlias:
-          type: string
-        from:
-          type: string
-        subject:
-          type: string
-        success:
-          type: boolean
-        processedAt:
-          type: string
-          format: date-time
-        errorMessage:
-          type: string
-    ResendEmailRequest:
-      required:
-      - emailSentId
-      type: object
-      properties:
-        emailSentId:
-          type: string
-          format: uuid
-    CustomerSummary:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        billingContact:
-          $ref: '#/components/schemas/PersonSummary'
-    Status:
-      type: object
-      properties:
-        name:
-          type: string
-        version:
-          type: string
-        profiles:
-          type: array
-          items:
-            type: string
-        branch:
-          type: string
-        sha:
-          type: string
-        runId:
-          type: string
-        runNumber:
-          type: string
-        fullProperty:
-          type: string
-        error:
-          type: string
-        buildTime:
-          type: string
-          format: date-time
-        startTime:
-          type: string
-          format: date-time
-        features:
-          type: object
-          additionalProperties:
-            type: boolean
-        maintenance:
-          type: boolean
-        orgFeatures:
-          type: object
-          additionalProperties:
-            type: boolean
-    Organization:
-      required:
-      - defaultCurrency
-      - domainName
-      - flowDomain
-      - status
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        domainName:
-          type: string
-        name:
-          type: string
-        internalName:
-          type: string
-        flowDomain:
-          type: string
-        options:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        deletedAt:
-          type: string
-          format: date-time
-        defaultCurrency:
-          type: string
-        active:
-          type: boolean
-        orgId:
-          $ref: '#/components/schemas/OrgId'
-    EventResults:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventResult'
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/Event'
-    OrgLogin:
-      type: object
-      properties:
-        orgId:
-          type: string
-          format: uuid
-        reason:
-          type: string
-    RenewalsDueResponse:
-      type: object
-      properties:
-        dueRenewals:
-          type: array
-          items:
-            $ref: '#/components/schemas/RenewalRequest'
+          - migration
+          - refresh
     EventResult:
       type: object
       properties:
@@ -1291,86 +1176,7 @@ components:
             type: string
         event:
           $ref: '#/components/schemas/Event'
-    TokenResponse:
-      type: object
-      properties:
-        token:
-          type: string
-        actorType:
-          type: string
-          enum:
-          - account
-          - apiwebhook
-          - apitoken
-          - approvalgroup
-          - attachmentconfig
-          - authidentity
-          - billingschedule
-          - companyInfo
-          - connectorSyncEvent
-          - contact
-          - contentTemplate
-          - contract
-          - contractitem
-          - contractitemlevel
-          - currency
-          - customer
-          - docusignaccount
-          - document
-          - documentversion
-          - group
-          - invite
-          - invoice
-          - invoiceConfiguration
-          - organization
-          - orgconfig
-          - orgidentitytoken
-          - payment
-          - paymentMethod
-          - paymentSchedule
-          - paymentTerm
-          - pricebook
-          - pricebookentry
-          - product
-          - productlevel
-          - productusage
-          - proposal
-          - proposalapprovalrule
-          - proposalevent
-          - proposalitem
-          - proposaliteminterval
-          - proposalitemlevel
-          - proposaloption
-          - refund
-          - renewalconfiguration
-          - signature
-          - signingdocument
-          - transfer
-          - transferevent
-          - unit
-          - user
-        orgId:
-          type: string
-        userId:
-          type: string
-        redirectUrl:
-          type: string
-        role:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-    PersonSummary:
+    User:
       type: object
       properties:
         id:
@@ -1389,10 +1195,33 @@ components:
         updatedBy:
           type: string
           readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
         firstName:
           type: string
         lastName:
           type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    ResendEmailRequest:
+      required:
+      - emailSentId
+      type: object
+      properties:
+        emailSentId:
+          type: string
+          format: uuid
     ProposalSummaryAnalytics:
       type: object
       properties:
@@ -1478,49 +1307,58 @@ components:
           format: int64
         amountFormatted:
           type: string
-    OrgId:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-    KnexDbMigration:
+    PersonSummary:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
-        name:
           type: string
-        batch:
-          type: integer
-          format: int32
-        migrationTime:
+          format: uuid
+        createdAt:
           type: string
           format: date-time
           readOnly: true
-    RenewalRequest:
-      type: object
-      properties:
-        proposalId:
+        createdBy:
           type: string
-          format: uuid
-        pendingRenewalAt:
+        updatedAt:
           type: string
           format: date-time
-        orgId:
+          readOnly: true
+        updatedBy:
           type: string
-          format: uuid
-    JobDescription:
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+    UserEmail:
       type: object
       properties:
-        jobName:
+        id:
           type: string
-        jobType:
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        email:
+          type: string
+        status:
           type: string
           enum:
-          - migration
-          - refresh
+          - pending
+          - active
+          - inactive
+        user:
+          $ref: '#/components/schemas/User'
     Event:
       title: Event
       type: object
@@ -1591,12 +1429,19 @@ components:
           product_created: '#/components/schemas/ProductCreatedEvent'
           items_date_truncated: '#/components/schemas/ItemsDateTruncatedEvent'
           items_date_cleared: '#/components/schemas/ItemsDateClearedEvent'
-    NotificationEvent:
-      required:
-      - contractId
-      - dateToSend
-      - eventType
-      - recipients
+    RenewalRequest:
+      type: object
+      properties:
+        proposalId:
+          type: string
+          format: uuid
+        pendingRenewalAt:
+          type: string
+          format: date-time
+        orgId:
+          type: string
+          format: uuid
+    CustomerSummary:
       type: object
       properties:
         id:
@@ -1615,65 +1460,141 @@ components:
         updatedBy:
           type: string
           readOnly: true
-        contractId:
+        name:
           type: string
-          format: uuid
-        dateToSend:
-          type: string
-          format: date
-        sentAt:
-          type: string
-          format: date-time
-        recipients:
+        billingContact:
+          $ref: '#/components/schemas/PersonSummary'
+    ProvisionOrganizationRequest:
+      type: object
+      properties:
+        domainAliases:
           type: array
           items:
             type: string
-        type:
+        domainName:
           type: string
-          enum:
-          - email
-        eventType:
+        name:
           type: string
-          enum:
-          - auto_renewal_reminder
-    User:
-      type: object
-      properties:
-        id:
+        internalName:
           type: string
-          format: uuid
-        createdAt:
+        flowDomain:
           type: string
-          format: date-time
-          readOnly: true
-        createdBy:
+        expireDate:
           type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
+          format: date
         status:
           type: string
           enum:
           - pending
           - active
           - inactive
-        source:
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+        orgType:
           type: string
-        firstName:
+          enum:
+          - basicTest
+        options:
+          type: object
+          additionalProperties:
+            type: boolean
+        defaultCurrency:
           type: string
-        lastName:
+    UserProfile:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        roleType:
           type: string
-        lastActiveAt:
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        invite:
+          type: boolean
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'
+    Notification:
+      required:
+      - from
+      - id
+      - orgId
+      - orgName
+      - processedAt
+      - recipients
+      - success
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orgId:
+          $ref: '#/components/schemas/OrgId'
+        orgName:
+          type: string
+        emailKey:
+          type: string
+          enum:
+          - otp_created
+          - approval
+          - auto_renewal_reminder_buyer
+          - billing_invite
+          - billing_method_updated_buyer
+          - billing_method_updated_seller
+          - change_accepted_buyer
+          - change_accepted_seller
+          - contract_confirmation_buyer
+          - contract_confirmation_seller
+          - invite_created
+          - negative_charge
+          - payment_error_buyer
+          - payment_error_seller
+          - payment_receipt_buyer
+          - renewal_accepted_buyer
+          - renewal_accepted_seller
+          - renewal_upcoming_buyer
+          - renewal_upcoming_seller
+          - subscription_renewed_buyer
+          - subscription_renewed_seller
+          - invoice_pdf
+          - invoice_buyer
+          - billing_method_verification_buyer
+          - items_date_truncated_seller
+          - items_date_cleared_seller
+        type:
+          type: string
+          enum:
+          - email
+        recipients:
+          type: array
+          items:
+            type: string
+        emailAlias:
+          type: string
+        from:
+          type: string
+        subject:
+          type: string
+        success:
+          type: boolean
+        processedAt:
           type: string
           format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
+        errorMessage:
+          type: string
     ConnectorInfo:
       type: object
       properties:
@@ -1696,3 +1617,82 @@ components:
           - warmly
           - zapier
           - cacheflow_checkout
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        actorType:
+          type: string
+          enum:
+          - account
+          - apiwebhook
+          - apitoken
+          - approvalgroup
+          - attachmentconfig
+          - authidentity
+          - billingschedule
+          - companyInfo
+          - connectorSyncEvent
+          - contact
+          - contentTemplate
+          - contract
+          - contractitem
+          - contractitemlevel
+          - currency
+          - customer
+          - docusignaccount
+          - document
+          - documentversion
+          - group
+          - invite
+          - invoice
+          - invoiceConfiguration
+          - organization
+          - orgconfig
+          - orgidentitytoken
+          - payment
+          - paymentMethod
+          - paymentSchedule
+          - paymentTerm
+          - pricebook
+          - pricebookentry
+          - product
+          - productlevel
+          - productusage
+          - proposal
+          - proposalapprovalrule
+          - proposalevent
+          - proposalitem
+          - proposaliteminterval
+          - proposalitemlevel
+          - proposaloption
+          - refund
+          - renewalconfiguration
+          - signature
+          - signingdocument
+          - transfer
+          - transferevent
+          - unit
+          - user
+        orgId:
+          type: string
+        userId:
+          type: string
+        redirectUrl:
+          type: string
+        role:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer

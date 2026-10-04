@@ -231,121 +231,6 @@ paths:
                   $ref: '#/components/schemas/ContentTemplate'
 components:
   schemas:
-    CompanyInfo:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        internalName:
-          type: string
-        brandingEnabled:
-          type: boolean
-        externalId:
-          type: string
-        source:
-          type: string
-        logoUrl:
-          type: string
-        tin:
-          type: string
-        billingAddress:
-          $ref: '#/components/schemas/Address'
-        branding:
-          type: object
-          additionalProperties:
-            type: object
-        logo:
-          $ref: '#/components/schemas/Document'
-        defaultInfo:
-          type: boolean
-        deleted:
-          type: boolean
-        logoId:
-          type: string
-          format: uuid
-    Document:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        fileName:
-          type: string
-        latestVersion:
-          $ref: '#/components/schemas/DocumentVersion'
-    Address:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-        streetAddress:
-          type: string
-        subAddress:
-          type: string
-        otherAddress:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        regionIso:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-        countryIso:
-          type: string
-        verifiedAt:
-          type: string
-          format: date-time
     ContentTemplate:
       type: object
       properties:
@@ -475,3 +360,118 @@ components:
         documentId:
           type: string
           format: uuid
+    CompanyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        internalName:
+          type: string
+        brandingEnabled:
+          type: boolean
+        externalId:
+          type: string
+        source:
+          type: string
+        logoUrl:
+          type: string
+        tin:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        branding:
+          type: object
+          additionalProperties:
+            type: object
+        logo:
+          $ref: '#/components/schemas/Document'
+        defaultInfo:
+          type: boolean
+        deleted:
+          type: boolean
+        logoId:
+          type: string
+          format: uuid
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        fileName:
+          type: string
+        latestVersion:
+          $ref: '#/components/schemas/DocumentVersion'
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+        streetAddress:
+          type: string
+        subAddress:
+          type: string
+        otherAddress:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        regionIso:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        countryIso:
+          type: string
+        verifiedAt:
+          type: string
+          format: date-time

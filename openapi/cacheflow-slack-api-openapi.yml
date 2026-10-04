@@ -123,97 +123,6 @@ components:
         subject:
           type: string
           readOnly: true
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        username:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - inactive
-        source:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        lastActiveAt:
-          type: string
-          format: date-time
-        manager:
-          $ref: '#/components/schemas/User'
-    TokenData:
-      title: TokenData
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - basic
-          - hubspot
-          - slackUser
-          - slackWorkspace
-          - salesforceUser
-        subject:
-          type: string
-      discriminator:
-        propertyName: type
-        mapping:
-          slackUser: '#/components/schemas/SlackUser'
-          slackWorkspace: '#/components/schemas/SlackWorkspace'
-          salesforceUser: '#/components/schemas/SalesforceUser'
-          hubspot: '#/components/schemas/HubspotTokenData'
-          basic: '#/components/schemas/BasicTokenData'
-    CreateSlackResourceRequest:
-      type: object
-      properties:
-        slackAuthCode:
-          type: string
-        stateTokenKey:
-          type: string
-        originalRedirectUri:
-          type: string
-    SlackUser:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/TokenData'
-      - type: object
-        properties:
-          dmChannelId:
-            type: string
-          userToken:
-            type: string
-          subject:
-            type: string
-            readOnly: true
-    SlackAppInfo:
-      required:
-      - clientId
-      type: object
-      properties:
-        clientId:
-          type: string
-        teamId:
-          type: string
     IdentityToken:
       type: object
       properties:
@@ -255,4 +164,95 @@ components:
         tokenData:
           $ref: '#/components/schemas/TokenData'
         token:
+          type: string
+    SlackUser:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/TokenData'
+      - type: object
+        properties:
+          dmChannelId:
+            type: string
+          userToken:
+            type: string
+          subject:
+            type: string
+            readOnly: true
+    TokenData:
+      title: TokenData
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - basic
+          - hubspot
+          - slackUser
+          - slackWorkspace
+          - salesforceUser
+        subject:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          slackUser: '#/components/schemas/SlackUser'
+          slackWorkspace: '#/components/schemas/SlackWorkspace'
+          salesforceUser: '#/components/schemas/SalesforceUser'
+          hubspot: '#/components/schemas/HubspotTokenData'
+          basic: '#/components/schemas/BasicTokenData'
+    CreateSlackResourceRequest:
+      type: object
+      properties:
+        slackAuthCode:
+          type: string
+        stateTokenKey:
+          type: string
+        originalRedirectUri:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        username:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - inactive
+        source:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        lastActiveAt:
+          type: string
+          format: date-time
+        manager:
+          $ref: '#/components/schemas/User'
+    SlackAppInfo:
+      required:
+      - clientId
+      type: object
+      properties:
+        clientId:
+          type: string
+        teamId:
           type: string
