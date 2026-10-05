@@ -1,0 +1,12 @@
+{
+ "url": "https://getcacheflow.readme.io/openapi/643433f05a25b604ca3ec7c9",
+ "requested_url": "https://getcacheflow.readme.io/openapi/643433f05a25b604ca3ec7c9",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 431724,
+ "sha256": "31bf80b0f38a0e0a919304eaf3e0cef6183f4cc40aa8e2de0bbd9908b21cff1e",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
