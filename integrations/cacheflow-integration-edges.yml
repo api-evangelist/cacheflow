@@ -1,0 +1,95 @@
+generated: '2026-10-12'
+method: searched
+source:
+- https://zapier.com/apps/cacheflow/integrations
+checked:
+- https://composio.dev/toolkits/cacheflow
+- https://monid.ai/tools/cacheflow
+- https://n8n.io/integrations/cacheflow/
+- https://zapier.com/apps/cacheflow/integrations
+summary: null
+marketplace_apps:
+- marketplace: zapier
+  channel: ipaas-listing
+  app: cacheflow
+  url: https://zapier.com/apps/cacheflow/integrations
+  external_url: https://www.getcacheflow.com/
+  partner_tier: BRONZE
+  triggers:
+  - key: contract_trigger
+    label: Subscription Event
+  - key: proposal_trigger
+    label: Proposal Event
+  - key: transfer_trigger
+    label: Transaction Event
+  actions:
+  - key: create_proposal
+    label: Create Proposal
+  - key: create_usage
+    label: Update Usage
+  - key: update_subscription_status
+    label: Update Subscription Status
+  searches:
+  - key: find_billing_schedule
+    label: Get Billing Schedules for Subscription
+  - key: find_invoice
+    label: Get Invoice Information
+  - key: find_product
+    label: Get Product Information
+  - key: find_proposal
+    label: Get Proposal Information
+  - key: find_subscription
+    label: Get Subscription Information
+  - key: find_transaction
+    label: Get Transaction Information
+  - key: get_contacts
+    label: Get Contacts for Customer
+  - key: get_customer
+    label: Get Customer Information
+edges: []
+templates:
+- title: Create tickets in Zendesk for newly-signed Cacheflow proposals
+  url: https://zapier.com/apps/cacheflow/integrations/zendesk/1805293/create-tickets-in-zendesk-for-newly-signed-cacheflow-proposals
+  apps:
+  - cacheflow
+  - filter
+  - zendesk
+- title: Send Slack channel messages for newly signed Cacheflow proposals
+  url: https://zapier.com/apps/cacheflow/integrations/slack/1805301/send-slack-channel-messages-for-newly-signed-cacheflow-proposals
+  apps:
+  - cacheflow
+  - filter
+  - slack
+- title: Send Slack channel messages for new viewed proposal events in Cacheflow
+  url: https://zapier.com/apps/cacheflow/integrations/slack/1805305/send-slack-channel-messages-for-new-viewed-proposal-events-in-cacheflow
+  apps:
+  - cacheflow
+  - filter
+  - slack
+- title: Send Slack channel messages and emails via Gmail for new failed transaction events in Cacheflow
+  url: https://zapier.com/apps/cacheflow/integrations/gmail/1805308/send-slack-channel-messages-and-emails-via-gmail-for-new-failed-transaction-events-in-cacheflow
+  apps:
+  - cacheflow
+  - filter
+  - slack
+  - formatter
+  - gmail
+- title: Upload newly-signed Cacheflow proposals to Box
+  url: https://zapier.com/apps/box/integrations/cacheflow/1805310/upload-newly-signed-cacheflow-proposals-to-box
+  apps:
+  - cacheflow
+  - filter
+  - box
+- title: Upload Cacheflow proposal information as files to OneDrive for new signed proposal events in Cacheflow
+  url: https://zapier.com/apps/cacheflow/integrations/onedrive/1805327/upload-cacheflow-proposal-information-as-files-to-onedrive-for-new-signed-proposal-events-in-cacheflow
+  apps:
+  - cacheflow
+  - filter
+  - onedrive
+- title: Upload Cacheflow proposal information as files to Dropbox for new signed proposal events in Cacheflow
+  url: https://zapier.com/apps/cacheflow/integrations/dropbox/1805418/upload-cacheflow-proposal-information-as-files-to-dropbox-for-new-signed-proposal-events-in-cacheflow
+  apps:
+  - cacheflow
+  - filter
+  - dropbox
+template_total: 7
