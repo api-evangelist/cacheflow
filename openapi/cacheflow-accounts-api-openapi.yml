@@ -141,23 +141,6 @@ paths:
                 $ref: '#/components/schemas/AccountLedgerItemResponse'
 components:
   schemas:
-    AccountLedgerItemRequest:
-      type: object
-      properties:
-        accountId:
-          type: string
-          format: uuid
-        transferId:
-          type: string
-          format: uuid
-        type:
-          type: string
-          enum:
-          - DEBIT
-          - CREDIT
-        amount:
-          type: integer
-          format: int64
     CreateAccountsWithPlaidRequest:
       type: object
       properties:
@@ -187,6 +170,43 @@ components:
           type: string
         mask:
           type: string
+    AccountLedgerItemResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - pending
+          - in_progress
+          - failed
+          - posted
+          - cancelled
+          - declined
+          - reversed
+          - receiver_pending
+          - receiver_posted
+        reason:
+          type: string
+        amount:
+          type: integer
+          format: int64
+    AccountLedgerItemRequest:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+        transferId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - DEBIT
+          - CREDIT
+        amount:
+          type: integer
+          format: int64
     Account:
       type: object
       properties:
@@ -258,26 +278,6 @@ components:
           type: string
         mandateId:
           type: string
-    AccountLedgerItemResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - pending
-          - in_progress
-          - failed
-          - posted
-          - cancelled
-          - declined
-          - reversed
-          - receiver_pending
-          - receiver_posted
-        reason:
-          type: string
-        amount:
-          type: integer
-          format: int64
     Address:
       type: object
       properties:

@@ -112,32 +112,6 @@ components:
           format: date-time
         manager:
           $ref: '#/components/schemas/User'
-    UserProfile:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        roleType:
-          type: string
-          enum:
-          - anonymous
-          - auth_identity
-          - system
-          - admin
-          - user
-          - observer
-          - sales
-          - scope
-          - api
-          - buyer_guest
-          - buyer_preview
-          - buyer
-        invite:
-          type: boolean
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserEmail'
     UserEmail:
       type: object
       properties:
@@ -167,3 +141,29 @@ components:
           - inactive
         user:
           $ref: '#/components/schemas/User'
+    UserProfile:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        roleType:
+          type: string
+          enum:
+          - anonymous
+          - auth_identity
+          - system
+          - admin
+          - user
+          - observer
+          - sales
+          - scope
+          - api
+          - buyer_guest
+          - buyer_preview
+          - buyer
+        invite:
+          type: boolean
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserEmail'

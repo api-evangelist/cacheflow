@@ -264,34 +264,6 @@ components:
           - user
         deleted:
           type: boolean
-    UpdatePaymentMethodRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        internalName:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        isEnabledSet:
-          type: boolean
-        billingPeriods:
-          type: array
-          items:
-            type: string
-            enum:
-            - month
-            - quarter
-            - halfyear
-            - year
-        customText:
-          type: string
-        configuration:
-          type: object
-          additionalProperties:
-            type: object
     Account:
       type: object
       properties:
@@ -402,6 +374,34 @@ components:
           - wire
           - external
           - manual
+    UpdatePaymentMethodRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        internalName:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        isEnabledSet:
+          type: boolean
+        billingPeriods:
+          type: array
+          items:
+            type: string
+            enum:
+            - month
+            - quarter
+            - halfyear
+            - year
+        customText:
+          type: string
+        configuration:
+          type: object
+          additionalProperties:
+            type: object
     Address:
       type: object
       properties:

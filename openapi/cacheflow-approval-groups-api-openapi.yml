@@ -124,17 +124,6 @@ paths:
                   $ref: '#/components/schemas/ApprovalGroup'
 components:
   schemas:
-    ApprovalGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        priority:
-          type: integer
-          format: int32
-        groupId:
-          type: string
-          format: uuid
     ApprovalGroup:
       type: object
       properties:
@@ -159,6 +148,17 @@ components:
         priority:
           type: integer
           format: int32
+    ApprovalGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        groupId:
+          type: string
+          format: uuid
     Group:
       type: object
       properties:

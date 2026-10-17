@@ -56,6 +56,14 @@ paths:
                   $ref: '#/components/schemas/ProductUsage'
 components:
   schemas:
+    ProductUsageRequest:
+      type: object
+      properties:
+        billingItemId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
     ProductUsage:
       required:
       - currency
@@ -89,11 +97,3 @@ components:
           type: string
         amountFormatted:
           type: string
-    ProductUsageRequest:
-      type: object
-      properties:
-        billingItemId:
-          type: string
-          format: uuid
-        quantity:
-          type: number

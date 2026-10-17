@@ -103,24 +103,96 @@ paths:
                 $ref: '#/components/schemas/ApprovalRule'
 components:
   schemas:
-    ProposalBillingPeriodsRuleConfig:
+    UpdateProposalApprovalRuleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        approvalGroupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        config:
+          oneOf:
+          - $ref: '#/components/schemas/ProposalAmountDecreaseRuleConfig'
+          - $ref: '#/components/schemas/ProposalAmountRuleConfig'
+          - $ref: '#/components/schemas/ProposalAttachmentsRuleConfig'
+          - $ref: '#/components/schemas/ProposalAutoRenewalRuleConfig'
+          - $ref: '#/components/schemas/ProposalBillingPeriodsRuleConfig'
+          - $ref: '#/components/schemas/ProposalCountryRuleConfig'
+          - $ref: '#/components/schemas/ProposalCustomRuleConfig'
+          - $ref: '#/components/schemas/ProposalCustomTermsRuleConfig'
+          - $ref: '#/components/schemas/ProposalDiscountPercentRuleConfig'
+          - $ref: '#/components/schemas/ProposalDocusignRuleConfig'
+          - $ref: '#/components/schemas/ProposalDuplicateProductsRuleConfig'
+          - $ref: '#/components/schemas/ProposalExternalCrmRuleConfig'
+          - $ref: '#/components/schemas/ProposalFreeMonthsRuleConfig'
+          - $ref: '#/components/schemas/ProposalItemQuantityRuleConfig'
+          - $ref: '#/components/schemas/ProposalPaymentTermsRuleConfig'
+          - $ref: '#/components/schemas/ProposalProductDiscountPercentRuleConfig'
+          - $ref: '#/components/schemas/ProposalProductsRuleConfig'
+          - $ref: '#/components/schemas/ProposalTermLengthRuleConfig'
+    ProposalCustomRuleConfig:
       required:
-      - billingPeriods
+      - expression
       - ruleType
       type: object
       allOf:
       - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
       - type: object
         properties:
-          billingPeriods:
+          expression:
+            type: object
+    ProposalProductsRuleConfig:
+      required:
+      - products
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          products:
             type: array
             items:
               type: string
-              enum:
-              - month
-              - quarter
-              - halfyear
-              - year
+              format: uuid
+    ProposalCountryRuleConfig:
+      required:
+      - country
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          country:
+            type: string
+    ProposalAmountDecreaseRuleConfig:
+      required:
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          foo:
+            type: boolean
+    ProposalDocusignRuleConfig:
+      required:
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          foo:
+            type: boolean
     CreateProposalApprovalRuleRequest:
       type: object
       properties:
@@ -155,30 +227,6 @@ components:
           - $ref: '#/components/schemas/ProposalProductDiscountPercentRuleConfig'
           - $ref: '#/components/schemas/ProposalProductsRuleConfig'
           - $ref: '#/components/schemas/ProposalTermLengthRuleConfig'
-    Money:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-        scale:
-          type: integer
-          format: int32
-        formattedAmount:
-          type: string
-        currency:
-          type: string
-      description: Total list amount for this level. null for usage.
-    ProposalAutoRenewalRuleConfig:
-      required:
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          foo:
-            type: boolean
     ProposalPaymentTermsRuleConfig:
       required:
       - paymentTerms
@@ -212,6 +260,25 @@ components:
       - type: object
         properties:
           termLength:
+            type: integer
+            format: int64
+    ProposalProductDiscountPercentRuleConfig:
+      required:
+      - discount
+      - rootProductId
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          rootProductId:
+            type: string
+            format: uuid
+          discount:
+            type: integer
+            format: int64
+          maxDiscount:
             type: integer
             format: int64
     ProposalApprovalRuleConfig:
@@ -269,78 +336,6 @@ components:
           proposalTermLength: '#/components/schemas/ProposalTermLengthRuleConfig'
           proposalExternalCrm: '#/components/schemas/ProposalExternalCrmRuleConfig'
           proposalDuplicateProducts: '#/components/schemas/ProposalDuplicateProductsRuleConfig'
-    ProposalFreeMonthsRuleConfig:
-      required:
-      - freeMonths
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          freeMonths:
-            type: integer
-            format: int64
-    ProposalDiscountPercentRuleConfig:
-      required:
-      - discount
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          discount:
-            type: integer
-            format: int64
-          maxDiscount:
-            type: integer
-            format: int64
-    UpdateProposalApprovalRuleRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        enabled:
-          type: boolean
-        approvalGroupIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        config:
-          oneOf:
-          - $ref: '#/components/schemas/ProposalAmountDecreaseRuleConfig'
-          - $ref: '#/components/schemas/ProposalAmountRuleConfig'
-          - $ref: '#/components/schemas/ProposalAttachmentsRuleConfig'
-          - $ref: '#/components/schemas/ProposalAutoRenewalRuleConfig'
-          - $ref: '#/components/schemas/ProposalBillingPeriodsRuleConfig'
-          - $ref: '#/components/schemas/ProposalCountryRuleConfig'
-          - $ref: '#/components/schemas/ProposalCustomRuleConfig'
-          - $ref: '#/components/schemas/ProposalCustomTermsRuleConfig'
-          - $ref: '#/components/schemas/ProposalDiscountPercentRuleConfig'
-          - $ref: '#/components/schemas/ProposalDocusignRuleConfig'
-          - $ref: '#/components/schemas/ProposalDuplicateProductsRuleConfig'
-          - $ref: '#/components/schemas/ProposalExternalCrmRuleConfig'
-          - $ref: '#/components/schemas/ProposalFreeMonthsRuleConfig'
-          - $ref: '#/components/schemas/ProposalItemQuantityRuleConfig'
-          - $ref: '#/components/schemas/ProposalPaymentTermsRuleConfig'
-          - $ref: '#/components/schemas/ProposalProductDiscountPercentRuleConfig'
-          - $ref: '#/components/schemas/ProposalProductsRuleConfig'
-          - $ref: '#/components/schemas/ProposalTermLengthRuleConfig'
-    ProposalCustomRuleConfig:
-      required:
-      - expression
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          expression:
-            type: object
     ProposalCustomTermsRuleConfig:
       required:
       - ruleType
@@ -351,21 +346,36 @@ components:
         properties:
           foo:
             type: boolean
-    ProposalItemQuantityRuleConfig:
+    ProposalAttachmentsRuleConfig:
       required:
-      - quantity
-      - rootProductId
       - ruleType
       type: object
       allOf:
       - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
       - type: object
         properties:
-          rootProductId:
-            type: string
-            format: uuid
-          quantity:
-            type: number
+          foo:
+            type: boolean
+    ProposalExternalCrmRuleConfig:
+      required:
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          expression:
+            type: object
+    ProposalAutoRenewalRuleConfig:
+      required:
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          foo:
+            type: boolean
     ProposalAmountRuleConfig:
       required:
       - amount
@@ -377,40 +387,6 @@ components:
         properties:
           amount:
             $ref: '#/components/schemas/Money'
-    ProposalDocusignRuleConfig:
-      required:
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          foo:
-            type: boolean
-    ProposalAmountDecreaseRuleConfig:
-      required:
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          foo:
-            type: boolean
-    ProposalProductsRuleConfig:
-      required:
-      - products
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          products:
-            type: array
-            items:
-              type: string
-              format: uuid
     ApprovalRule:
       type: object
       properties:
@@ -443,29 +419,23 @@ components:
           items:
             type: string
             format: uuid
-    ProposalAttachmentsRuleConfig:
-      required:
-      - ruleType
+    Money:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          foo:
-            type: boolean
-    ProposalExternalCrmRuleConfig:
+      properties:
+        amount:
+          type: integer
+          format: int64
+        scale:
+          type: integer
+          format: int32
+        formattedAmount:
+          type: string
+        currency:
+          type: string
+      description: Total list amount for this level. null for usage.
+    ProposalItemQuantityRuleConfig:
       required:
-      - ruleType
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
-      - type: object
-        properties:
-          expression:
-            type: object
-    ProposalProductDiscountPercentRuleConfig:
-      required:
-      - discount
+      - quantity
       - rootProductId
       - ruleType
       type: object
@@ -476,10 +446,33 @@ components:
           rootProductId:
             type: string
             format: uuid
+          quantity:
+            type: number
+    ProposalDiscountPercentRuleConfig:
+      required:
+      - discount
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
           discount:
             type: integer
             format: int64
           maxDiscount:
+            type: integer
+            format: int64
+    ProposalFreeMonthsRuleConfig:
+      required:
+      - freeMonths
+      - ruleType
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
+      - type: object
+        properties:
+          freeMonths:
             type: integer
             format: int64
     ProposalDuplicateProductsRuleConfig:
@@ -492,14 +485,21 @@ components:
         properties:
           foo:
             type: boolean
-    ProposalCountryRuleConfig:
+    ProposalBillingPeriodsRuleConfig:
       required:
-      - country
+      - billingPeriods
       - ruleType
       type: object
       allOf:
       - $ref: '#/components/schemas/ProposalApprovalRuleConfig'
       - type: object
         properties:
-          country:
-            type: string
+          billingPeriods:
+            type: array
+            items:
+              type: string
+              enum:
+              - month
+              - quarter
+              - halfyear
+              - year

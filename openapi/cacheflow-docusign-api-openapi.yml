@@ -207,56 +207,6 @@ paths:
           description: OK
 components:
   schemas:
-    DocusignEnvelopeQuota:
-      required:
-      - blocked
-      - sent
-      - unlimitedQuota
-      type: object
-      properties:
-        allowed:
-          type: integer
-          format: int32
-        sent:
-          type: integer
-          format: int32
-        blocked:
-          type: boolean
-        unlimitedQuota:
-          type: boolean
-    Signature:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedBy:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        title:
-          type: string
-        signatureImageData:
-          type: string
-        userId:
-          type: string
-          format: uuid
-    DocusignUser:
-      type: object
-      properties:
-        username:
-          type: string
     DocusignAccount:
       required:
       - userId
@@ -288,3 +238,53 @@ components:
         hasHMACKey:
           type: boolean
           readOnly: true
+    DocusignEnvelopeQuota:
+      required:
+      - blocked
+      - sent
+      - unlimitedQuota
+      type: object
+      properties:
+        allowed:
+          type: integer
+          format: int32
+        sent:
+          type: integer
+          format: int32
+        blocked:
+          type: boolean
+        unlimitedQuota:
+          type: boolean
+    DocusignUser:
+      type: object
+      properties:
+        username:
+          type: string
+    Signature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        title:
+          type: string
+        signatureImageData:
+          type: string
+        userId:
+          type: string
+          format: uuid

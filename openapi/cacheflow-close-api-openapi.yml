@@ -63,30 +63,6 @@ paths:
                   type: object
 components:
   schemas:
-    CloseEmail:
-      type: object
-      properties:
-        type:
-          type: string
-        email:
-          type: string
-    CloseAddress:
-      type: object
-      properties:
-        address_1:
-          type: string
-        address_2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        country:
-          type: string
-        zipcode:
-          type: string
-        label:
-          type: string
     CloseLead:
       type: object
       properties:
@@ -118,4 +94,28 @@ components:
           items:
             $ref: '#/components/schemas/CloseEmail'
         lead_id:
+          type: string
+    CloseAddress:
+      type: object
+      properties:
+        address_1:
+          type: string
+        address_2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipcode:
+          type: string
+        label:
+          type: string
+    CloseEmail:
+      type: object
+      properties:
+        type:
+          type: string
+        email:
           type: string
